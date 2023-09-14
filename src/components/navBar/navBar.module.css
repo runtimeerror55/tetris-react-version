@@ -1,0 +1,15 @@
+.navBar {
+      width: 70vw;
+      height: fit-content;
+      padding: 10px;
+      color: white;
+      display: flex;
+}
+.nav-links {
+      margin-left: auto;
+}
+.nav-link {
+      color: white;
+      text-decoration: none;
+      margin: 5px;
+}
