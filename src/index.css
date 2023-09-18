@@ -8,19 +8,3 @@
 body {
       overflow-x: hidden;
 }
-
-#root {
-      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-            url("./assets/images/homePageBackgroundImage.jpg");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      align-items: center;
-      font-family: ff-mark;
-      letter-spacing: 0.08rem;
-      background-color: rgba(0, 0, 0, 1);
-}

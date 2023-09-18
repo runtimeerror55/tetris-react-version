@@ -1,0 +1,33 @@
+.menu-overlay-section {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      color: white;
+      flex-direction: column;
+      cursor: pointer;
+}
+.menu-overlay-close-button {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+}
+
+.option {
+      width: 500px;
+      margin: 5px;
+      font-size: 20px;
+      padding: 5px;
+}
+
+.option:hover {
+      background-color: gray;
+      color: black;
+      cursor: pointer;
+}

@@ -1,11 +1,17 @@
-import React from "react";
+import React, { Profiler } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-      <React.StrictMode>
-            <App />
-      </React.StrictMode>
-);
+function onRender(
+      id,
+      phase,
+      actualDuration,
+      baseDuration,
+      startTime,
+      commitTime
+) {
+      console.log(actualDuration);
+}
+root.render(<App />);
