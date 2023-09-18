@@ -148,11 +148,7 @@ export const GamePage = () => {
 
       return (
             <>
-                  <div
-                        className={styles["page"]}
-                        onKeyDown={pageKeyDownHandler}
-                        tabIndex={0}
-                  >
+                  <div className={styles["page"]} tabIndex={0}>
                         <ToastContainer></ToastContainer>
                         <NavBar></NavBar>
                         <main className={styles["main"]}>

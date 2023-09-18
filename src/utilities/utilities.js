@@ -1,5 +1,3 @@
-let x = 0;
-let y = {};
 export class Game {
       players;
       isGameStarted;
@@ -157,35 +155,58 @@ export class Game {
             ];
             this.onJoyStickConnect();
             this.onJoystickDisconnect();
+            this.onKeyboard();
       }
 
       gamepadLoop = () => {
+            let isTrue = false;
             const joysticks = this.joysticks;
             const gamepads = navigator.getGamepads();
-            joysticks.forEach((joystick) => {
+            joysticks.forEach((joystick, joystickIndex) => {
                   if (joystick) {
-                        if (joystick.throttleCount < 13) {
+                        if (joystick.throttleCount < 10) {
                               joystick.throttleCount++;
                         }
                         const gamepad = gamepads[joystick.gamepad.index];
                         if (gamepad) {
                               gamepad.buttons.forEach((button, buttonIndex) => {
                                     if (button.pressed) {
+                                          console.log(buttonIndex);
                                           if (
                                                 joystick.previousPressedButtonIndex !==
                                                 buttonIndex
                                           ) {
-                                                console.log(buttonIndex);
+                                                finalInput(
+                                                      joystick
+                                                            .defaultKeyBindings[
+                                                            buttonIndex
+                                                      ],
+                                                      this.players[
+                                                            joystickIndex
+                                                      ]
+                                                );
                                                 joystick.previousPressedButtonIndex =
                                                       buttonIndex;
                                                 joystick.throttleCount = 0;
+                                                isTrue = true;
                                           } else {
                                                 if (
                                                       joystick.throttleCount ===
-                                                      13
+                                                      10
                                                 ) {
-                                                      console.log(buttonIndex);
+                                                      finalInput(
+                                                            joystick
+                                                                  .defaultKeyBindings[
+                                                                  buttonIndex
+                                                            ],
+                                                            this.players[
+                                                                  joystickIndex
+                                                            ]
+                                                      );
+
                                                       joystick.throttleCount = 0;
+
+                                                      isTrue = true;
                                                 }
                                           }
                                     }
@@ -193,9 +214,13 @@ export class Game {
                         }
                   }
             });
+            return isTrue;
       };
       gameLoop = () => {
-            this.gamepadLoop.bind(this)();
+            if (this.gamepadLoop.bind(this)()) {
+                  this.renderPlayersUi({});
+                  return;
+            }
 
             this.gameLoopWaitCount++;
             if (this.gameLoopWaitCount === 30) {
@@ -224,12 +249,12 @@ export class Game {
                                     );
 
                               if (destroyableRows.length > 0) {
-                                    console.log(destroyableRows);
                                     destroy(
                                           destroyableRows,
                                           player.boardMatrix,
                                           player.renderUi
                                     );
+                                    updateStats(player, destroyableRows.length);
                               }
                               player.currentIndexOfrandomTetrominoIndexes++;
 
@@ -253,7 +278,6 @@ export class Game {
 
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
-                  console.log(event);
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (this.joysticks[i] === null) {
                               this.joysticks[i] = new Joystick(
@@ -279,6 +303,13 @@ export class Game {
                               return;
                         }
                   }
+            });
+      };
+
+      onKeyboard = () => {
+            window.addEventListener("keydown", (event) => {
+                  console.log(event.key);
+                  finalInput(event.key, this.players[0]);
             });
       };
 }
@@ -315,68 +346,6 @@ export class Player {
       }
 }
 
-export class GamepadInput {
-      defualtGameControlsMapping;
-      connectedControllers;
-      mappedPlayers;
-      constructor() {
-            this.connectedControllers = [null];
-            this.defualtGameControlsMapping = [
-                  null,
-                  "rotate",
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  null,
-                  "ArrowDown",
-                  "ArrowLeft",
-                  "ArrowRight",
-                  null,
-            ];
-            this.onConnect();
-      }
-      onConnect = () => {
-            window.addEventListener("gamepadconnected", (event) => {
-                  console.log(event);
-
-                  this.connectedControllers[event.gamepad.index] = {
-                        mappedGameControls: this.defualtGameControlsMapping,
-                        mappedPlayer: event.gamepad.index,
-                        gamepad: event.gamepad,
-                        previousPressedButton: null,
-                        count: 0,
-                  };
-            });
-      };
-      onDisconnect = () => {
-            window.addEventListener("gamepaddisconnected", (event) => {
-                  console.log(event);
-                  this.connectedControllers[event.gamepad.index] = null;
-            });
-      };
-
-      updateGameControlsMapping = (controllerIndex, buttonIndex, action) => {
-            let mappedAction =
-                  this.connectedControllers[controllerIndex].mappedGameControls[
-                        buttonIndex
-                  ];
-            if (mappedAction !== null && mappedAction !== action) {
-                  return `already mapped to ${mappedAction}`;
-            } else {
-                  this.connectedControllers[controllerIndex].mappedGameControls[
-                        buttonIndex
-                  ] = action;
-            }
-      };
-}
-
 export class Joystick {
       previousPressedButtonIndex;
       throttleCount;
@@ -410,6 +379,16 @@ export class Joystick {
       }
 }
 
+export const updateStats = (player, numberOfDestroyedRows) => {
+      if (numberOfDestroyedRows === 1) {
+            player.stats.singleShots++;
+      } else if (numberOfDestroyedRows === 2) {
+            player.stats.doubleShots++;
+      } else if (numberOfDestroyedRows === 3) {
+            player.stats.tripleShots++;
+      }
+      player.stats.score += numberOfDestroyedRows * 100 * numberOfDestroyedRows;
+};
 export const moveRight = (currentTetromino) => {
       const newTetromino = [];
       currentTetromino.allCoordinates.forEach((coordinates, index) => {
@@ -554,7 +533,6 @@ export const areThereAnydestroyableRows = (
 
 export const shiftBlocks = (destroyableRows, playerBoardMatrix) => {
       destroyableRows.forEach((row) => {
-            console.log(row);
             let currentRow = row;
             let upperRow = row - 1;
             while (playerBoardMatrix[upperRow][15]) {
@@ -570,10 +548,7 @@ export const shiftBlocks = (destroyableRows, playerBoardMatrix) => {
                               playerBoardMatrix[upperRow][column] = "";
                         }
                   });
-                  console.log(
-                        playerBoardMatrix[currentRow][15],
-                        playerBoardMatrix[upperRow][15]
-                  );
+
                   currentRow--;
                   upperRow--;
             }
@@ -600,4 +575,62 @@ export const destroy = (destroyableRows, playerBoardMatrix, setDestroy) => {
             requestAnimationFrame(destroyAnimationLoop);
       };
       requestAnimationFrame(destroyAnimationLoop);
+};
+
+export const finalInput = (direction, player) => {
+      if (direction === "ArrowDown") {
+            if (
+                  isPossibleToMove(
+                        "ArrowDown",
+                        player.currentTetromino,
+                        player.boardMatrix
+                  )
+            ) {
+                  const newTetromino = moveDown(player.currentTetromino);
+
+                  player.currentTetromino = newTetromino;
+                  player.renderUi({});
+                  return true;
+            }
+      } else if (direction === "ArrowLeft") {
+            if (
+                  isPossibleToMove(
+                        "ArrowLeft",
+                        player.currentTetromino,
+                        player.boardMatrix
+                  )
+            ) {
+                  const newTetromino = moveLeft(player.currentTetromino);
+
+                  player.currentTetromino = newTetromino;
+                  player.renderUi({});
+                  return true;
+            }
+      } else if (direction === "ArrowRight") {
+            if (
+                  isPossibleToMove(
+                        "ArrowRight",
+                        player.currentTetromino,
+                        player.boardMatrix
+                  )
+            ) {
+                  const newTetromino = moveRight(player.currentTetromino);
+
+                  player.currentTetromino = newTetromino;
+                  player.renderUi({});
+                  return true;
+            }
+      } else if (direction === "rotate") {
+            const setOfrotatedCoordinates = isRotationPossible(
+                  player.currentTetromino,
+                  player.boardMatrix
+            );
+            if (setOfrotatedCoordinates) {
+                  player.currentTetromino.allCoordinates =
+                        setOfrotatedCoordinates;
+                  player.renderUi({});
+                  return true;
+            }
+      }
+      return false;
 };

@@ -98,26 +98,26 @@ export const PlayerJsx = ({ player }) => {
                               className={styles["info-item"]}
                               id={styles["score"]}
                         >
-                              Score: 0
+                              Score: {player.stats.score}
                         </div>
 
                         <div
                               className={styles["info-item"]}
                               id={styles["single-shot"]}
                         >
-                              1X blast: 0
+                              1X blast: {player.stats.singleShots}
                         </div>
                         <div
                               className={styles["info-item"]}
                               id={styles["double-shot"]}
                         >
-                              2X blast: 0
+                              2X blast: {player.stats.doubleShots}
                         </div>
                         <div
                               className={styles["info-item"]}
                               id={styles["triple-shot"]}
                         >
-                              3X blast: 0
+                              3X blast: {player.stats.tripleShots}
                         </div>
                         <button
                               className={styles["menu-item"]}
