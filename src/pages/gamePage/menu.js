@@ -1,18 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./menu.module.css";
 import { Settings } from "./settings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import { Howl } from "howler";
+import clickSoundPath from "../../assets/sounds/click.mp3";
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
+const clickSound = new Howl({
+      src: [clickSoundPath],
+});
 export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
       const [showSettingsOveryLay, setShowSettingsOverLay] = useState(false);
+      const [renderMenu, setRenderMenu] = useState({});
 
       const focusableElements = useMemo(() => {
             return { elements: null, index: 0 };
       }, []);
-      const meuOverlayCloseButtonClickHandler = () => {
+      const newGameButtonClickHandler = (event) => {
+            game.reset();
             setShowMenuOverlay(false);
             setShowGameStartTimer(true);
       };
@@ -23,7 +31,6 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
 
       const menuOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
-                  console.log(focusableElements);
                   if (
                         focusableElements.index ===
                         focusableElements.elements.length - 1
@@ -44,6 +51,9 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                               focusableElements.index
                         ].focus();
                   }
+            } else if (event.key === "Enter") {
+                  clickSound.play();
+                  focusableElements.elements[focusableElements.index].click();
             }
       };
 
@@ -51,31 +61,73 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='0']");
             focusableElements.elements[0].focus();
-            console.log(focusableElements);
       }, []);
 
-      const gamepadLoop = () => {};
+      const gamepadLoop = () => {
+            const joystick = game.joysticks[0];
+            const gamepads = navigator.getGamepads();
+
+            if (joystick) {
+                  if (joystick.throttleCount < 10) {
+                        joystick.throttleCount++;
+                  }
+                  const gamepad = gamepads[joystick.gamepad.index];
+                  if (gamepad) {
+                        gamepad.buttons.forEach((button, buttonIndex) => {
+                              if (button.pressed) {
+                                    if (
+                                          joystick.previousPressedButtonIndex !==
+                                          buttonIndex
+                                    ) {
+                                          menuOverlayKeyDownHandler({
+                                                key: joystick
+                                                      .navigationKeyBindings[
+                                                      buttonIndex
+                                                ],
+                                          });
+                                          joystick.previousPressedButtonIndex =
+                                                buttonIndex;
+                                          joystick.throttleCount = 0;
+                                          console.log(buttonIndex);
+                                    } else if (joystick.throttleCount === 10) {
+                                          menuOverlayKeyDownHandler({
+                                                key: joystick
+                                                      .navigationKeyBindings[
+                                                      buttonIndex
+                                                ],
+                                          });
+                                          joystick.throttleCount = 0;
+                                          console.log(buttonIndex);
+                                    }
+                              }
+                        });
+                  }
+            }
+
+            setRenderMenu({});
+      };
       useEffect(() => {
-            gamepadLoop();
-      }, []);
+            if (!showSettingsOveryLay) {
+                  requestAnimationFrame(gamepadLoop);
+            }
+      }, [showSettingsOveryLay, renderMenu]);
       return (
             <>
                   <section
                         className={styles["menu-overlay-section"]}
                         onKeyDown={menuOverlayKeyDownHandler}
-                        tabIndex={-1}
                   >
-                        {/* <button
-                              onClick={meuOverlayCloseButtonClickHandler}
+                        <button
+                              onClick={newGameButtonClickHandler}
                               className={styles["menu-overlay-close-button"]}
                               tabIndex={-1}
                         >
-                              Close
-                        </button> */}
+                              <FontAwesomeIcon icon={faArrowLeft} />
+                        </button>
                         <div
                               className={styles["option"]}
                               tabIndex={0}
-                              onClick={meuOverlayCloseButtonClickHandler}
+                              onClick={newGameButtonClickHandler}
                         >
                               NEW GAME
                         </div>
@@ -96,6 +148,7 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                   {showSettingsOveryLay ? (
                         <Settings
                               setShowSettingsOverLay={setShowSettingsOverLay}
+                              game={game}
                         ></Settings>
                   ) : (
                         ""

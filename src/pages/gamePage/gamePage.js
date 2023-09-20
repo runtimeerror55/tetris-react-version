@@ -28,10 +28,12 @@ export const GamePage = () => {
       useEffect(() => {
             window.addEventListener("keydown", (event) => {
                   if (event.key === "Escape") {
-                        setShowMenuOverlay((previous) => {
-                              return !previous;
-                        });
-                        game.pause = !game.pause;
+                        if (game.isGameStarted) {
+                              setShowMenuOverlay((previous) => {
+                                    return !previous;
+                              });
+                              game.pause = !game.pause;
+                        }
                   }
                   console.log(game.pause);
             });

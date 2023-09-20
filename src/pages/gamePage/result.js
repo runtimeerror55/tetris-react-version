@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./result.module.css";
 import { useEffect } from "react";
 
@@ -12,6 +12,16 @@ export const GameResult = ({
             setShowGameStartTimer(true);
             setShowGameResult(false);
       };
+      const playAgainRef = useRef();
+      const playAgainButtonKeyDownHandler = (event) => {
+            if (event.key === "Enter") {
+                  event.target.click();
+            }
+      };
+
+      useEffect(() => {
+            playAgainRef.current.focus();
+      });
       return (
             <section className={styles["game-result-section"]}>
                   <div className={styles["game-result-container"]}>
@@ -25,8 +35,10 @@ export const GameResult = ({
                         })}
                   </div>
                   <button
+                        ref={playAgainRef}
                         className={styles["play-again-button"]}
                         onClick={playAgainButtonClickHandler}
+                        onKeyDown={playAgainButtonKeyDownHandler}
                   >
                         Play Again
                   </button>

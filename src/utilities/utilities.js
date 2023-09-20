@@ -220,15 +220,12 @@ export class Game {
             return isTrue;
       };
       gameLoop = () => {
-            if (this.gamepadLoop.bind(this)()) {
-                  this.renderPlayersUi({});
-                  return;
-            }
+            this.gamepadLoop.bind(this)();
 
             this.gameLoopWaitCount++;
             if (this.gameLoopWaitCount === 30) {
                   this.players.forEach((player, index) => {
-                        if (!finalInput("ArrowDown", player, this.sounds)) {
+                        if (!finalInput("ArrowDown", player)) {
                               updateplayerBoardMatrix(
                                     player.currentTetromino,
                                     player.boardMatrix
@@ -330,7 +327,6 @@ export class Game {
       };
 
       start = () => {
-            this.reset();
             this.isGameStarted = true;
             this.renderPlayersUi({});
       };
@@ -416,6 +412,7 @@ export class Joystick {
       gamepad;
       mappedPlayerNumber;
       defaultKeyBindings;
+      navigationKeyBindings;
       constructor(gamepad, player) {
             this.previousPressedButtonIndex = null;
             this.throttleCount = 0;
@@ -435,6 +432,25 @@ export class Joystick {
                   null,
                   null,
                   null,
+                  "ArrowDown",
+                  "ArrowLeft",
+                  "ArrowRight",
+                  null,
+            ];
+            this.navigationKeyBindings = [
+                  null,
+                  null,
+                  "Enter",
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  "ArrowUp",
                   "ArrowDown",
                   "ArrowLeft",
                   "ArrowRight",
@@ -664,7 +680,9 @@ export const finalInput = (direction, player, sounds, gamepad) => {
             ) {
                   const newTetromino = moveDown(player.currentTetromino);
 
-                  sounds.fall.play();
+                  if (sounds) {
+                        sounds.fall.play();
+                  }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
@@ -679,7 +697,9 @@ export const finalInput = (direction, player, sounds, gamepad) => {
             ) {
                   const newTetromino = moveLeft(player.currentTetromino);
 
-                  sounds.fall.play();
+                  if (sounds) {
+                        sounds.fall.play();
+                  }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
@@ -694,7 +714,9 @@ export const finalInput = (direction, player, sounds, gamepad) => {
             ) {
                   const newTetromino = moveRight(player.currentTetromino);
 
-                  sounds.fall.play();
+                  if (sounds) {
+                        sounds.fall.play();
+                  }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
@@ -705,7 +727,9 @@ export const finalInput = (direction, player, sounds, gamepad) => {
                   player.boardMatrix
             );
             if (setOfrotatedCoordinates) {
-                  sounds.fall.play();
+                  if (sounds) {
+                        sounds.fall.play();
+                  }
                   player.currentTetromino.allCoordinates =
                         setOfrotatedCoordinates;
                   player.renderUi({});

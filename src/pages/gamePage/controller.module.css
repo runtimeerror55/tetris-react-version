@@ -1,0 +1,41 @@
+.connected-controller {
+      margin: 5px;
+      padding: 10px;
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      max-width: 700px;
+      background-color: cadetblue;
+      border-radius: 20px;
+      text-align: center;
+}
+.gamepad-image {
+      width: 200px;
+}
+
+.setting-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 300px;
+}
+
+.setting {
+      font-style: italic;
+      font-weight: bold;
+      font-size: 15px;
+      background-color: white;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      border-radius: 20px;
+      color: black;
+      margin: 5px;
+      border: 1px solid black;
+}
+
+.setting:focus {
+      background-color: black;
+      color: white;
+}

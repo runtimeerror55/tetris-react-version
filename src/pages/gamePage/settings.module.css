@@ -2,12 +2,11 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: teal;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
-      align-items: center;
       z-index: 1;
 }
 .settings-overlay-close-button {
@@ -18,8 +17,9 @@
 }
 
 .settings {
-      background-color: bisque;
+      background-color: teal;
       padding: 20px;
       border-radius: 20px;
-      text-align: center;
+      width: 90%;
+      margin: 20px;
 }

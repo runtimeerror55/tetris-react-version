@@ -1,35 +1,13 @@
+.controller-settings-heading {
+      color: white;
+      font-size: 30px;
+      margin-top: 20px;
+}
 .connected-controllers {
       display: flex;
+      margin-top: 20px;
 }
 
 .controller-active {
       background-color: green;
-}
-.connected-controller {
-      margin: 5px;
-      padding: 10px;
-}
-
-.gamepad-image {
-      width: 100px;
-}
-
-.setting-container {
-      display: flex;
-      justify-content: space-between;
-}
-
-.setting {
-      font-style: italic;
-      font-weight: bold;
-      font-size: 15px;
-      background-color: white;
-      padding-left: 16px;
-      padding-right: 16px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      border-radius: 20px;
-      color: black;
-      margin: 5px;
-      border: 1px solid black;
 }
