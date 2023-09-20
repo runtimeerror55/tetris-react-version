@@ -1,0 +1,24 @@
+.player-result {
+      color: white;
+      background-color: teal;
+      padding: 5px;
+      margin: 5px;
+}
+
+.player-number {
+      text-align: center;
+      font-size: 25px;
+      color: black;
+      margin: 5px;
+      margin-bottom: 10px;
+      font-weight: bold;
+}
+
+.player-stat {
+      margin: 5px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      width: 250px;
+      padding: 3px;
+}

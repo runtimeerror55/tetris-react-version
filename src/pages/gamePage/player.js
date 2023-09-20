@@ -1,14 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./player.module.css";
-import {
-      moveDown,
-      moveRight,
-      createPlayerBoardMatrix,
-      isPossibleToMove,
-      updateplayerBoardMatrix,
-      moveLeft,
-      isRotationPossible,
-} from "../../utilities/playerInputs";
+import {} from "../../utilities/playerInputs";
 
 const createGameBox = (currentTetromino, playerBoardMatrix) => {
       const arrayOne = new Array(22).fill(0);
@@ -126,7 +118,7 @@ export const PlayerJsx = ({ player }) => {
                               Pause
                         </button>
                   </div>
-                  <div className={styles["container"]} tabIndex={0}>
+                  <div className={styles["container"]}>
                         {createGameBox(
                               player.currentTetromino,
                               player.boardMatrix

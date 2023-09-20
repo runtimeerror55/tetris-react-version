@@ -1,3 +1,8 @@
+import { Howl } from "howler";
+import laserGunShotSoundPath from "../assets/sounds/laserGunShot.wav";
+import fallPath from "../assets/sounds/fireball.wav";
+import glassBreakPath from "../assets/sounds/laserInSpace.wav";
+import gameOverPath from "../assets/sounds/gameOver.wav";
 export class Game {
       players;
       isGameStarted;
@@ -8,47 +13,74 @@ export class Game {
       tetrominos;
       gameLoopWaitCount;
       renderPlayersUi;
+      renderGameResult;
       CoordinatesAndColorsOfTetrominos;
-      constructor(renderPlayersUi) {
-            this.players = [new Player(0)];
+      sounds;
+      anyGameStarted;
+      constructor(renderPlayersUi, renderGameResult) {
             this.isGameStarted = false;
             this.isGameOver = null;
             this.pause = false;
-            this.randomTetrominoIndexes = [
-                  2, 2, 2, 2, 1, 3, 2, 2, 1, 1, 3, 2, 2, 3, 3, 3, 3, 1, 3, 1, 3,
-                  2, 3, 2, 0, 1, 3, 0, 1, 2, 3, 0, 0, 3, 1, 2, 2, 2, 0, 0, 0, 1,
-                  1, 2, 0, 0, 1, 1, 0, 1, 1, 2, 0, 2, 3, 1, 3, 3, 2, 2, 1, 1, 1,
-                  0, 1, 1, 0, 2, 2, 3, 1, 1, 0, 3, 3, 2, 0, 1, 2, 0, 2, 2, 3, 2,
-                  1, 0, 3, 1, 3, 2, 2, 3, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 1,
-                  3, 2, 2, 1, 1, 3, 2, 2, 3, 3, 3, 3, 1, 3, 1, 3, 2, 3, 2, 0, 1,
-                  3, 0, 1, 2, 3, 0, 0, 3, 1, 2, 2, 2, 0, 0, 0, 1, 1, 2, 0, 0, 1,
-                  1, 0, 1, 1, 2, 0, 2, 3, 1, 3, 3, 2, 2, 1, 1, 1, 0, 1, 1, 0, 2,
-                  2, 3, 1, 1, 0, 3, 3, 2, 0, 1, 2, 0, 2, 2, 3, 2, 1, 0, 3, 1, 3,
-                  2, 2, 3, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 3, 2, 2, 1, 1,
-                  3, 2, 2, 3, 3, 3, 3, 1, 3, 1, 3, 2, 3, 2, 0, 1, 3, 0, 1, 2, 3,
-                  0, 0, 3, 1, 2, 2, 2, 0, 0, 0, 1, 1, 2, 0, 0, 1, 1, 0, 1, 1, 2,
-                  0, 2, 3, 1, 3, 3, 2, 2, 1, 1, 1, 0, 1, 1, 0, 2, 2, 3, 1, 1, 0,
-                  3, 3, 2, 0, 1, 2, 0, 2, 2, 3, 2, 1, 0, 3, 1, 3, 2, 2, 3, 2, 2,
-                  1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 3, 2, 2, 1, 1, 3, 2, 2, 3, 3,
-                  3, 3, 1, 3, 1, 3, 2, 3, 2, 0, 1, 3, 0, 1, 2, 3, 0, 0, 3, 1, 2,
-                  2, 2, 0, 0, 0, 1, 1, 2, 0, 0, 1, 1, 0, 1, 1, 2, 0, 2, 3, 1, 3,
-                  3, 2, 2, 1, 1, 1, 0, 1, 1, 0, 2, 2, 3, 1, 1, 0, 3, 3, 2, 0, 1,
-                  2, 0, 2, 2, 3, 2, 1, 0, 3, 1, 3, 2, 2, 3, 2, 2, 1, 1, 1, 2, 2,
-                  1, 2, 2, 2, 2, 1, 3, 2, 2, 1, 1, 3, 2, 2, 3, 3, 3, 3, 1, 3, 1,
-                  3, 2, 3, 2, 0, 1, 3, 0, 1, 2, 3, 0, 0, 3, 1, 2, 2, 2, 0, 0, 0,
-                  1, 1, 2, 0, 0, 1, 1, 0, 1, 1, 2, 0, 2, 3, 1, 3, 3, 2, 2, 1, 1,
-                  1, 0, 1, 1, 0, 2, 2, 3, 1, 1, 0, 3, 3, 2, 0, 1, 2, 0, 2, 2, 3,
-                  2, 1, 0, 3, 1, 3, 2, 2, 3, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2,
-                  1, 3, 2, 2, 1, 1, 3, 2, 2, 3, 3, 3, 3, 1, 3, 1, 3, 2, 3, 2, 0,
-                  1, 3, 0, 1, 2, 3, 0, 0, 3, 1, 2, 2, 2, 0, 0, 0, 1, 1, 2, 0, 0,
-                  1, 1, 0, 1, 1, 2, 0, 2, 3, 1, 3, 3, 2, 2, 1, 1, 1, 0, 1, 1, 0,
-                  2, 2, 3, 1, 1, 0, 3, 3, 2, 0, 1, 2, 0, 2, 2, 3, 2, 1, 0, 3, 1,
-                  3, 2, 2, 3, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 3, 2, 2, 1,
-                  1, 3, 2, 2, 3, 3, 3, 3, 1, 3, 1, 3, 2, 3, 2, 0, 1, 3, 0, 1, 2,
-                  3, 0, 0, 3, 1, 2, 2, 2, 0, 0, 0, 1, 1, 2, 0, 0, 1, 1, 0, 1, 1,
-                  2, 0, 2, 3, 1, 3, 3, 2, 2, 1, 1, 1, 0, 1, 1, 0, 2, 2, 3, 1, 1,
-                  0, 3, 3, 2, 0, 1, 2, 0, 2, 2, 3, 2, 1, 0, 3, 1, 3, 2, 2, 3, 2,
-                  2, 1, 1, 1, 2, 2, 1,
+            this.renderGameResult = renderGameResult;
+            this.CoordinatesAndColorsOfTetrominos = [
+                  {
+                        allCoordinates: [
+                              [0, 5],
+                              [1, 5],
+                              [2, 5],
+                              [2, 6],
+                        ],
+                        colorClass: "l-tetromino-active",
+                  }, // l tetromino
+                  {
+                        allCoordinates: [
+                              [0, 5],
+                              [0, 6],
+                              [0, 7],
+                              [1, 6],
+                        ],
+                        colorClass: "t-tetromino-active",
+                  }, // t tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, 5],
+                              [0, 6],
+                              [1, 5],
+                              [1, 6],
+                        ],
+                        colorClass: "square-tetromino-active",
+                  }, // square
+
+                  {
+                        allCoordinates: [
+                              [0, 5],
+                              [0, 6],
+                              [0, 7],
+                              [0, 8],
+                        ],
+                        colorClass: "line-tetromino-active",
+                  }, // line tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, 5],
+                              [1, 5],
+                              [1, 6],
+                              [2, 6],
+                        ],
+                        colorClass: "z-tetromino-active",
+                  }, // skew tetromino
+            ];
+            this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
+
+            this.players = [
+                  new Player(
+                        0,
+                        this.CoordinatesAndColorsOfTetrominos[
+                              this.randomTetrominoIndexes[0]
+                        ]
+                  ),
             ];
             this.tetrominos = [
                   {
@@ -103,59 +135,27 @@ export class Game {
             this.joysticks = [null, null, null, null];
             this.gameLoopWaitCount = 0;
             this.renderPlayersUi = renderPlayersUi;
-            this.CoordinatesAndColorsOfTetrominos = [
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [1, 5],
-                              [2, 5],
-                              [2, 6],
-                        ],
-                        colorClass: "l-tetromino-active",
-                  }, // l tetromino
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [0, 7],
-                              [1, 6],
-                        ],
-                        colorClass: "t-tetromino-active",
-                  }, // t tetromino
-
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [1, 5],
-                              [1, 6],
-                        ],
-                        colorClass: "square-tetromino-active",
-                  }, // square
-
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [0, 7],
-                              [0, 8],
-                        ],
-                        colorClass: "line-tetromino-active",
-                  }, // line tetromino
-
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [1, 5],
-                              [1, 6],
-                              [2, 6],
-                        ],
-                        colorClass: "z-tetromino-active",
-                  }, // skew tetromino
-            ];
+            this.anyGameStarted = false;
             this.onJoyStickConnect();
             this.onJoystickDisconnect();
             this.onKeyboard();
+            this.sounds = {
+                  laserGunShotSound: new Howl({
+                        src: [laserGunShotSoundPath],
+                  }),
+
+                  fall: new Howl({
+                        src: [fallPath],
+                  }),
+
+                  glassBreak: new Howl({
+                        src: [glassBreakPath],
+                  }),
+
+                  gameOver: new Howl({
+                        src: [gameOverPath],
+                  }),
+            };
       }
 
       gamepadLoop = () => {
@@ -183,7 +183,9 @@ export class Game {
                                                       ],
                                                       this.players[
                                                             joystickIndex
-                                                      ]
+                                                      ],
+                                                      this.sounds,
+                                                      gamepad
                                                 );
                                                 joystick.previousPressedButtonIndex =
                                                       buttonIndex;
@@ -201,7 +203,8 @@ export class Game {
                                                             ],
                                                             this.players[
                                                                   joystickIndex
-                                                            ]
+                                                            ],
+                                                            this.sounds
                                                       );
 
                                                       joystick.throttleCount = 0;
@@ -224,20 +227,8 @@ export class Game {
 
             this.gameLoopWaitCount++;
             if (this.gameLoopWaitCount === 30) {
-                  this.players.forEach((player) => {
-                        if (
-                              isPossibleToMove(
-                                    "ArrowDown",
-                                    player.currentTetromino,
-                                    player.boardMatrix
-                              )
-                        ) {
-                              const newCoordinates = moveDown(
-                                    player.currentTetromino
-                              );
-
-                              player.currentTetromino = newCoordinates;
-                        } else {
+                  this.players.forEach((player, index) => {
+                        if (!finalInput("ArrowDown", player, this.sounds)) {
                               updateplayerBoardMatrix(
                                     player.currentTetromino,
                                     player.boardMatrix
@@ -252,8 +243,26 @@ export class Game {
                                     destroy(
                                           destroyableRows,
                                           player.boardMatrix,
-                                          player.renderUi
+                                          player.renderUi,
+                                          this.sounds
                                     );
+                                    if (this.joysticks[index]) {
+                                          let duration =
+                                                (destroyableRows.length - 1) *
+                                                      200 +
+                                                200;
+                                          this.joysticks[
+                                                index
+                                          ].gamepad.vibrationActuator.playEffect(
+                                                "dual-rumble",
+                                                {
+                                                      startDelay: 0,
+                                                      duration: duration,
+                                                      weakMagnitude: 1.0,
+                                                      strongMagnitude: 1.0,
+                                                }
+                                          );
+                                    }
                                     updateStats(player, destroyableRows.length);
                               }
                               player.currentIndexOfrandomTetrominoIndexes++;
@@ -266,6 +275,11 @@ export class Game {
                                           ]
                                     ];
                               player.currentTetromino = newCoordinates;
+                              if (!finalInput("startingPosition", player)) {
+                                    player.isGameOver = true;
+                                    this.isGameOver = true;
+                                    this.renderGameResult(true);
+                              }
                         }
                   });
                   this.renderPlayersUi({});
@@ -308,9 +322,47 @@ export class Game {
 
       onKeyboard = () => {
             window.addEventListener("keydown", (event) => {
-                  console.log(event.key);
-                  finalInput(event.key, this.players[0]);
+                  if (this.isGameStarted) {
+                        console.log(event.key);
+                        finalInput(event.key, this.players[0], this.sounds);
+                  }
             });
+      };
+
+      start = () => {
+            this.reset();
+            this.isGameStarted = true;
+            this.renderPlayersUi({});
+      };
+
+      reset = () => {
+            this.isGameOver = false;
+            this.isGameStarted = false;
+            this.pause = false;
+            this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
+            this.gameLoopWaitCount = 0;
+            this.players.forEach((player) => {
+                  player.reset(
+                        this.CoordinatesAndColorsOfTetrominos[
+                              this.randomTetrominoIndexes[0]
+                        ]
+                  );
+            });
+            // this.joysticks.forEach((joystick) => {
+            //       if (joystick) {
+            //             joystick.reset();
+            //       }
+            // });
+      };
+
+      generateNewTetrominoIndexes = () => {
+            let a = [];
+            for (let i = 0; i < 500; i++) {
+                  const randomInteger = Math.ceil(Math.random() * 4);
+                  a.push(randomInteger);
+            }
+            console.log(a);
+            return a;
       };
 }
 
@@ -322,28 +374,40 @@ export class Player {
       boardMatrix;
       renderUi;
       currentIndexOfrandomTetrominoIndexes;
-      constructor(playerNumber) {
+      constructor(playerNumber, startingTetromino) {
             this.stats = {
-                  score: 0,
-                  singleShots: 0,
-                  doubleShots: 0,
-                  tripleShots: 0,
+                  score: 1000,
+                  singleShots: 5,
+                  doubleShots: 4,
+                  tripleShots: 2,
             };
             this.isGameOver = false;
             this.number = playerNumber;
             this.currentIndexOfrandomTetrominoIndexes = 0;
-            this.currentTetromino = {
-                  allCoordinates: [
-                        [0, 5],
-                        [0, 6],
-                        [1, 5],
-                        [1, 6],
-                  ],
-                  colorClass: "square-tetromino-active",
-            };
+            this.currentTetromino = startingTetromino;
             this.boardMatrix = createPlayerBoardMatrix();
             this.renderUi = null;
       }
+
+      reset = (currentTetromino) => {
+            this.stats.score = 0;
+            this.stats.singleShots = 0;
+            this.stats.doubleShots = 0;
+            this.stats.tripleShots = 0;
+            this.currentIndexOfrandomTetrominoIndexes = 0;
+            this.currentTetromino = currentTetromino;
+            let rows = this.boardMatrix.length;
+            for (let i = 0; i < rows; i++) {
+                  const columns = this.boardMatrix[i].length;
+                  for (let j = 0; j < columns; j++) {
+                        if (j === 15) {
+                              this.boardMatrix[i][j] = 0;
+                        } else {
+                              this.boardMatrix[i][j] = "";
+                        }
+                  }
+            }
+      };
 }
 
 export class Joystick {
@@ -450,12 +514,11 @@ export const isPossibleToMove = (
                         !playerBoardMatrix[coordinates[0] + 1][coordinates[1]]
                   );
             });
-      } else if ("setStartingPosition") {
+      } else if ("startingPosition") {
             return currentTetromino.allCoordinates.every((coordinates) => {
                   return !playerBoardMatrix[coordinates[0]][coordinates[1]];
             });
       }
-      return false;
 };
 
 export const createPlayerBoardMatrix = () => {
@@ -555,29 +618,42 @@ export const shiftBlocks = (destroyableRows, playerBoardMatrix) => {
       });
 };
 
-export const destroy = (destroyableRows, playerBoardMatrix, setDestroy) => {
+export const destroy = (
+      destroyableRows,
+      playerBoardMatrix,
+      setDestroy,
+      sounds
+) => {
       let column = 0;
-      const destroyAnimationLoop = () => {
-            if (column === 15) {
-                  destroyableRows.forEach((row) => {
-                        playerBoardMatrix[row][column] = 0;
-                  });
-                  shiftBlocks(destroyableRows, playerBoardMatrix);
-                  setDestroy({});
-                  return;
-            }
+      let throttleCount = 0;
+      sounds.glassBreak.play();
 
-            destroyableRows.forEach((row) => {
-                  playerBoardMatrix[row][column] = "";
-            });
-            column++;
-            setDestroy({});
+      const destroyAnimationLoop = () => {
+            throttleCount++;
+            if (throttleCount === 2) {
+                  if (column === 15) {
+                        destroyableRows.forEach((row) => {
+                              playerBoardMatrix[row][column] = 0;
+                        });
+                        shiftBlocks(destroyableRows, playerBoardMatrix);
+                        setDestroy({});
+                        return;
+                  }
+
+                  destroyableRows.forEach((row) => {
+                        playerBoardMatrix[row][column] = "";
+                  });
+                  column++;
+
+                  setDestroy({});
+                  throttleCount = 0;
+            }
             requestAnimationFrame(destroyAnimationLoop);
       };
       requestAnimationFrame(destroyAnimationLoop);
 };
 
-export const finalInput = (direction, player) => {
+export const finalInput = (direction, player, sounds, gamepad) => {
       if (direction === "ArrowDown") {
             if (
                   isPossibleToMove(
@@ -588,6 +664,7 @@ export const finalInput = (direction, player) => {
             ) {
                   const newTetromino = moveDown(player.currentTetromino);
 
+                  sounds.fall.play();
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
@@ -602,6 +679,7 @@ export const finalInput = (direction, player) => {
             ) {
                   const newTetromino = moveLeft(player.currentTetromino);
 
+                  sounds.fall.play();
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
@@ -616,19 +694,31 @@ export const finalInput = (direction, player) => {
             ) {
                   const newTetromino = moveRight(player.currentTetromino);
 
+                  sounds.fall.play();
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
                   return true;
             }
-      } else if (direction === "rotate") {
+      } else if (direction === " " || direction === "rotate") {
             const setOfrotatedCoordinates = isRotationPossible(
                   player.currentTetromino,
                   player.boardMatrix
             );
             if (setOfrotatedCoordinates) {
+                  sounds.fall.play();
                   player.currentTetromino.allCoordinates =
                         setOfrotatedCoordinates;
                   player.renderUi({});
+                  return true;
+            }
+      } else if (direction === "startingPosition") {
+            if (
+                  isPossibleToMove(
+                        "startingPosition",
+                        player.currentTetromino,
+                        player.boardMatrix
+                  )
+            ) {
                   return true;
             }
       }
