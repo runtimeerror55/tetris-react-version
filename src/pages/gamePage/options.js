@@ -1,27 +1,19 @@
-import styles from "./gamePadSettings.module.css";
-import gamePadImage from "../../assets/images/pngwing.com.png";
-import { useEffect, useState, useContext, useMemo } from "react";
-import { toast } from "react-toastify";
-import { Form } from "react-router-dom";
-import { Controller } from "./controller";
+import { useState, useEffect, useMemo } from "react";
 import { Howl } from "howler";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import clickSoundPath from "../../assets/sounds/click.mp3";
+import styles from "./options.module.css";
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
 const clickSound = new Howl({
       src: [clickSoundPath],
 });
-
-export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
-      const [startGamePadLoop, setStartGamePadLoop] = useState(true);
-      const gamepadLoopState = useMemo(() => {
-            return { run: true };
-      }, []);
+export const Options = ({ game, setShowOptions, previousGamepadLoop }) => {
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
       }, []);
+
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -72,7 +64,7 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                           buttonIndex
                                     ) {
                                           if (buttonIndex === 1) {
-                                                setShowSettingsOverLay(false);
+                                                setShowOptions(false);
                                                 shouldExit = true;
                                           }
                                           controllerSettingsOverlayKeyDownHandler(
@@ -102,36 +94,79 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                         });
                   }
             }
-            if (shouldExit || !gamepadLoopState.run) {
+            if (shouldExit) {
+                  setShowOptions(false);
+                  previousGamepadLoop.gamepadLoopState.run = true;
+                  previousGamepadLoop.setStartGamePadLoop(true);
                   return;
             }
 
             requestAnimationFrame(gamepadLoop);
       };
-      useEffect(() => {
-            if (gamepadLoopState.run) {
-                  gamepadLoop();
-            }
-      }, [startGamePadLoop]);
 
       useEffect(() => {
+            gamepadLoop();
             focusableElements.elements =
-                  document.querySelectorAll("[tabindex='2']");
+                  document.querySelectorAll("[tabindex='3']");
+            previousGamepadLoop.gamepadLoopState.run = false;
+            previousGamepadLoop.setStartGamePadLoop(false);
+            console.log(focusableElements);
       }, []);
-
       return (
             <>
-                  <h1 className={styles["controller-settings-heading"]}>
-                        Controller settings
-                  </h1>
-                  <div className={styles["connected-controllers"]}>
-                        <Controller
-                              game={game}
-                              previousGamepadLoop={{
-                                    gamepadLoopState,
-                                    setStartGamePadLoop,
-                              }}
-                        ></Controller>
+                  <div className={styles["options"]}>
+                        <div
+                              className={styles["option"]}
+                              value="12"
+                              tabIndex={3}
+                        >
+                              dpad up
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              value="13"
+                              tabIndex={3}
+                        >
+                              dpad down
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              value="14"
+                              tabIndex={3}
+                        >
+                              dpad left
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              value="15"
+                              tabIndex={3}
+                        >
+                              dpad right
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              x
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              a
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              b
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              y
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              r1
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              r2
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              l1
+                        </div>
+                        <div className={styles["option"]} tabIndex={3}>
+                              l2
+                        </div>
                   </div>
             </>
       );
