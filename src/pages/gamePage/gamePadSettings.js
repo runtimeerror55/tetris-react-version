@@ -7,6 +7,7 @@ import { Controller } from "./controller";
 import { Howl } from "howler";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import clickSoundPath from "../../assets/sounds/click.mp3";
+import { KeyBoard } from "./keyBoard/keyBoard";
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
@@ -33,12 +34,12 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                         focusableElements.index++;
                   }
                   navigationSound.play();
-                  console.log(
-                        focusableElements.elements[focusableElements.index]
-                  );
                   focusableElements.elements[focusableElements.index].focus();
             } else if (event.key === "ArrowUp") {
-                  if (focusableElements.index === 0) {
+                  if (
+                        focusableElements.index === 0 ||
+                        focusableElements.index === -1
+                  ) {
                         return;
                   } else {
                         navigationSound.play();
@@ -49,9 +50,10 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                   }
             } else if (event.key === "Enter") {
                   clickSound.play();
-
                   focusableElements.elements[focusableElements.index].click();
-            } else if (event.key === "back") {
+            } else if (event.key === "Back") {
+                  clickSound.play();
+                  setShowSettingsOverLay(false);
             }
       };
       const gamepadLoop = () => {
@@ -72,7 +74,6 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                           buttonIndex
                                     ) {
                                           if (buttonIndex === 1) {
-                                                setShowSettingsOverLay(false);
                                                 shouldExit = true;
                                           }
                                           controllerSettingsOverlayKeyDownHandler(
@@ -88,6 +89,9 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                           joystick.throttleCount = 0;
                                           console.log(buttonIndex);
                                     } else if (joystick.throttleCount === 10) {
+                                          if (buttonIndex === 1) {
+                                                shouldExit = true;
+                                          }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
                                                       key: joystick
@@ -97,6 +101,7 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                                 }
                                           );
                                           joystick.throttleCount = 0;
+                                          console.log(buttonIndex);
                                     }
                               }
                         });
@@ -117,7 +122,7 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
       useEffect(() => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='2']");
-      }, []);
+      });
 
       return (
             <>
@@ -125,13 +130,38 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                         Controller settings
                   </h1>
                   <div className={styles["connected-controllers"]}>
-                        <Controller
-                              game={game}
+                        {game.joysticks.map((joystick, index) => {
+                              if (joystick) {
+                                    return (
+                                          <Controller
+                                                key={index}
+                                                joystickIndex={index}
+                                                previousGamepadLoop={{
+                                                      gamepadLoopState,
+                                                      setStartGamePadLoop,
+                                                }}
+                                                joystick={joystick}
+                                                game={game}
+                                          ></Controller>
+                                    );
+                              }
+                        })}
+                        <KeyBoard
                               previousGamepadLoop={{
                                     gamepadLoopState,
                                     setStartGamePadLoop,
                               }}
-                        ></Controller>
+                              playerNumber="0"
+                              game={game}
+                        ></KeyBoard>
+                        <KeyBoard
+                              previousGamepadLoop={{
+                                    gamepadLoopState,
+                                    setStartGamePadLoop,
+                              }}
+                              playerNumber="1"
+                              game={game}
+                        ></KeyBoard>
                   </div>
             </>
       );

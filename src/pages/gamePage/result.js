@@ -9,6 +9,7 @@ export const GameResult = ({
       setShowGameResult,
 }) => {
       const playAgainButtonClickHandler = () => {
+            game.reset();
             setShowGameStartTimer(true);
             setShowGameResult(false);
       };

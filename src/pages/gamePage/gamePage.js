@@ -35,7 +35,6 @@ export const GamePage = () => {
                               game.pause = !game.pause;
                         }
                   }
-                  console.log(game.pause);
             });
       }, []);
 
@@ -43,7 +42,7 @@ export const GamePage = () => {
             <>
                   <div className={styles["page"]} tabIndex={-1}>
                         <ToastContainer></ToastContainer>
-                        <NavBar></NavBar>
+
                         <main className={styles["main"]}>
                               {showGame
                                     ? game.players.map((player) => {

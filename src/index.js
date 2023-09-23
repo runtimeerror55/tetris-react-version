@@ -4,14 +4,4 @@ import "./index.css";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-function onRender(
-      id,
-      phase,
-      actualDuration,
-      baseDuration,
-      startTime,
-      commitTime
-) {
-      console.log(actualDuration);
-}
 root.render(<App />);

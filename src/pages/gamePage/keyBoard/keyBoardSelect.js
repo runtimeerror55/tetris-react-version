@@ -1,12 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
-import styles from "./select.module.css";
-import { Options } from "./options";
-let count = 0;
-export const Select = ({
-      joystickIndex,
+import styles from "./keyBoardSelect.module.css";
+import { KeyBoardOptions } from "./keyBoardOptions";
+
+export const KeyBoardSelect = ({
       previousGamepadLoop,
       bindingValue,
-      joystick,
+      playerNumber,
       game,
 }) => {
       const [showOptions, setShowOptions] = useState(false);
@@ -15,13 +14,20 @@ export const Select = ({
             setShowOptions(true);
       };
 
-      let assignedButtonName = null;
-      for (let i = 0; i < joystick.defaultKeyBindings.length; i++) {
-            if (joystick.defaultKeyBindings[i] === bindingValue) {
-                  assignedButtonName = joystick.buttonsNames[i];
+      let assignedKeyBoardKey = null;
+
+      for (let i in game.keyBoard.keyBoardMapping) {
+            if (
+                  game.keyBoard.keyBoardMapping[i].bindingValue ===
+                        bindingValue &&
+                  game.keyBoard.keyBoardMapping[i].playerNumber === playerNumber
+            ) {
+                  assignedKeyBoardKey = i;
+            }
+            if (assignedKeyBoardKey === " ") {
+                  assignedKeyBoardKey = "space bar";
             }
       }
-      console.log(showOptions, assignedButtonName);
 
       return (
             <div className={styles["setting-container"]}>
@@ -31,15 +37,16 @@ export const Select = ({
                         tabIndex={2}
                         onClick={settingClickHandler}
                   >
-                        {assignedButtonName}
+                        {assignedKeyBoardKey ? assignedKeyBoardKey : "empty"}
                         {showOptions ? (
-                              <Options
+                              <KeyBoardOptions
                                     previousGamepadLoop={previousGamepadLoop}
                                     game={game}
-                                    assignedButtonName={assignedButtonName}
                                     bindingValue={bindingValue}
                                     setShowOptions={setShowOptions}
-                              ></Options>
+                                    assignedKeyBoardKey={assignedKeyBoardKey}
+                                    playerNumber={playerNumber}
+                              ></KeyBoardOptions>
                         ) : (
                               ""
                         )}

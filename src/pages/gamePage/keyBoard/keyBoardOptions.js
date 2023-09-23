@@ -1,22 +1,15 @@
 import { useState, useEffect, useMemo } from "react";
-import { Howl } from "howler";
-import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
-import clickSoundPath from "../../assets/sounds/click.mp3";
-import styles from "./options.module.css";
+import styles from "./keyBoardOptions.module.css";
 import { toast } from "react-toastify";
-import { toastOptions } from "../../utilities/utilities";
-const navigationSound = new Howl({
-      src: [menuNavigationSoundPath],
-});
-const clickSound = new Howl({
-      src: [clickSoundPath],
-});
-export const Options = ({
+import { toastOptions } from "../../../utilities/utilities";
+
+export const KeyBoardOptions = ({
       game,
       setShowOptions,
       previousGamepadLoop,
-      assignedButtonName,
       bindingValue,
+      assignedKeyBoardKey,
+      playerNumber,
 }) => {
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
@@ -26,7 +19,7 @@ export const Options = ({
                   run: true,
             };
       }, []);
-      console.log(assignedButtonName);
+
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -37,7 +30,7 @@ export const Options = ({
                   } else {
                         focusableElements.index++;
                   }
-                  navigationSound.play();
+                  game.sounds.navigationSound.play();
                   focusableElements.elements[focusableElements.index].focus();
             } else if (event.key === "ArrowUp") {
                   if (
@@ -46,7 +39,7 @@ export const Options = ({
                   ) {
                         return;
                   } else {
-                        navigationSound.play();
+                        game.sounds.navigationSound.play();
                         focusableElements.index--;
                         focusableElements.elements[
                               focusableElements.index
@@ -55,7 +48,7 @@ export const Options = ({
             } else if (event.key === "Enter") {
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
-                  clickSound.play();
+                  game.sounds.clickSound.play();
                   setShowOptions(false);
                   previousGamepadLoop.gamepadLoopState.run = true;
                   previousGamepadLoop.setStartGamePadLoop(true);
@@ -129,7 +122,6 @@ export const Options = ({
             previousGamepadLoop.gamepadLoopState.run = false;
             previousGamepadLoop.setStartGamePadLoop(false);
       }, []);
-
       useEffect(() => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='3']");
@@ -137,17 +129,19 @@ export const Options = ({
 
       const optionsClickHandler = (event) => {
             event.stopPropagation();
-            const buttonIndex = event.target.getAttribute("data-button-index");
-            const joystickIndex = event.currentTarget.getAttribute(
-                  "data-joystick-index"
-            );
+            const playerNumber =
+                  event.currentTarget.getAttribute("data-player-number");
+
             const bindingValue =
                   event.currentTarget.getAttribute("data-binding-value");
+            const key = event.target.getAttribute("data-key");
 
             if (
-                  game.joysticks[joystickIndex].updateGameKeyBinding(
-                        buttonIndex,
-                        bindingValue
+                  game.keyBoard.updateKeyBoardMapping(
+                        key,
+                        playerNumber,
+                        bindingValue,
+                        assignedKeyBoardKey
                   )
             ) {
                   game.sounds.clickSound.play();
@@ -165,96 +159,183 @@ export const Options = ({
                   <div
                         className={styles["options"]}
                         onClick={optionsClickHandler}
-                        data-joystick-index="0"
+                        data-player-number={playerNumber}
                         data-binding-value={bindingValue}
                   >
                         <div
-                              data-button-index="12"
-                              className={styles["option"]}
-                              value="12"
-                              tabIndex={3}
-                        >
-                              dpad up
-                        </div>
-                        <div
-                              data-button-index="13"
-                              className={styles["option"]}
-                              value="13"
-                              tabIndex={3}
-                        >
-                              dpad down
-                        </div>
-                        <div
-                              data-button-index="14"
-                              className={styles["option"]}
-                              value="14"
-                              tabIndex={3}
-                        >
-                              dpad left
-                        </div>
-                        <div
-                              data-button-index="15"
-                              className={styles["option"]}
-                              value="15"
-                              tabIndex={3}
-                        >
-                              dpad right
-                        </div>
-                        <div
-                              data-button-index="2"
                               className={styles["option"]}
                               tabIndex={3}
-                        >
-                              x
-                        </div>
-                        <div
-                              data-button-index="0"
-                              className={styles["option"]}
-                              tabIndex={3}
+                              data-key="a"
                         >
                               a
                         </div>
                         <div
-                              data-button-index="1"
                               className={styles["option"]}
                               tabIndex={3}
+                              data-key="b"
                         >
                               b
                         </div>
                         <div
-                              data-button-index="3"
                               className={styles["option"]}
                               tabIndex={3}
+                              data-key="c"
+                        >
+                              c
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="d"
+                        >
+                              d
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="e"
+                        >
+                              e
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="f"
+                        >
+                              f
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="g"
+                        >
+                              g
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="h"
+                        >
+                              h
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="i"
+                        >
+                              i
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="j"
+                        >
+                              j
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="k"
+                        >
+                              k
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="l"
+                        >
+                              l
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="m"
+                        >
+                              m
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="n"
+                        >
+                              n
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="o"
+                        >
+                              o
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="p"
+                        >
+                              p
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="q"
+                        >
+                              q
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="r"
+                        >
+                              r
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="s"
+                        >
+                              s
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="u"
+                        >
+                              u
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="v"
+                        >
+                              v
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="w"
+                        >
+                              w
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="x"
+                        >
+                              x
+                        </div>
+                        <div
+                              className={styles["option"]}
+                              tabIndex={3}
+                              data-key="y"
                         >
                               y
                         </div>
                         <div
-                              data-button-index="5"
                               className={styles["option"]}
                               tabIndex={3}
+                              data-key="z"
                         >
-                              r1
-                        </div>
-                        <div
-                              data-button-index="7"
-                              className={styles["option"]}
-                              tabIndex={3}
-                        >
-                              r2
-                        </div>
-                        <div
-                              data-button-index="4"
-                              className={styles["option"]}
-                              tabIndex={3}
-                        >
-                              l1
-                        </div>
-                        <div
-                              data-button-index="6"
-                              className={styles["option"]}
-                              tabIndex={3}
-                        >
-                              l2
+                              z
                         </div>
                   </div>
             </>

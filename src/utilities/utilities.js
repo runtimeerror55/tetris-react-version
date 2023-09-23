@@ -3,6 +3,10 @@ import laserGunShotSoundPath from "../assets/sounds/laserGunShot.wav";
 import fallPath from "../assets/sounds/fireball.wav";
 import glassBreakPath from "../assets/sounds/laserInSpace.wav";
 import gameOverPath from "../assets/sounds/gameOver.wav";
+import navigationSoundPath from "../assets/sounds/navigation.m4a";
+import clickSoundPath from "../assets/sounds/click.mp3";
+
+import { toast } from "react-toastify";
 export class Game {
       players;
       isGameStarted;
@@ -17,6 +21,7 @@ export class Game {
       CoordinatesAndColorsOfTetrominos;
       sounds;
       anyGameStarted;
+      keyBoard;
       constructor(renderPlayersUi, renderGameResult) {
             this.isGameStarted = false;
             this.isGameOver = null;
@@ -81,6 +86,12 @@ export class Game {
                               this.randomTetrominoIndexes[0]
                         ]
                   ),
+                  new Player(
+                        0,
+                        this.CoordinatesAndColorsOfTetrominos[
+                              this.randomTetrominoIndexes[0]
+                        ]
+                  ),
             ];
             this.tetrominos = [
                   {
@@ -136,6 +147,7 @@ export class Game {
             this.gameLoopWaitCount = 0;
             this.renderPlayersUi = renderPlayersUi;
             this.anyGameStarted = false;
+            this.keyBoard = new KeyBoard();
             this.onJoyStickConnect();
             this.onJoystickDisconnect();
             this.onKeyboard();
@@ -154,6 +166,12 @@ export class Game {
 
                   gameOver: new Howl({
                         src: [gameOverPath],
+                  }),
+                  navigationSound: new Howl({
+                        src: [navigationSoundPath],
+                  }),
+                  clickSound: new Howl({
+                        src: [clickSoundPath],
                   }),
             };
       }
@@ -296,6 +314,7 @@ export class Game {
                                     i
                               );
                               console.log(this.joysticks);
+                              this.renderPlayersUi({});
                               return;
                         }
                   }
@@ -319,9 +338,26 @@ export class Game {
 
       onKeyboard = () => {
             window.addEventListener("keydown", (event) => {
-                  if (this.isGameStarted) {
-                        console.log(event.key);
-                        finalInput(event.key, this.players[0], this.sounds);
+                  console.log(event.key);
+                  if (this.isGameStarted && !this.pause && !this.isGameOver) {
+                        if (
+                              !this.keyBoard.keyBoardMapping[event.key] ||
+                              !this.keyBoard.keyBoardMapping[event.key]
+                                    .playerNumber
+                        ) {
+                              return;
+                        }
+                        const playerNumber =
+                              this.keyBoard.keyBoardMapping[event.key]
+                                    .playerNumber;
+                        const bindingValue =
+                              this.keyBoard.keyBoardMapping[event.key]
+                                    .bindingValue;
+                        finalInput(
+                              bindingValue,
+                              this.players[playerNumber],
+                              this.sounds
+                        );
                   }
             });
       };
@@ -372,10 +408,10 @@ export class Player {
       currentIndexOfrandomTetrominoIndexes;
       constructor(playerNumber, startingTetromino) {
             this.stats = {
-                  score: 1000,
-                  singleShots: 5,
-                  doubleShots: 4,
-                  tripleShots: 2,
+                  score: 0,
+                  singleShots: 0,
+                  doubleShots: 0,
+                  tripleShots: 0,
             };
             this.isGameOver = false;
             this.number = playerNumber;
@@ -413,6 +449,7 @@ export class Joystick {
       mappedPlayerNumber;
       defaultKeyBindings;
       navigationKeyBindings;
+      buttonsNames;
       constructor(gamepad, player) {
             this.previousPressedButtonIndex = null;
             this.throttleCount = 0;
@@ -437,9 +474,28 @@ export class Joystick {
                   "ArrowRight",
                   null,
             ];
+            this.buttonsNames = [
+                  "a",
+                  "b",
+                  "x",
+                  "y",
+                  "l1",
+                  "r1",
+                  "l2",
+                  "r2",
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  "dpad down",
+                  "dpad left",
+                  "dpad right",
+                  null,
+            ];
             this.navigationKeyBindings = [
                   null,
-                  null,
+                  "Back",
                   "Enter",
                   null,
                   null,
@@ -456,6 +512,203 @@ export class Joystick {
                   "ArrowRight",
                   null,
             ];
+      }
+
+      updateGameKeyBinding = (buttonIndex, bindingValue) => {
+            if (this.defaultKeyBindings[buttonIndex] === null) {
+                  for (let i = 0; i < this.defaultKeyBindings.length; i++) {
+                        if (this.defaultKeyBindings[i] === bindingValue) {
+                              this.defaultKeyBindings[i] = null;
+                        }
+                  }
+                  this.defaultKeyBindings[buttonIndex] = bindingValue;
+                  return true;
+            } else {
+                  return false;
+            }
+      };
+}
+
+export class KeyBoard {
+      keyBoardMapping;
+      constructor() {
+            this.keyBoardMapping = {
+                  ArrowDown: {
+                        playerNumber: "0",
+                        bindingValue: "ArrowDown",
+                  },
+                  ArrowLeft: {
+                        playerNumber: "0",
+                        bindingValue: "ArrowLeft",
+                  },
+                  ArrowRight: {
+                        playerNumber: "0",
+                        bindingValue: "ArrowRight",
+                  },
+                  " ": {
+                        playerNumber: "0",
+                        bindingValue: "rotate",
+                  },
+                  a: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  b: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  c: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  d: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  e: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  f: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  g: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  h: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  i: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  j: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  k: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  l: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  m: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  n: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  o: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  p: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  q: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  r: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  s: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  t: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  u: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  v: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  w: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  x: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  y: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  z: {
+                        playerNumber: null,
+                        bindingValue: null,
+                  },
+                  Control: {
+                        0: {
+                              playerNumber: null,
+                              bindingValue: null,
+                        },
+                        1: {
+                              playerNumber: null,
+                              bindingValue: null,
+                        },
+                  },
+                  Shift: {
+                        0: {
+                              playerNumber: null,
+                              bindingValue: null,
+                        },
+                        1: {
+                              playerNumber: null,
+                              bindingValue: null,
+                        },
+                  },
+            };
+      }
+
+      updateKeyBoardMapping(
+            key,
+            playerNumber,
+            bindingValue,
+            assignedKeyBoardKey,
+            keyLocation
+      ) {
+            if (assignedKeyBoardKey === "space bar") {
+                  assignedKeyBoardKey = " ";
+            }
+            if (keyLocation) {
+                  if (
+                        this.keyBoardMapping[key][keyLocation].playerNumber ===
+                        null
+                  ) {
+                        this.keyBoardMapping[key][keyLocation].playerNumber =
+                              playerNumber;
+                        this.keyBoardMapping[key][keyLocation].bindingValue =
+                              bindingValue;
+                        return true;
+                  }
+            } else if (this.keyBoardMapping[key].playerNumber === null) {
+                  this.keyBoardMapping[key].playerNumber = playerNumber;
+                  this.keyBoardMapping[key].bindingValue = bindingValue;
+                  if (assignedKeyBoardKey) {
+                        this.keyBoardMapping[assignedKeyBoardKey].playerNumber =
+                              null;
+                        this.keyBoardMapping[assignedKeyBoardKey].bindingValue =
+                              null;
+                  }
+                  return true;
+            }
+            return false;
       }
 }
 
@@ -747,4 +1000,15 @@ export const finalInput = (direction, player, sounds, gamepad) => {
             }
       }
       return false;
+};
+
+export const toastOptions = {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
 };

@@ -2,7 +2,12 @@ import { Form } from "react-router-dom";
 import gamePadImage from "../../assets/images/pngwing.com.png";
 import styles from "./controller.module.css";
 import { Select } from "./select";
-export const Controller = ({ game, previousGamepadLoop }) => {
+export const Controller = ({
+      joystickIndex,
+      previousGamepadLoop,
+      joystick,
+      game,
+}) => {
       return (
             <div className={styles["connected-controller"]}>
                   <div>
@@ -11,43 +16,38 @@ export const Controller = ({ game, previousGamepadLoop }) => {
                               alt="gamepad"
                               className={styles["gamepad-image"]}
                         ></img>
-                        <div>Player-1</div>
+                        <div>Player-{joystickIndex}</div>
                   </div>
-                  <Form
-                  // onChange={(event) => {
-                  //     //   gameControlChangeHandler(event, 0);
-                  // }}
-                  >
-                        <div className={styles["setting-container"]}>
-                              <span>DOWN</span>
-                              <Select
-                                    game={game}
-                                    previousGamepadLoop={previousGamepadLoop}
-                              ></Select>
-                        </div>
-
-                        <div className={styles["setting-container"]}>
-                              <span>RIGHT</span>
-                              <Select
-                                    game={game}
-                                    previousGamepadLoop={previousGamepadLoop}
-                              ></Select>
-                        </div>
-                        <div className={styles["setting-container"]}>
-                              <span>LEFT</span>
-                              <Select
-                                    game={game}
-                                    previousGamepadLoop={previousGamepadLoop}
-                              ></Select>
-                        </div>
-                        <div className={styles["setting-container"]}>
-                              <span>DROP</span>
-                              <Select
-                                    game={game}
-                                    previousGamepadLoop={previousGamepadLoop}
-                              ></Select>
-                        </div>
-                  </Form>
+                  <div>
+                        <Select
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="ArrowDown"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></Select>
+                        <Select
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="ArrowRight"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></Select>
+                        <Select
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="ArrowLeft"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></Select>
+                        <Select
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="rotate"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></Select>
+                  </div>
             </div>
       );
 };

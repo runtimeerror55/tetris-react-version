@@ -1,0 +1,14 @@
+.connected-key-board {
+      margin: 5px;
+      padding: 10px;
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      max-width: 700px;
+      background-color: cadetblue;
+      border-radius: 20px;
+      text-align: center;
+}
+.key-board-image {
+      width: 200px;
+}
