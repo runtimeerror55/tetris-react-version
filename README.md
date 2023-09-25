@@ -1,11 +1,22 @@
 # tetris-react-version
 
-## game
+## key functionalities
 
-1. move left , right, down- params(tetrimino coordinates,binary matrix)
-2. rotate coordinates - params(tetrimino coordinates,binary matrix)
-3. update currentTetromino - params(tetrimino coordintates)
-4. generate binary matrix
+1. simple,clean experience
+1. move current tetromino down ,right,left
+1. destroy blocks
+1. destroying blocks
+1. shifting blocks
+1. continously dropping the current tetromino of each player
+1. update score
+1. generate random tetrominos for every new game
+1. single player
+1. couch play(2 players in one screen side by side)
+1. only controller supporrt, only keyboard support, keyboard and controller mix support
+1. whole app navigation support with controller
+1. customize keybindings for controller and keyboard
+1. multiple players on single keyboard support
+1. sounds for button presses,game sounds
 
 # Getting Started with Create React App
 
