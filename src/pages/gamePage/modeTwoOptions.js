@@ -1,28 +1,21 @@
-import styles from "./gamePadSettings.module.css";
-import gamePadImage from "../../assets/images/pngwing.com.png";
-import { useEffect, useState, useContext, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import styles from "./modeTwoOptions.module.css";
 import { toast } from "react-toastify";
-import { Form } from "react-router-dom";
-import { Controller } from "./controller";
-import { Howl } from "howler";
-import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
-import clickSoundPath from "../../assets/sounds/click.mp3";
-import { KeyBoard } from "./keyBoard/keyBoard";
-const navigationSound = new Howl({
-      src: [menuNavigationSoundPath],
-});
-const clickSound = new Howl({
-      src: [clickSoundPath],
-});
-
-export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
-      const [startGamePadLoop, setStartGamePadLoop] = useState(true);
-      const gamepadLoopState = useMemo(() => {
-            return { run: true };
-      }, []);
+import { toastOptions } from "../../utilities/utilities";
+export const ModeTwoOptions = ({
+      game,
+      setShowOptions,
+      previousGamepadLoop,
+}) => {
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
       }, []);
+      const currentGamePadLoopState = useMemo(() => {
+            return {
+                  run: true,
+            };
+      }, []);
+
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -33,7 +26,7 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                   } else {
                         focusableElements.index++;
                   }
-                  navigationSound.play();
+                  game.sounds.navigationSound.play();
                   focusableElements.elements[focusableElements.index].focus();
             } else if (event.key === "ArrowUp") {
                   if (
@@ -42,18 +35,19 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                   ) {
                         return;
                   } else {
-                        navigationSound.play();
+                        game.sounds.navigationSound.play();
                         focusableElements.index--;
                         focusableElements.elements[
                               focusableElements.index
                         ].focus();
                   }
             } else if (event.key === "Enter") {
-                  clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
-                  clickSound.play();
-                  setShowSettingsOverLay(false);
+                  game.sounds.clickSound.play();
+                  setShowOptions(false);
+                  previousGamepadLoop.gamepadLoopState.run = true;
+                  previousGamepadLoop.setStartGamePadLoop(true);
             }
       };
       const gamepadLoop = () => {
@@ -74,7 +68,15 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                           buttonIndex
                                     ) {
                                           if (buttonIndex === 1) {
-                                                shouldExit = true;
+                                                currentGamePadLoopState.run = false;
+                                                controllerSettingsOverlayKeyDownHandler(
+                                                      {
+                                                            key: joystick
+                                                                  .navigationKeyBindings[
+                                                                  buttonIndex
+                                                            ],
+                                                      }
+                                                );
                                           }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
@@ -87,11 +89,8 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                           joystick.previousPressedButtonIndex =
                                                 buttonIndex;
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
+                                          //   console.log(buttonIndex);
                                     } else if (joystick.throttleCount === 10) {
-                                          if (buttonIndex === 1) {
-                                                shouldExit = true;
-                                          }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
                                                       key: joystick
@@ -101,65 +100,50 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                                                 }
                                           );
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
+                                          //   console.log(buttonIndex);
                                     }
                               }
                         });
                   }
             }
-            if (shouldExit || !gamepadLoopState.run) {
+            if (!currentGamePadLoopState.run) {
                   return;
             }
 
             requestAnimationFrame(gamepadLoop);
       };
-      useEffect(() => {
-            if (gamepadLoopState.run) {
-                  gamepadLoop();
-            }
-      }, [startGamePadLoop]);
 
+      useEffect(() => {
+            gamepadLoop();
+            previousGamepadLoop.gamepadLoopState.run = false;
+            previousGamepadLoop.setStartGamePadLoop(false);
+      }, []);
       useEffect(() => {
             focusableElements.elements =
-                  document.querySelectorAll("[tabindex='2']");
+                  document.querySelectorAll("[tabindex='3']");
       });
 
+      const optionsClickHandler = (event) => {
+            event.stopPropagation();
+            game.sounds.clickSound.play();
+            const value = event.target.getAttribute("data-value");
+            game.gameModes.modeTwo = +value;
+            game.reset();
+
+            setShowOptions(false);
+            currentGamePadLoopState.run = false;
+            previousGamepadLoop.gamepadLoopState.run = true;
+            previousGamepadLoop.setStartGamePadLoop(true);
+            toast.success("updated scuccesfully", toastOptions);
+      };
       return (
-            <>
-                  <h1 className={styles["controller-settings-heading"]}>
-                        Controller settings
-                  </h1>
-                  <div className={styles["connected-controllers"]}>
-                        {game.players.map((player, index) => {
-                              const joystick = game.joysticks[index];
-                              if (joystick) {
-                                    return (
-                                          <Controller
-                                                key={index}
-                                                joystickIndex={index}
-                                                previousGamepadLoop={{
-                                                      gamepadLoopState,
-                                                      setStartGamePadLoop,
-                                                }}
-                                                joystick={joystick}
-                                                game={game}
-                                          ></Controller>
-                                    );
-                              }
-                        })}
-                        {game.players.map((player, index) => {
-                              return (
-                                    <KeyBoard
-                                          previousGamepadLoop={{
-                                                gamepadLoopState,
-                                                setStartGamePadLoop,
-                                          }}
-                                          playerNumber={index + ""}
-                                          game={game}
-                                    ></KeyBoard>
-                              );
-                        })}
+            <div className={styles["options"]} onClick={optionsClickHandler}>
+                  <div className={styles["option"]} tabIndex={3} data-value="1">
+                        score till you die
                   </div>
-            </>
+                  <div className={styles["option"]} tabIndex={3} data-value="2">
+                        maximize score in 5 min
+                  </div>
+            </div>
       );
 };

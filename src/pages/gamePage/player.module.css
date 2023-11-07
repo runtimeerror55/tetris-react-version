@@ -8,6 +8,9 @@
       align-items: center;
       width: 150px;
       flex-wrap: wrap;
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.3);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 .info-item {
@@ -16,6 +19,9 @@
       padding: 5px;
       width: 100px;
       color: white;
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 #pause-button {
@@ -31,6 +37,8 @@
       background-color: rgba(12, 12, 12);
       border: 5px solid rgba(0, 255, 255, 1);
       position: relative;
+      border: 2px solid rgba(255, 0, 0, 1);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 .row {
@@ -91,47 +99,41 @@
 }
 
 .t-tetromino-active {
-      border: 2px solid rgba(0, 255, 0, 1);
+      /* border: 2px solid rgba(0, 255, 0, 1);
       background-color: rgba(0, 255, 0, 0.5);
-      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1); */
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 .square-tetromino-active {
-      border: 2px solid rgba(0, 255, 255, 1);
+      /* border: 2px solid rgba(0, 255, 255, 1);
       background-color: rgba(0, 255, 255, 0.5);
-      box-shadow: 0 0 10px rgba(0, 255, 255, 1);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 1); */
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 .line-tetromino-active {
-      border: 2px solid rgba(128, 0, 128, 1);
+      /* border: 2px solid rgba(128, 0, 128, 1);
       background-color: rgba(128, 0, 128, 0.5);
-      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1); */
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
 .z-tetromino-active {
-      border: 2px solid rgba(255, 255, 0, 1);
+      /* border: 2px solid rgba(255, 255, 0, 1);
       background-color: rgba(255, 255, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1); */
+      border: 2px solid rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
-/* #sounds-button {
-    border: 2px solid rgba(128, 0, 128, 1);
-    background-color: rgba(128, 0, 128, 0.5);
+.hard-drop-active {
+      border: 2px solid white;
 }
-#reset-button {
-    border: 2px solid rgba(128, 0, 128, 1);
-    background-color: rgba(128, 0, 128, 0.5);
-} */
-
-/* #sounds-button:hover {
-    box-shadow: 0 0 10px rgba(128, 0, 128, 1);
-}
-
-#exit-button {
-    border: 2px solid rgba(255, 0, 0, 1);
-    background-color: rgba(255, 0, 0, 0.5);
-}
-
-#exit-button:hover {
-    box-shadow: 0 0 10px rgba(255, 0, 0, 1);
-} */

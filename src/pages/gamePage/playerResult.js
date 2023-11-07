@@ -4,7 +4,6 @@ import styles from "./playerResult.module.css";
 export const PlayerResult = ({ player }) => {
       const [score, setScore] = useState(0);
       const statsLoop = () => {
-            console.log(score + 20);
             if (score + 20 > player.stats.score) {
                   setScore(player.stats.score);
             } else {

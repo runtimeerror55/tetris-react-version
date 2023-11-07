@@ -1,21 +1,13 @@
-import styles from "./gamePadSettings.module.css";
-import gamePadImage from "../../assets/images/pngwing.com.png";
-import { useEffect, useState, useContext, useMemo } from "react";
-import { toast } from "react-toastify";
-import { Form } from "react-router-dom";
-import { Controller } from "./controller";
-import { Howl } from "howler";
-import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
-import clickSoundPath from "../../assets/sounds/click.mp3";
-import { KeyBoard } from "./keyBoard/keyBoard";
-const navigationSound = new Howl({
-      src: [menuNavigationSoundPath],
-});
-const clickSound = new Howl({
-      src: [clickSoundPath],
-});
+import { useEffect, useState, useMemo } from "react";
+import styles from "./gameModes.module.css";
+import { GoBackButton } from "../../components/navBar/buttons/goBack";
+import { ModeOneSelect } from "./modeOneSelect";
+import { ModeTwoSelect } from "./modeTwoSelect";
+export const GameModes = ({ setShowGameModes, game }) => {
+      const gameModesCloseButtonClickHandler = () => {
+            setShowGameModes(false);
+      };
 
-export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
       const [startGamePadLoop, setStartGamePadLoop] = useState(true);
       const gamepadLoopState = useMemo(() => {
             return { run: true };
@@ -33,7 +25,7 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                   } else {
                         focusableElements.index++;
                   }
-                  navigationSound.play();
+                  game.sounds.navigationSound.play();
                   focusableElements.elements[focusableElements.index].focus();
             } else if (event.key === "ArrowUp") {
                   if (
@@ -42,18 +34,18 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
                   ) {
                         return;
                   } else {
-                        navigationSound.play();
+                        game.sounds.navigationSound.play();
                         focusableElements.index--;
                         focusableElements.elements[
                               focusableElements.index
                         ].focus();
                   }
             } else if (event.key === "Enter") {
-                  clickSound.play();
+                  game.sounds.clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
-                  clickSound.play();
-                  setShowSettingsOverLay(false);
+                  game.sounds.clickSound.play();
+                  setShowGameModes(false);
             }
       };
       const gamepadLoop = () => {
@@ -125,41 +117,29 @@ export const GamePadSettings = ({ game, setShowSettingsOverLay }) => {
       });
 
       return (
-            <>
-                  <h1 className={styles["controller-settings-heading"]}>
-                        Controller settings
-                  </h1>
-                  <div className={styles["connected-controllers"]}>
-                        {game.players.map((player, index) => {
-                              const joystick = game.joysticks[index];
-                              if (joystick) {
-                                    return (
-                                          <Controller
-                                                key={index}
-                                                joystickIndex={index}
-                                                previousGamepadLoop={{
-                                                      gamepadLoopState,
-                                                      setStartGamePadLoop,
-                                                }}
-                                                joystick={joystick}
-                                                game={game}
-                                          ></Controller>
-                                    );
-                              }
-                        })}
-                        {game.players.map((player, index) => {
-                              return (
-                                    <KeyBoard
-                                          previousGamepadLoop={{
-                                                gamepadLoopState,
-                                                setStartGamePadLoop,
-                                          }}
-                                          playerNumber={index + ""}
-                                          game={game}
-                                    ></KeyBoard>
-                              );
-                        })}
+            <section className={styles["game-modes-section"]}>
+                  <GoBackButton
+                        onClickHandler={gameModesCloseButtonClickHandler}
+                  ></GoBackButton>
+                  <div className={styles["game-modes"]}>
+                        <h1 className={styles["game-modes-heading"]}>
+                              Game modes
+                        </h1>
+                        <ModeOneSelect
+                              previousGamepadLoop={{
+                                    gamepadLoopState,
+                                    setStartGamePadLoop,
+                              }}
+                              game={game}
+                        ></ModeOneSelect>
+                        <ModeTwoSelect
+                              previousGamepadLoop={{
+                                    gamepadLoopState,
+                                    setStartGamePadLoop,
+                              }}
+                              game={game}
+                        ></ModeTwoSelect>
                   </div>
-            </>
+            </section>
       );
 };

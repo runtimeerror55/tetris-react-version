@@ -5,6 +5,7 @@ import glassBreakPath from "../assets/sounds/laserInSpace.wav";
 import gameOverPath from "../assets/sounds/gameOver.wav";
 import navigationSoundPath from "../assets/sounds/navigation.m4a";
 import clickSoundPath from "../assets/sounds/click.mp3";
+import blasterSoundPath from "../assets/sounds/blaster.mp3";
 
 import { toast } from "react-toastify";
 export class Game {
@@ -22,11 +23,26 @@ export class Game {
       sounds;
       anyGameStarted;
       keyBoard;
-      constructor(renderPlayersUi, renderGameResult) {
+      gameModes;
+      renderMenuOverlay;
+      speed;
+      boardRows;
+      boardColumns;
+      constructor(
+            renderPlayersUi,
+            renderGameResult,
+            renderMenuOverlay,
+            boardRows,
+            boardColumns
+      ) {
+            this.boardRows = boardRows;
+            this.boardColumns = boardColumns;
+            this.speed = 30;
             this.isGameStarted = false;
             this.isGameOver = null;
             this.pause = false;
             this.renderGameResult = renderGameResult;
+            this.renderMenuOverlay = renderMenuOverlay;
             this.CoordinatesAndColorsOfTetrominos = [
                   {
                         allCoordinates: [
@@ -78,19 +94,18 @@ export class Game {
                   }, // skew tetromino
             ];
             this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
-
+            this.gameModes = {
+                  modeOne: 1,
+                  modeTwo: 1,
+            };
             this.players = [
                   new Player(
                         0,
                         this.CoordinatesAndColorsOfTetrominos[
                               this.randomTetrominoIndexes[0]
-                        ]
-                  ),
-                  new Player(
-                        0,
-                        this.CoordinatesAndColorsOfTetrominos[
-                              this.randomTetrominoIndexes[0]
-                        ]
+                        ],
+                        this.boardRows,
+                        this.boardColumns
                   ),
             ];
             this.tetrominos = [
@@ -156,6 +171,10 @@ export class Game {
                         src: [laserGunShotSoundPath],
                   }),
 
+                  blasterSound: new Howl({
+                        src: [blasterSoundPath],
+                  }),
+
                   fall: new Howl({
                         src: [fallPath],
                   }),
@@ -176,6 +195,23 @@ export class Game {
             };
       }
 
+      createPlayers = (numberOfPlayers) => {
+            console.log(numberOfPlayers);
+            const players = [];
+            for (let i = 0; i < numberOfPlayers; i++) {
+                  players.push(
+                        new Player(
+                              i,
+                              this.CoordinatesAndColorsOfTetrominos[
+                                    this.randomTetrominoIndexes[0]
+                              ],
+                              this.boardRows,
+                              this.boardColumns
+                        )
+                  );
+            }
+            this.players = players;
+      };
       gamepadLoop = () => {
             let isTrue = false;
             const joysticks = this.joysticks;
@@ -187,7 +223,7 @@ export class Game {
                         }
                         const gamepad = gamepads[joystick.gamepad.index];
                         if (gamepad) {
-                              gamepad.buttons.forEach((button, buttonIndex) => {
+                              gamepad.buttons.every((button, buttonIndex) => {
                                     if (button.pressed) {
                                           console.log(buttonIndex);
                                           if (
@@ -203,8 +239,17 @@ export class Game {
                                                             joystickIndex
                                                       ],
                                                       this.sounds,
-                                                      gamepad
+                                                      gamepad,
+                                                      this
                                                 );
+                                                if (buttonIndex === 9) {
+                                                      if (this.isGameStarted) {
+                                                            this.renderMenuOverlay(
+                                                                  true
+                                                            );
+                                                            this.pause = true;
+                                                      }
+                                                }
                                                 joystick.previousPressedButtonIndex =
                                                       buttonIndex;
                                                 joystick.throttleCount = 0;
@@ -222,7 +267,9 @@ export class Game {
                                                             this.players[
                                                                   joystickIndex
                                                             ],
-                                                            this.sounds
+                                                            this.sounds,
+                                                            null,
+                                                            this
                                                       );
 
                                                       joystick.throttleCount = 0;
@@ -230,7 +277,9 @@ export class Game {
                                                       isTrue = true;
                                                 }
                                           }
+                                          return false;
                                     }
+                                    return true;
                               });
                         }
                   }
@@ -241,17 +290,24 @@ export class Game {
             this.gamepadLoop.bind(this)();
 
             this.gameLoopWaitCount++;
-            if (this.gameLoopWaitCount === 30) {
+            if (this.gameLoopWaitCount === this.speed) {
                   this.players.forEach((player, index) => {
-                        if (!finalInput("ArrowDown", player)) {
+                        if (
+                              !finalInput("ArrowDown", player, null, null, this)
+                        ) {
+                              if (this.speed === 2) {
+                                    this.speed = 30;
+                              }
                               updateplayerBoardMatrix(
                                     player.currentTetromino,
-                                    player.boardMatrix
+                                    player.boardMatrix,
+                                    this
                               );
                               const destroyableRows =
                                     areThereAnydestroyableRows(
                                           player.currentTetromino,
-                                          player.boardMatrix
+                                          player.boardMatrix,
+                                          this
                                     );
 
                               if (destroyableRows.length > 0) {
@@ -259,7 +315,8 @@ export class Game {
                                           destroyableRows,
                                           player.boardMatrix,
                                           player.renderUi,
-                                          this.sounds
+                                          this.sounds,
+                                          this
                                     );
                                     if (this.joysticks[index]) {
                                           let duration =
@@ -290,12 +347,23 @@ export class Game {
                                           ]
                                     ];
                               player.currentTetromino = newCoordinates;
-                              if (!finalInput("startingPosition", player)) {
+                              if (
+                                    !finalInput(
+                                          "startingPosition",
+                                          player,
+                                          null,
+                                          null,
+                                          this
+                                    )
+                              ) {
                                     player.isGameOver = true;
                                     this.isGameOver = true;
                                     this.renderGameResult(true);
                               }
                         }
+
+                        player.hardDropCoordinates = null;
+                        player.hardDropFinalCoordinates(this);
                   });
                   this.renderPlayersUi({});
                   this.gameLoopWaitCount = 0;
@@ -356,8 +424,15 @@ export class Game {
                         finalInput(
                               bindingValue,
                               this.players[playerNumber],
-                              this.sounds
+                              this.sounds,
+                              null,
+                              this
                         );
+
+                        this.players.forEach((player) => {
+                              player.hardDropCoordinates = null;
+                              player.hardDropFinalCoordinates(this);
+                        });
                   }
             });
       };
@@ -406,18 +481,24 @@ export class Player {
       boardMatrix;
       renderUi;
       currentIndexOfrandomTetrominoIndexes;
-      constructor(playerNumber, startingTetromino) {
+      timer;
+      timerId;
+      hardDropCoordinates;
+      constructor(playerNumber, startingTetromino, boardRows, boardColumns) {
             this.stats = {
                   score: 0,
                   singleShots: 0,
                   doubleShots: 0,
                   tripleShots: 0,
             };
+            this.hardDropCoordinates = null;
+            this.timer = 0;
+            this.timerId = null;
             this.isGameOver = false;
             this.number = playerNumber;
             this.currentIndexOfrandomTetrominoIndexes = 0;
             this.currentTetromino = startingTetromino;
-            this.boardMatrix = createPlayerBoardMatrix();
+            this.boardMatrix = createPlayerBoardMatrix(boardRows, boardColumns);
             this.renderUi = null;
       }
 
@@ -432,12 +513,33 @@ export class Player {
             for (let i = 0; i < rows; i++) {
                   const columns = this.boardMatrix[i].length;
                   for (let j = 0; j < columns; j++) {
-                        if (j === 15) {
+                        if (j === columns - 1) {
                               this.boardMatrix[i][j] = 0;
                         } else {
                               this.boardMatrix[i][j] = "";
                         }
                   }
+            }
+      };
+
+      hardDropFinalCoordinates = (game) => {
+            console.log(game);
+            let currentTetromino = this.currentTetromino;
+            let flag = false;
+
+            while (
+                  isPossibleToMove(
+                        "ArrowDown",
+                        currentTetromino,
+                        this.boardMatrix,
+                        game
+                  )
+            ) {
+                  currentTetromino = moveDown(currentTetromino);
+                  flag = true;
+            }
+            if (flag) {
+                  this.hardDropCoordinates = currentTetromino;
             }
       };
 }
@@ -456,7 +558,7 @@ export class Joystick {
             this.gamepad = gamepad;
             this.mappedPlayerNumber = player;
             this.defaultKeyBindings = [
-                  null,
+                  "hardDrop",
                   "rotate",
                   null,
                   null,
@@ -503,7 +605,7 @@ export class Joystick {
                   null,
                   null,
                   null,
-                  null,
+                  "Escape",
                   null,
                   null,
                   "ArrowUp",
@@ -760,8 +862,10 @@ export const moveLeft = (currentTetromino) => {
 export const isPossibleToMove = (
       direction,
       currentTetromino,
-      playerBoardMatrix
+      playerBoardMatrix,
+      game
 ) => {
+      console.log(game);
       if (direction === "ArrowLeft") {
             return currentTetromino.allCoordinates.every((coordinates) => {
                   return (
@@ -772,14 +876,14 @@ export const isPossibleToMove = (
       } else if (direction === "ArrowRight") {
             return currentTetromino.allCoordinates.every((coordinates) => {
                   return (
-                        coordinates[1] < 14 &&
+                        coordinates[1] < game.boardColumns - 1 &&
                         !playerBoardMatrix[coordinates[0]][coordinates[1] + 1]
                   );
             });
       } else if (direction === "ArrowDown") {
             return currentTetromino.allCoordinates.every((coordinates) => {
                   return (
-                        coordinates[0] < 21 &&
+                        coordinates[0] < game.boardRows - 1 &&
                         !playerBoardMatrix[coordinates[0] + 1][coordinates[1]]
                   );
             });
@@ -790,14 +894,14 @@ export const isPossibleToMove = (
       }
 };
 
-export const createPlayerBoardMatrix = () => {
+export const createPlayerBoardMatrix = (boardRows, boardColumns) => {
       const playerBoardMatrix = [];
 
-      for (let i = 0; i < 22; i++) {
+      for (let i = 0; i < boardRows; i++) {
             playerBoardMatrix[i] = [];
 
-            for (let j = 0; j < 16; j++) {
-                  if (j === 15) {
+            for (let j = 0; j < boardColumns + 1; j++) {
+                  if (j === boardColumns) {
                         playerBoardMatrix[i][j] = 0;
                   } else {
                         playerBoardMatrix[i].push("");
@@ -809,16 +913,21 @@ export const createPlayerBoardMatrix = () => {
 
 export const updateplayerBoardMatrix = (
       currentTetromino,
-      playerBoardMatrix
+      playerBoardMatrix,
+      game
 ) => {
       currentTetromino.allCoordinates.forEach((coordinates) => {
-            playerBoardMatrix[coordinates[0]][15]++;
+            playerBoardMatrix[coordinates[0]][game.boardColumns]++;
             playerBoardMatrix[coordinates[0]][coordinates[1]] =
                   currentTetromino.colorClass;
       });
 };
 
-export const isRotationPossible = (currentTetromino, playerBoardMatrix) => {
+export const isRotationPossible = (
+      currentTetromino,
+      playerBoardMatrix,
+      game
+) => {
       const x = currentTetromino.allCoordinates;
       const y = playerBoardMatrix;
       const setOfrotatedCoordinates = x.map((coordinates) => {
@@ -830,9 +939,9 @@ export const isRotationPossible = (currentTetromino, playerBoardMatrix) => {
 
       const output = setOfrotatedCoordinates.every((coordinates) => {
             return (
-                  coordinates[0] < 22 &&
+                  coordinates[0] < game.boardRows &&
                   coordinates[0] > -1 &&
-                  coordinates[1] < 14 &&
+                  coordinates[1] < game.boardColumns - 1 &&
                   coordinates[1] > -1 &&
                   !y[coordinates[0]][coordinates[1]]
             );
@@ -847,11 +956,15 @@ export const isRotationPossible = (currentTetromino, playerBoardMatrix) => {
 
 export const areThereAnydestroyableRows = (
       currentTetromino,
-      playerBoardMatrix
+      playerBoardMatrix,
+      game
 ) => {
       let destroyableRows = new Set();
       currentTetromino.allCoordinates.forEach((coordinates) => {
-            if (playerBoardMatrix[coordinates[0]][15] === 15) {
+            if (
+                  playerBoardMatrix[coordinates[0]][game.boardColumns] ===
+                  game.boardColumns
+            ) {
                   destroyableRows.add(coordinates[0]);
             }
       });
@@ -863,16 +976,20 @@ export const areThereAnydestroyableRows = (
       return destroyableRows;
 };
 
-export const shiftBlocks = (destroyableRows, playerBoardMatrix) => {
+export const shiftBlocks = (destroyableRows, playerBoardMatrix, game) => {
       destroyableRows.forEach((row) => {
             let currentRow = row;
             let upperRow = row - 1;
-            while (playerBoardMatrix[upperRow][15]) {
+            while (playerBoardMatrix[upperRow][game.boardColumns]) {
                   playerBoardMatrix[currentRow].forEach((element, column) => {
-                        if (column === 15) {
-                              playerBoardMatrix[currentRow][15] =
-                                    playerBoardMatrix[upperRow][15];
-                              playerBoardMatrix[upperRow][15] = 0;
+                        if (column === game.boardColumns) {
+                              playerBoardMatrix[currentRow][game.boardColumns] =
+                                    playerBoardMatrix[upperRow][
+                                          game.boardColumns
+                                    ];
+                              playerBoardMatrix[upperRow][
+                                    game.boardColumns
+                              ] = 0;
                         } else {
                               playerBoardMatrix[currentRow][column] =
                                     playerBoardMatrix[upperRow][column];
@@ -891,20 +1008,21 @@ export const destroy = (
       destroyableRows,
       playerBoardMatrix,
       setDestroy,
-      sounds
+      sounds,
+      game
 ) => {
       let column = 0;
       let throttleCount = 0;
-      sounds.glassBreak.play();
+      sounds.blasterSound.play();
 
       const destroyAnimationLoop = () => {
             throttleCount++;
             if (throttleCount === 2) {
-                  if (column === 15) {
+                  if (column === game.boardColumns) {
                         destroyableRows.forEach((row) => {
                               playerBoardMatrix[row][column] = 0;
                         });
-                        shiftBlocks(destroyableRows, playerBoardMatrix);
+                        shiftBlocks(destroyableRows, playerBoardMatrix, game);
                         setDestroy({});
                         return;
                   }
@@ -922,13 +1040,15 @@ export const destroy = (
       requestAnimationFrame(destroyAnimationLoop);
 };
 
-export const finalInput = (direction, player, sounds, gamepad) => {
+export const finalInput = (direction, player, sounds, gamepad, game) => {
+      let returnValue = false;
       if (direction === "ArrowDown") {
             if (
                   isPossibleToMove(
                         "ArrowDown",
                         player.currentTetromino,
-                        player.boardMatrix
+                        player.boardMatrix,
+                        game
                   )
             ) {
                   const newTetromino = moveDown(player.currentTetromino);
@@ -938,14 +1058,15 @@ export const finalInput = (direction, player, sounds, gamepad) => {
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
-                  return true;
+                  returnValue = true;
             }
       } else if (direction === "ArrowLeft") {
             if (
                   isPossibleToMove(
                         "ArrowLeft",
                         player.currentTetromino,
-                        player.boardMatrix
+                        player.boardMatrix,
+                        game
                   )
             ) {
                   const newTetromino = moveLeft(player.currentTetromino);
@@ -955,14 +1076,15 @@ export const finalInput = (direction, player, sounds, gamepad) => {
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
-                  return true;
+                  returnValue = true;
             }
       } else if (direction === "ArrowRight") {
             if (
                   isPossibleToMove(
                         "ArrowRight",
                         player.currentTetromino,
-                        player.boardMatrix
+                        player.boardMatrix,
+                        game
                   )
             ) {
                   const newTetromino = moveRight(player.currentTetromino);
@@ -972,12 +1094,13 @@ export const finalInput = (direction, player, sounds, gamepad) => {
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
-                  return true;
+                  returnValue = true;
             }
       } else if (direction === " " || direction === "rotate") {
             const setOfrotatedCoordinates = isRotationPossible(
                   player.currentTetromino,
-                  player.boardMatrix
+                  player.boardMatrix,
+                  game
             );
             if (setOfrotatedCoordinates) {
                   if (sounds) {
@@ -986,20 +1109,36 @@ export const finalInput = (direction, player, sounds, gamepad) => {
                   player.currentTetromino.allCoordinates =
                         setOfrotatedCoordinates;
                   player.renderUi({});
-                  return true;
+                  returnValue = true;
             }
       } else if (direction === "startingPosition") {
             if (
                   isPossibleToMove(
                         "startingPosition",
                         player.currentTetromino,
-                        player.boardMatrix
+                        player.boardMatrix,
+                        game
                   )
             ) {
-                  return true;
+                  returnValue = true;
             }
+      } else if (direction === "hardDrop") {
+            game?.sounds?.blasterSound.play();
+            if (game) {
+                  game.speed = 2;
+                  game.gameLoopWaitCount = 0;
+            }
+            // player.hardDropCoordinates = null;
+            // player.hardDropFinalCoordinates();
+            // if (player.hardDropCoordinates) {
+            //       player.currentTetromino = player.hardDropCoordinates;
+            //       player.renderUi({});
+            //       returnValue = true;
+            // }
       }
-      return false;
+      player.hardDropCoordinates = null;
+      player.hardDropFinalCoordinates(game);
+      return returnValue;
 };
 
 export const toastOptions = {

@@ -13,12 +13,18 @@ export const GamePage = () => {
       const [renderPlayersUi, setRenderPlayersUi] = useState({});
       const [showGameStartTimer, setShowGameStartTimer] = useState(false);
       const [showGameResult, setShowGameResult] = useState(false);
-      const game = useMemo(() => {
-            return new Game(setRenderPlayersUi, setShowGameResult);
-      }, []);
-
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
       const [showGame, setShowGame] = useState(true);
+
+      const game = useMemo(() => {
+            return new Game(
+                  setRenderPlayersUi,
+                  setShowGameResult,
+                  setShowMenuOverlay,
+                  20,
+                  12
+            );
+      }, []);
       useEffect(() => {
             if (!game.pause && game.isGameStarted && !game.isGameOver) {
                   game.gameLoop();
@@ -50,6 +56,7 @@ export const GamePage = () => {
                                                   <>
                                                         <PlayerJsx
                                                               player={player}
+                                                              game={game}
                                                         ></PlayerJsx>
                                                   </>
                                             );

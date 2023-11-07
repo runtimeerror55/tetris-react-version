@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./menu.module.css";
 import { Settings } from "./settings";
+import { GameModes } from "./gameModes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
@@ -13,7 +14,8 @@ const clickSound = new Howl({
       src: [clickSoundPath],
 });
 export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
-      const [showSettingsOveryLay, setShowSettingsOverLay] = useState(false);
+      const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
+      const [showGameModes, setShowGameModes] = useState(false);
       const [renderMenu, setRenderMenu] = useState({});
 
       const focusableElements = useMemo(() => {
@@ -29,6 +31,16 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
             setShowSettingsOverLay(true);
       };
 
+      const gameModesClickHandler = () => {
+            setShowGameModes(true);
+      };
+
+      const resumeGameClickHandler = () => {
+            if (game.isGameStarted) {
+                  setShowMenuOverlay(false);
+                  game.pause = false;
+            }
+      };
       const menuOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -88,7 +100,6 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                                           joystick.previousPressedButtonIndex =
                                                 buttonIndex;
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
                                     } else if (joystick.throttleCount === 10) {
                                           menuOverlayKeyDownHandler({
                                                 key: joystick
@@ -97,7 +108,6 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                                                 ],
                                           });
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
                                     }
                               }
                         });
@@ -107,33 +117,36 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
             setRenderMenu({});
       };
       useEffect(() => {
-            if (!showSettingsOveryLay) {
+            if (!showSettingsOverLay && !showGameModes) {
                   requestAnimationFrame(gamepadLoop);
             }
-      }, [showSettingsOveryLay, renderMenu]);
+      }, [showSettingsOverLay, renderMenu, showGameModes]);
       return (
             <>
                   <section
                         className={styles["menu-overlay-section"]}
                         onKeyDown={menuOverlayKeyDownHandler}
                   >
-                        <button
-                              onClick={newGameButtonClickHandler}
-                              className={styles["menu-overlay-close-button"]}
-                              tabIndex={-1}
-                        >
-                              <FontAwesomeIcon icon={faArrowLeft} />
-                        </button>
-                        <div
-                              className={styles["option"]}
-                              tabIndex={0}
-                              onClick={newGameButtonClickHandler}
-                        >
-                              NEW GAME
-                        </div>
-                        <div className={styles["option"]} tabIndex={0}>
-                              RESUME GAME
-                        </div>
+                        {!game.isGameStarted ? (
+                              <div
+                                    className={styles["option"]}
+                                    tabIndex={0}
+                                    onClick={newGameButtonClickHandler}
+                              >
+                                    NEW GAME
+                              </div>
+                        ) : null}
+
+                        {game.isGameStarted && game.pause ? (
+                              <div
+                                    className={styles["option"]}
+                                    tabIndex={0}
+                                    onClick={resumeGameClickHandler}
+                              >
+                                    RESUME GAME
+                              </div>
+                        ) : null}
+
                         <div
                               className={styles["option"]}
                               onClick={controlsClickHandler}
@@ -144,8 +157,15 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                         <div className={styles["option"]} tabIndex={0}>
                               SOUNDS
                         </div>
+                        <div
+                              className={styles["option"]}
+                              onClick={gameModesClickHandler}
+                              tabIndex={0}
+                        >
+                              GAME MODES
+                        </div>
                   </section>
-                  {showSettingsOveryLay ? (
+                  {showSettingsOverLay ? (
                         <Settings
                               setShowSettingsOverLay={setShowSettingsOverLay}
                               game={game}
@@ -153,6 +173,13 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                   ) : (
                         ""
                   )}
+
+                  {showGameModes ? (
+                        <GameModes
+                              setShowGameModes={setShowGameModes}
+                              game={game}
+                        ></GameModes>
+                  ) : null}
             </>
       );
 };
