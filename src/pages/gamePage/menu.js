@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./menu.module.css";
 import { Settings } from "./settings";
-import { GameModes } from "./gameModes";
+import { GameModes } from "./gameModes/gameModes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import { Howl } from "howler";
 import clickSoundPath from "../../assets/sounds/click.mp3";
+import { themeContext } from "../../context/theme";
+import { CardOne } from "../../components/cards/cardOne";
+
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
@@ -17,6 +20,7 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
       const [showGameModes, setShowGameModes] = useState(false);
       const [renderMenu, setRenderMenu] = useState({});
+      const { theme } = useContext(themeContext);
 
       const focusableElements = useMemo(() => {
             return { elements: null, index: 0 };
@@ -73,8 +77,8 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='0']");
             focusableElements.elements[0].focus();
-      }, []);
-
+      }, [game.isGameStarted]);
+      console.log(focusableElements.elements);
       const gamepadLoop = () => {
             const joystick = game.joysticks[0];
             const gamepads = navigator.getGamepads();
@@ -121,15 +125,21 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                   requestAnimationFrame(gamepadLoop);
             }
       }, [showSettingsOverLay, renderMenu, showGameModes]);
+
       return (
             <>
-                  <section
-                        className={styles["menu-overlay-section"]}
-                        onKeyDown={menuOverlayKeyDownHandler}
+                  <CardOne
+                        customClass={styles["menu-overlay-section"]}
+                        keyDownHandler={menuOverlayKeyDownHandler}
+                        customTag="section"
                   >
                         {!game.isGameStarted ? (
                               <div
-                                    className={styles["option"]}
+                                    className={
+                                          styles["option"] +
+                                          " " +
+                                          styles["option-" + theme]
+                                    }
                                     tabIndex={0}
                                     onClick={newGameButtonClickHandler}
                               >
@@ -139,7 +149,11 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
 
                         {game.isGameStarted && game.pause ? (
                               <div
-                                    className={styles["option"]}
+                                    className={
+                                          styles["option"] +
+                                          " " +
+                                          styles["option-" + theme]
+                                    }
                                     tabIndex={0}
                                     onClick={resumeGameClickHandler}
                               >
@@ -148,23 +162,38 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                         ) : null}
 
                         <div
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               onClick={controlsClickHandler}
                               tabIndex={0}
                         >
                               CONTROLS
                         </div>
-                        <div className={styles["option"]} tabIndex={0}>
+                        <div
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
+                              tabIndex={0}
+                        >
                               SOUNDS
                         </div>
                         <div
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               onClick={gameModesClickHandler}
                               tabIndex={0}
                         >
                               GAME MODES
                         </div>
-                  </section>
+                  </CardOne>
                   {showSettingsOverLay ? (
                         <Settings
                               setShowSettingsOverLay={setShowSettingsOverLay}

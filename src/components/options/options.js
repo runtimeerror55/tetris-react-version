@@ -1,20 +1,24 @@
-import { useEffect, useState, useMemo } from "react";
-import styles from "./gameModes.module.css";
-import { GoBackButton } from "../../components/navBar/buttons/goBack";
-import { ModeOneSelect } from "./modeOneSelect";
-import { ModeTwoSelect } from "./modeTwoSelect";
-export const GameModes = ({ setShowGameModes, game }) => {
-      const gameModesCloseButtonClickHandler = () => {
-            setShowGameModes(false);
-      };
-
-      const [startGamePadLoop, setStartGamePadLoop] = useState(true);
-      const gamepadLoopState = useMemo(() => {
-            return { run: true };
-      }, []);
+import styles from "./options.module.css";
+import { useState, useEffect, useMemo, useContext } from "react";
+import { themeContext } from "../../context/theme";
+export const Options = ({
+      game,
+      setShowOptions,
+      previousGamepadLoop,
+      clickHandler,
+      attributes,
+      children,
+}) => {
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
       }, []);
+      const currentGamePadLoopState = useMemo(() => {
+            return {
+                  run: true,
+            };
+      }, []);
+      const { theme } = useContext(themeContext);
+
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -41,14 +45,16 @@ export const GameModes = ({ setShowGameModes, game }) => {
                         ].focus();
                   }
             } else if (event.key === "Enter") {
-                  game.sounds.clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
                   game.sounds.clickSound.play();
-                  setShowGameModes(false);
+                  setShowOptions(false);
+                  previousGamepadLoop.gamepadLoopState.run = true;
+                  previousGamepadLoop.setStartGamePadLoop(true);
             }
       };
       const gamepadLoop = () => {
+            console.log(game);
             const joystick = game.joysticks[0];
             const gamepads = navigator.getGamepads();
             let shouldExit = false;
@@ -66,7 +72,15 @@ export const GameModes = ({ setShowGameModes, game }) => {
                                           buttonIndex
                                     ) {
                                           if (buttonIndex === 1) {
-                                                shouldExit = true;
+                                                currentGamePadLoopState.run = false;
+                                                controllerSettingsOverlayKeyDownHandler(
+                                                      {
+                                                            key: joystick
+                                                                  .navigationKeyBindings[
+                                                                  buttonIndex
+                                                            ],
+                                                      }
+                                                );
                                           }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
@@ -79,11 +93,8 @@ export const GameModes = ({ setShowGameModes, game }) => {
                                           joystick.previousPressedButtonIndex =
                                                 buttonIndex;
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
+                                          //   console.log(buttonIndex);
                                     } else if (joystick.throttleCount === 10) {
-                                          if (buttonIndex === 1) {
-                                                shouldExit = true;
-                                          }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
                                                       key: joystick
@@ -93,53 +104,39 @@ export const GameModes = ({ setShowGameModes, game }) => {
                                                 }
                                           );
                                           joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
+                                          //   console.log(buttonIndex);
                                     }
                               }
                         });
                   }
             }
-            if (shouldExit || !gamepadLoopState.run) {
+            if (!currentGamePadLoopState.run) {
                   return;
             }
 
             requestAnimationFrame(gamepadLoop);
       };
-      useEffect(() => {
-            if (gamepadLoopState.run) {
-                  gamepadLoop();
-            }
-      }, [startGamePadLoop]);
 
+      useEffect(() => {
+            gamepadLoop();
+            previousGamepadLoop.gamepadLoopState.run = false;
+            previousGamepadLoop.setStartGamePadLoop(false);
+      }, []);
       useEffect(() => {
             focusableElements.elements =
-                  document.querySelectorAll("[tabindex='2']");
+                  document.querySelectorAll("[tabindex='3']");
       });
-
       return (
-            <section className={styles["game-modes-section"]}>
-                  <GoBackButton
-                        onClickHandler={gameModesCloseButtonClickHandler}
-                  ></GoBackButton>
-                  <div className={styles["game-modes"]}>
-                        <h1 className={styles["game-modes-heading"]}>
-                              Game modes
-                        </h1>
-                        <ModeOneSelect
-                              previousGamepadLoop={{
-                                    gamepadLoopState,
-                                    setStartGamePadLoop,
-                              }}
-                              game={game}
-                        ></ModeOneSelect>
-                        <ModeTwoSelect
-                              previousGamepadLoop={{
-                                    gamepadLoopState,
-                                    setStartGamePadLoop,
-                              }}
-                              game={game}
-                        ></ModeTwoSelect>
-                  </div>
-            </section>
+            <div
+                  className={
+                        styles["options"] + " " + styles["options-" + theme]
+                  }
+                  onClick={(event) => {
+                        clickHandler(event, currentGamePadLoopState);
+                  }}
+                  {...attributes}
+            >
+                  {children}
+            </div>
       );
 };

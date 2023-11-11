@@ -10,6 +10,23 @@
       z-index: 1;
       overflow-y: scroll;
 }
+
+.settings-overlay-theme-0 {
+      background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.settings-overlay-theme-1 {
+      background: linear-gradient(rgba(0, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.settings-overlay-theme-2 {
+      background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.settings-overlay-theme-3 {
+      background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
 .settings-overlay::-webkit-scrollbar-track {
       -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
       border-radius: 10px;
@@ -35,7 +52,6 @@
 }
 
 .settings {
-      background-color: teal;
       padding: 20px;
       border-radius: 20px;
       width: 90%;

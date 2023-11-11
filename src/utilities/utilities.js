@@ -28,6 +28,7 @@ export class Game {
       speed;
       boardRows;
       boardColumns;
+      playersStandings = null;
       constructor(
             renderPlayersUi,
             renderGameResult,
@@ -196,7 +197,6 @@ export class Game {
       }
 
       createPlayers = (numberOfPlayers) => {
-            console.log(numberOfPlayers);
             const players = [];
             for (let i = 0; i < numberOfPlayers; i++) {
                   players.push(
@@ -225,7 +225,6 @@ export class Game {
                         if (gamepad) {
                               gamepad.buttons.every((button, buttonIndex) => {
                                     if (button.pressed) {
-                                          console.log(buttonIndex);
                                           if (
                                                 joystick.previousPressedButtonIndex !==
                                                 buttonIndex
@@ -289,90 +288,142 @@ export class Game {
       gameLoop = () => {
             this.gamepadLoop.bind(this)();
 
-            this.gameLoopWaitCount++;
-            if (this.gameLoopWaitCount === this.speed) {
-                  this.players.forEach((player, index) => {
-                        if (
-                              !finalInput("ArrowDown", player, null, null, this)
-                        ) {
-                              if (this.speed === 2) {
-                                    this.speed = 30;
-                              }
-                              updateplayerBoardMatrix(
-                                    player.currentTetromino,
-                                    player.boardMatrix,
-                                    this
-                              );
-                              const destroyableRows =
-                                    areThereAnydestroyableRows(
-                                          player.currentTetromino,
-                                          player.boardMatrix,
-                                          this
-                                    );
+            // this.gameLoopWaitCount++;
+            let shouldReturn = false;
 
-                              if (destroyableRows.length > 0) {
-                                    destroy(
-                                          destroyableRows,
-                                          player.boardMatrix,
-                                          player.renderUi,
-                                          this.sounds,
-                                          this
-                                    );
-                                    if (this.joysticks[index]) {
-                                          let duration =
-                                                (destroyableRows.length - 1) *
-                                                      200 +
-                                                200;
-                                          this.joysticks[
-                                                index
-                                          ].gamepad.vibrationActuator.playEffect(
-                                                "dual-rumble",
-                                                {
-                                                      startDelay: 0,
-                                                      duration: duration,
-                                                      weakMagnitude: 1.0,
-                                                      strongMagnitude: 1.0,
-                                                }
-                                          );
-                                    }
-                                    updateStats(player, destroyableRows.length);
-                              }
-                              player.currentIndexOfrandomTetrominoIndexes++;
-
-                              const newCoordinates =
-                                    this.CoordinatesAndColorsOfTetrominos[
-                                          this.randomTetrominoIndexes[
-                                                player
-                                                      .currentIndexOfrandomTetrominoIndexes
-                                          ]
-                                    ];
-                              player.currentTetromino = newCoordinates;
+            this.players.forEach((player, index) => {
+                  if (!player.isGameOver) {
+                        player.frameCounter++;
+                        if (player.frameCounter === player.currentSpeed) {
                               if (
                                     !finalInput(
-                                          "startingPosition",
+                                          "ArrowDown",
                                           player,
                                           null,
                                           null,
                                           this
                                     )
                               ) {
-                                    player.isGameOver = true;
-                                    this.isGameOver = true;
-                                    this.renderGameResult(true);
-                              }
-                        }
+                                    if (player.currentSpeed === 2) {
+                                          player.currentSpeed =
+                                                player.previousSpeed;
+                                    }
+                                    updateplayerBoardMatrix(
+                                          player.currentTetromino,
+                                          player.boardMatrix,
+                                          this
+                                    );
+                                    const destroyableRows =
+                                          areThereAnydestroyableRows(
+                                                player.currentTetromino,
+                                                player.boardMatrix,
+                                                this
+                                          );
 
-                        player.hardDropCoordinates = null;
-                        player.hardDropFinalCoordinates(this);
-                  });
-                  this.renderPlayersUi({});
-                  this.gameLoopWaitCount = 0;
+                                    if (destroyableRows.length > 0) {
+                                          destroy(
+                                                destroyableRows,
+                                                player.boardMatrix,
+                                                player.renderUi,
+                                                this.sounds,
+                                                this,
+                                                player.number
+                                          );
+                                          if (this.joysticks[index]) {
+                                                let duration =
+                                                      (destroyableRows.length -
+                                                            1) *
+                                                            200 +
+                                                      200;
+                                                this.joysticks[
+                                                      index
+                                                ].gamepad.vibrationActuator.playEffect(
+                                                      "dual-rumble",
+                                                      {
+                                                            startDelay: 0,
+                                                            duration: duration,
+                                                            weakMagnitude: 1.0,
+                                                            strongMagnitude: 1.0,
+                                                      }
+                                                );
+                                          }
+                                          updateStats(
+                                                player,
+                                                destroyableRows.length
+                                          );
+                                    }
+                                    player.currentIndexOfrandomTetrominoIndexes++;
+
+                                    const newCoordinates =
+                                          this.CoordinatesAndColorsOfTetrominos[
+                                                this.randomTetrominoIndexes[
+                                                      player
+                                                            .currentIndexOfrandomTetrominoIndexes
+                                                ]
+                                          ];
+                                    player.currentTetromino = newCoordinates;
+                                    if (
+                                          !finalInput(
+                                                "startingPosition",
+                                                player,
+                                                null,
+                                                null,
+                                                this
+                                          )
+                                    ) {
+                                          player.isGameOver = true;
+                                          this.checkGameOver();
+                                    }
+                              }
+                              this.renderPlayersUi({});
+                              shouldReturn = true;
+                              player.frameCounter = 0;
+                              player.hardDropCoordinates = null;
+                              player.hardDropFinalCoordinates(this);
+                        }
+                  }
+            });
+
+            if (shouldReturn) {
                   return;
             }
 
             requestAnimationFrame(this.gameLoop.bind(this));
       };
 
+      checkGameOver = () => {
+            const gameOverPlayers = [];
+            const playingPlayers = [];
+            this.players.forEach((player, index) => {
+                  if (!player.isGameOver) {
+                        playingPlayers.push(player);
+                  } else {
+                        gameOverPlayers.push(player);
+                  }
+            });
+
+            gameOverPlayers.sort((a, b) => {
+                  return b.stats.score - a.stats.score;
+            });
+
+            if (playingPlayers.length === 0) {
+                  this.isGameOver = true;
+                  this.renderGameResult(true);
+                  this.playersStandings = [...gameOverPlayers];
+            } else if (playingPlayers.length === 1) {
+                  if (
+                        playingPlayers[0].stats.score >
+                        gameOverPlayers[0].stats.score
+                  ) {
+                        this.isGameOver = true;
+                        this.renderGameResult(true);
+                        this.playersStandings = [
+                              playingPlayers[0],
+                              ...gameOverPlayers,
+                        ];
+                  }
+            }
+      };
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
                   for (let i = 0; i < this.joysticks.length; i++) {
@@ -381,7 +432,7 @@ export class Game {
                                     event.gamepad,
                                     i
                               );
-                              console.log(this.joysticks);
+
                               this.renderPlayersUi({});
                               return;
                         }
@@ -406,7 +457,6 @@ export class Game {
 
       onKeyboard = () => {
             window.addEventListener("keydown", (event) => {
-                  console.log(event.key);
                   if (this.isGameStarted && !this.pause && !this.isGameOver) {
                         if (
                               !this.keyBoard.keyBoardMapping[event.key] ||
@@ -443,6 +493,7 @@ export class Game {
       };
 
       reset = () => {
+            this.playersStandings = null;
             this.isGameOver = false;
             this.isGameStarted = false;
             this.pause = false;
@@ -468,7 +519,7 @@ export class Game {
                   const randomInteger = Math.ceil(Math.random() * 4);
                   a.push(randomInteger);
             }
-            console.log(a);
+
             return a;
       };
 }
@@ -484,7 +535,13 @@ export class Player {
       timer;
       timerId;
       hardDropCoordinates;
+      previousSpeed;
+      currentSpeed;
+      frameCounter;
       constructor(playerNumber, startingTetromino, boardRows, boardColumns) {
+            this.previousSpeed = 15;
+            this.currentSpeed = 15;
+            this.frameCounter = 0;
             this.stats = {
                   score: 0,
                   singleShots: 0,
@@ -503,6 +560,11 @@ export class Player {
       }
 
       reset = (currentTetromino) => {
+            this.isGameOver = false;
+            this.currentSpeed = 15;
+            this.previousSpeed = 15;
+            this.frameCounter = 0;
+            this.hardDropCoordinates = null;
             this.stats.score = 0;
             this.stats.singleShots = 0;
             this.stats.doubleShots = 0;
@@ -523,7 +585,6 @@ export class Player {
       };
 
       hardDropFinalCoordinates = (game) => {
-            console.log(game);
             let currentTetromino = this.currentTetromino;
             let flag = false;
 
@@ -865,7 +926,6 @@ export const isPossibleToMove = (
       playerBoardMatrix,
       game
 ) => {
-      console.log(game);
       if (direction === "ArrowLeft") {
             return currentTetromino.allCoordinates.every((coordinates) => {
                   return (
@@ -1009,7 +1069,8 @@ export const destroy = (
       playerBoardMatrix,
       setDestroy,
       sounds,
-      game
+      game,
+      playerNumber
 ) => {
       let column = 0;
       let throttleCount = 0;
@@ -1021,6 +1082,10 @@ export const destroy = (
                   if (column === game.boardColumns) {
                         destroyableRows.forEach((row) => {
                               playerBoardMatrix[row][column] = 0;
+                              const laserBeam = document.querySelector(
+                                    `#player-${playerNumber}-laser-beam-${row}`
+                              );
+                              laserBeam.style.width = "0px";
                         });
                         shiftBlocks(destroyableRows, playerBoardMatrix, game);
                         setDestroy({});
@@ -1029,6 +1094,11 @@ export const destroy = (
 
                   destroyableRows.forEach((row) => {
                         playerBoardMatrix[row][column] = "";
+                        const laserBeam = document.querySelector(
+                              `#player-${playerNumber}-laser-beam-${row}`
+                        );
+
+                        laserBeam.style.width = 25 * (column + 1) + "px";
                   });
                   column++;
 
@@ -1124,10 +1194,15 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
             }
       } else if (direction === "hardDrop") {
             game?.sounds?.blasterSound.play();
-            if (game) {
-                  game.speed = 2;
-                  game.gameLoopWaitCount = 0;
+            if (player.currentSpeed !== 2) {
+                  player.previousSpeed = player.currentSpeed;
             }
+            player.currentSpeed = 2;
+            player.frameCounter = 0;
+            // if (game) {
+            //       game.speed = 2;
+            //       game.gameLoopWaitCount = 0;
+            // }
             // player.hardDropCoordinates = null;
             // player.hardDropFinalCoordinates();
             // if (player.hardDropCoordinates) {

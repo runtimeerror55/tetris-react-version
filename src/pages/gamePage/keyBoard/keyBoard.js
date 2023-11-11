@@ -1,9 +1,13 @@
 import keyBoardImage from "../../../assets/images/160060-and-mouse-pic-black-keyboard.png";
+import { useContext } from "react";
 import styles from "./keyBoard.module.css";
 import { KeyBoardSelect } from "./keyBoardSelect";
+import { themeContext } from "../../../context/theme";
+import { CardTwo } from "../../../components/cards/cardTwo";
 export const KeyBoard = ({ playerNumber, previousGamepadLoop, game }) => {
+      const { theme } = useContext(themeContext);
       return (
-            <div className={styles["connected-key-board"]}>
+            <CardTwo customClass={styles["connected-key-board"]}>
                   <div>
                         <img
                               src={keyBoardImage}
@@ -38,6 +42,6 @@ export const KeyBoard = ({ playerNumber, previousGamepadLoop, game }) => {
                               game={game}
                         ></KeyBoardSelect>
                   </div>
-            </div>
+            </CardTwo>
       );
 };

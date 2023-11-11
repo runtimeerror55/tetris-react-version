@@ -2,14 +2,23 @@ import { Form } from "react-router-dom";
 import gamePadImage from "../../assets/images/pngwing.com.png";
 import styles from "./controller.module.css";
 import { Select } from "./select";
+import { themeContext } from "../../context/theme";
+import { useContext } from "react";
 export const Controller = ({
       joystickIndex,
       previousGamepadLoop,
       joystick,
       game,
 }) => {
+      const { theme } = useContext(themeContext);
       return (
-            <div className={styles["connected-controller"]}>
+            <div
+                  className={
+                        styles["connected-controller"] +
+                        " " +
+                        styles["connected-controller-" + theme]
+                  }
+            >
                   <div>
                         <img
                               src={gamePadImage}

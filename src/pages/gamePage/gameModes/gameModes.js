@@ -1,21 +1,21 @@
-import { useState, useEffect, useMemo } from "react";
-import styles from "./modeTwoOptions.module.css";
-import { toast } from "react-toastify";
-import { toastOptions } from "../../utilities/utilities";
-export const ModeTwoOptions = ({
-      game,
-      setShowOptions,
-      previousGamepadLoop,
-}) => {
+import { useEffect, useState, useMemo } from "react";
+import styles from "./gameModes.module.css";
+import { GoBackButton } from "../../../components/navBar/buttons/goBack";
+import { ModeOneSelect } from "./modeOneSelect";
+import { ModeTwoSelect } from "./modeTwoSelect";
+import { CardOne } from "../../../components/cards/cardOne";
+export const GameModes = ({ setShowGameModes, game }) => {
+      const gameModesCloseButtonClickHandler = () => {
+            setShowGameModes(false);
+      };
+
+      const [startGamePadLoop, setStartGamePadLoop] = useState(true);
+      const gamepadLoopState = useMemo(() => {
+            return { run: true };
+      }, []);
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
       }, []);
-      const currentGamePadLoopState = useMemo(() => {
-            return {
-                  run: true,
-            };
-      }, []);
-
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -42,12 +42,11 @@ export const ModeTwoOptions = ({
                         ].focus();
                   }
             } else if (event.key === "Enter") {
+                  game.sounds.clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
                   game.sounds.clickSound.play();
-                  setShowOptions(false);
-                  previousGamepadLoop.gamepadLoopState.run = true;
-                  previousGamepadLoop.setStartGamePadLoop(true);
+                  setShowGameModes(false);
             }
       };
       const gamepadLoop = () => {
@@ -68,15 +67,7 @@ export const ModeTwoOptions = ({
                                           buttonIndex
                                     ) {
                                           if (buttonIndex === 1) {
-                                                currentGamePadLoopState.run = false;
-                                                controllerSettingsOverlayKeyDownHandler(
-                                                      {
-                                                            key: joystick
-                                                                  .navigationKeyBindings[
-                                                                  buttonIndex
-                                                            ],
-                                                      }
-                                                );
+                                                shouldExit = true;
                                           }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
@@ -89,8 +80,11 @@ export const ModeTwoOptions = ({
                                           joystick.previousPressedButtonIndex =
                                                 buttonIndex;
                                           joystick.throttleCount = 0;
-                                          //   console.log(buttonIndex);
+                                          console.log(buttonIndex);
                                     } else if (joystick.throttleCount === 10) {
+                                          if (buttonIndex === 1) {
+                                                shouldExit = true;
+                                          }
                                           controllerSettingsOverlayKeyDownHandler(
                                                 {
                                                       key: joystick
@@ -100,50 +94,56 @@ export const ModeTwoOptions = ({
                                                 }
                                           );
                                           joystick.throttleCount = 0;
-                                          //   console.log(buttonIndex);
+                                          console.log(buttonIndex);
                                     }
                               }
                         });
                   }
             }
-            if (!currentGamePadLoopState.run) {
+            if (shouldExit || !gamepadLoopState.run) {
                   return;
             }
 
             requestAnimationFrame(gamepadLoop);
       };
-
       useEffect(() => {
-            gamepadLoop();
-            previousGamepadLoop.gamepadLoopState.run = false;
-            previousGamepadLoop.setStartGamePadLoop(false);
-      }, []);
+            if (gamepadLoopState.run) {
+                  gamepadLoop();
+            }
+      }, [startGamePadLoop]);
+
       useEffect(() => {
             focusableElements.elements =
-                  document.querySelectorAll("[tabindex='3']");
+                  document.querySelectorAll("[tabindex='2']");
       });
 
-      const optionsClickHandler = (event) => {
-            event.stopPropagation();
-            game.sounds.clickSound.play();
-            const value = event.target.getAttribute("data-value");
-            game.gameModes.modeTwo = +value;
-            game.reset();
-
-            setShowOptions(false);
-            currentGamePadLoopState.run = false;
-            previousGamepadLoop.gamepadLoopState.run = true;
-            previousGamepadLoop.setStartGamePadLoop(true);
-            toast.success("updated scuccesfully", toastOptions);
-      };
       return (
-            <div className={styles["options"]} onClick={optionsClickHandler}>
-                  <div className={styles["option"]} tabIndex={3} data-value="1">
-                        score till you die
+            <CardOne
+                  customClass={styles["game-modes-section"]}
+                  customTag="section"
+            >
+                  <GoBackButton
+                        onClickHandler={gameModesCloseButtonClickHandler}
+                  ></GoBackButton>
+                  <div className={styles["game-modes"]}>
+                        <h1 className={styles["game-modes-heading"]}>
+                              Game modes
+                        </h1>
+                        <ModeOneSelect
+                              previousGamepadLoop={{
+                                    gamepadLoopState,
+                                    setStartGamePadLoop,
+                              }}
+                              game={game}
+                        ></ModeOneSelect>
+                        <ModeTwoSelect
+                              previousGamepadLoop={{
+                                    gamepadLoopState,
+                                    setStartGamePadLoop,
+                              }}
+                              game={game}
+                        ></ModeTwoSelect>
                   </div>
-                  <div className={styles["option"]} tabIndex={3} data-value="2">
-                        maximize score in 5 min
-                  </div>
-            </div>
+            </CardOne>
       );
 };

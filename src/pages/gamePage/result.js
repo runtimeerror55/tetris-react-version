@@ -26,11 +26,11 @@ export const GameResult = ({
       return (
             <section className={styles["game-result-section"]}>
                   <div className={styles["game-result-container"]}>
-                        {game.players.map((player) => {
-                              console.log(player);
+                        {game.playersStandings.map((player, index) => {
                               return (
                                     <PlayerResult
                                           player={player}
+                                          index={index}
                                     ></PlayerResult>
                               );
                         })}

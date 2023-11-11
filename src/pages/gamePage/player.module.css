@@ -1,29 +1,64 @@
-#game-info {
+.game-info {
       width: 150px;
-      background-color: rgba(12, 12, 12);
-      border: 5px solid rgba(0, 255, 255, 1);
       color: white;
       display: flex;
       justify-content: space-evenly;
       align-items: center;
       width: 150px;
       flex-wrap: wrap;
+}
+
+.game-info-theme-0 {
       border: 2px solid rgba(255, 0, 0, 1);
-      background-color: rgba(255, 0, 0, 0.3);
+      /* background-color: rgba(255, 0, 0, 0.3); */
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+}
+
+.game-info-theme-1 {
+      border: 2px solid rgba(0, 255, 0, 1);
+      /* background-color: rgba(0, 255, 0, 0.3); */
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+}
+.game-info-theme-2 {
+      border: 2px solid rgba(128, 0, 128, 1);
+      /* background-color: rgba(0, 255, 0, 0.3); */
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+
+.game-info-theme-3 {
+      border: 2px solid rgba(255, 255, 0, 1);
+      /* background-color: rgba(0, 255, 0, 0.3); */
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
 }
 
 .info-item {
       margin: 5px;
-      background-color: rgba(0, 255, 0, 0.5);
       padding: 5px;
       width: 100px;
       color: white;
+}
+
+.info-item-theme-0 {
       border: 2px solid rgba(255, 0, 0, 1);
       background-color: rgba(255, 0, 0, 0.5);
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
+.info-item-theme-1 {
+      border: 2px solid rgba(0, 255, 0, 1);
+      background-color: rgba(0, 255, 0, 0.5);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+}
 
+.info-item-theme-2 {
+      border: 2px solid rgba(128, 0, 128, 1);
+      background-color: rgba(128, 0, 128, 0.5);
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+.info-item-theme-3 {
+      border: 2px solid rgba(255, 255, 0, 1);
+      background-color: rgba(255, 255, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+}
 #pause-button {
       border: 2px solid rgba(0, 255, 255, 1);
       background-color: rgba(0, 255, 255, 0.5);
@@ -37,8 +72,30 @@
       background-color: rgba(12, 12, 12);
       border: 5px solid rgba(0, 255, 255, 1);
       position: relative;
+}
+
+.container-theme-0 {
+      background-color: rgba(12, 12, 12);
       border: 2px solid rgba(255, 0, 0, 1);
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+}
+
+.container-theme-1 {
+      background-color: rgba(12, 12, 12);
+      border: 2px solid rgba(0, 255, 0, 1);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+}
+
+.container-theme-2 {
+      background-color: rgba(12, 12, 12);
+      border: 2px solid rgba(128, 0, 128, 1);
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+
+.container-theme-3 {
+      background-color: rgba(12, 12, 12);
+      border: 2px solid rgba(255, 255, 0, 1);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
 }
 
 .row {
@@ -51,13 +108,27 @@
       border: 2px solid rgb(6, 6, 6);
 }
 .laser-beam {
-      width: 0px;
+      /* width: 0px;
       height: 5px;
       background-color: rgba(255, 0, 0, 0.7npn);
       box-shadow: 0 0 10px red;
       transition: width 0.016s linear;
       position: absolute;
+      top: 50%; */
+
+      width: 0px;
+      height: 3px;
+      transition: width 0.016s linear;
+      position: absolute;
       top: 50%;
+      background-color: rgb(219 209 209);
+      box-shadow: 0 0 10px rgb(232 221 221);
+
+      /* background-color: rgba(255, 0, 0, 0.8);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+
+      background-color: rgba(0, 255, 0, 0.8);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1); */
 }
 .menu {
       position: absolute;
@@ -92,46 +163,78 @@
       cursor: pointer;
 }
 
-.l-tetromino-active {
+.l-tetromino-activ-theme-4 {
       border: 2px solid rgba(255, 0, 0, 1);
-      background-color: rgba(255, 0, 0, 0.5);
+      background-color: rgba(255, 0, 0, 0.3);
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
-.t-tetromino-active {
-      /* border: 2px solid rgba(0, 255, 0, 1);
+.t-tetromino-active-theme-4 {
+      border: 2px solid rgba(0, 255, 0, 1);
       background-color: rgba(0, 255, 0, 0.5);
-      box-shadow: 0 0 10px rgba(0, 255, 0, 1); */
-      border: 2px solid rgba(255, 0, 0, 1);
-      background-color: rgba(255, 0, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
 }
 
-.square-tetromino-active {
-      /* border: 2px solid rgba(0, 255, 255, 1);
+.square-tetromino-active-theme-4 {
+      border: 2px solid rgba(0, 255, 255, 1);
       background-color: rgba(0, 255, 255, 0.5);
-      box-shadow: 0 0 10px rgba(0, 255, 255, 1); */
-      border: 2px solid rgba(255, 0, 0, 1);
-      background-color: rgba(255, 0, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 1);
 }
 
-.line-tetromino-active {
-      /* border: 2px solid rgba(128, 0, 128, 1);
+.line-tetromino-active-theme-4 {
+      border: 2px solid rgba(128, 0, 128, 1);
       background-color: rgba(128, 0, 128, 0.5);
-      box-shadow: 0 0 10px rgba(128, 0, 128, 1); */
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+
+.z-tetromino-active-theme-4 {
+      border: 2px solid rgba(255, 255, 0, 1);
+      background-color: rgba(255, 255, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+}
+
+/* theme-0 */
+.l-tetromino-activ-theme-0,
+.t-tetromino-active-theme-0,
+.square-tetromino-active-theme-0,
+.line-tetromino-active-theme-0,
+.z-tetromino-active-theme-0 {
       border: 2px solid rgba(255, 0, 0, 1);
       background-color: rgba(255, 0, 0, 0.5);
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);
 }
 
-.z-tetromino-active {
-      /* border: 2px solid rgba(255, 255, 0, 1);
+/* theme-1 */
+.l-tetromino-activ-theme-1,
+.t-tetromino-active-theme-1,
+.square-tetromino-active-theme-1,
+.line-tetromino-active-theme-1,
+.z-tetromino-active-theme-1 {
+      border: 2px solid rgba(0, 255, 0, 1);
+      background-color: rgba(0, 255, 0, 0.5);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+}
+
+/* theme-2 */
+.l-tetromino-activ-theme-2,
+.t-tetromino-active-theme-2,
+.square-tetromino-active-theme-2,
+.line-tetromino-active-theme-2,
+.z-tetromino-active-theme-2 {
+      border: 2px solid rgba(128, 0, 128, 1);
+      background-color: rgba(128, 0, 128, 0.5);
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+
+/* theme-3 */
+.l-tetromino-activ-theme-3,
+.t-tetromino-active-theme-3,
+.square-tetromino-active-theme-3,
+.line-tetromino-active-theme-3,
+.z-tetromino-active-theme-3 {
+      border: 2px solid rgba(255, 255, 0, 1);
       background-color: rgba(255, 255, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 255, 0, 1); */
-      border: 2px solid rgba(255, 0, 0, 1);
-      background-color: rgba(255, 0, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
 }
 
 .hard-drop-active {

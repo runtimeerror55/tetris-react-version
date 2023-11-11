@@ -3,7 +3,7 @@
 1. smaller board with 20 rows 12 columns
 2. two game modes infinite time with speed increase at 4min,8min and time limit of 5 min where you need to miximize the score
 3. powers lasers for column destruction , row destruction , freeze time in second game mode, speed
-4. hard drop feature
+4. calculating the winner
 
 <!-- function deepCloneArray(input) {
       return input.map((element) =>

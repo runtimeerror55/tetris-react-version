@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useContext } from "react";
 import styles from "./gamePage.module.css";
 import { NavBar } from "../../components/navBar/navBar";
 import { PlayerJsx } from "./player";
@@ -8,6 +8,9 @@ import { Game } from "../../utilities/utilities";
 import { Menu } from "./menu";
 import { StartTimer } from "./startTimer";
 import { GameResult } from "./result";
+import { themeContext } from "../../context/theme";
+import { CardOne } from "../../components/cards/cardOne";
+import { Bars } from "../../components/bars/bars";
 
 export const GamePage = () => {
       const [renderPlayersUi, setRenderPlayersUi] = useState({});
@@ -16,13 +19,15 @@ export const GamePage = () => {
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
       const [showGame, setShowGame] = useState(true);
 
+      const { theme } = useContext(themeContext);
+
       const game = useMemo(() => {
             return new Game(
                   setRenderPlayersUi,
                   setShowGameResult,
                   setShowMenuOverlay,
                   20,
-                  12
+                  10
             );
       }, []);
       useEffect(() => {
@@ -46,7 +51,7 @@ export const GamePage = () => {
 
       return (
             <>
-                  <div className={styles["page"]} tabIndex={-1}>
+                  <CardOne customClass={styles["page"]} customTag="div">
                         <ToastContainer></ToastContainer>
 
                         <main className={styles["main"]}>
@@ -97,7 +102,7 @@ export const GamePage = () => {
                                     ""
                               )}
                         </main>
-                  </div>
+                  </CardOne>
             </>
       );
 };

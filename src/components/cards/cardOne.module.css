@@ -1,0 +1,23 @@
+.card-one-theme-0 {
+      background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+      color: white;
+}
+
+.card-one-theme-1 {
+      background: linear-gradient(rgba(0, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+      color: white;
+}
+
+.card-one-theme-2 {
+      background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+      color: white;
+}
+
+.card-one-theme-3 {
+      background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+      color: white;
+}

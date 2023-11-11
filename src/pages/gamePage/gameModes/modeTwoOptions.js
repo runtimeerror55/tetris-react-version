@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import styles from "./modeOneOptions.module.css";
+import styles from "./modeTwoOptions.module.css";
 import { toast } from "react-toastify";
-import { toastOptions } from "../../utilities/utilities";
-export const ModeOneOptions = ({
+import { toastOptions } from "../../../utilities/utilities";
+export const ModeTwoOptions = ({
       game,
       setShowOptions,
       previousGamepadLoop,
@@ -123,41 +123,12 @@ export const ModeOneOptions = ({
                   document.querySelectorAll("[tabindex='3']");
       });
 
-      //   const optionsClickHandler = (event) => {
-      //         event.stopPropagation();
-      //         const playerNumber =
-      //               event.currentTarget.getAttribute("data-player-number");
-
-      //         const bindingValue =
-      //               event.currentTarget.getAttribute("data-binding-value");
-      //         const key = event.target.getAttribute("data-key");
-
-      //         if (
-      //               game.keyBoard.updateKeyBoardMapping(
-      //                     key,
-      //                     playerNumber,
-      //                     bindingValue,
-      //                     assignedKeyBoardKey
-      //               )
-      //         ) {
-      //               game.sounds.clickSound.play();
-      //               setShowOptions(false);
-      //               currentGamePadLoopState.run = false;
-      //               previousGamepadLoop.gamepadLoopState.run = true;
-      //               previousGamepadLoop.setStartGamePadLoop(true);
-      //               toast.success("updated scuccesfully", toastOptions);
-      //         } else {
-      //               toast.error("already used", toastOptions);
-      //         }
-      //   };
       const optionsClickHandler = (event) => {
             event.stopPropagation();
             game.sounds.clickSound.play();
             const value = event.target.getAttribute("data-value");
-            game.gameModes.modeOne = +value;
-            game.createPlayers(+value);
-            console.log(game);
-            // game.reset();
+            game.gameModes.modeTwo = +value;
+            game.reset();
 
             setShowOptions(false);
             currentGamePadLoopState.run = false;
@@ -168,10 +139,10 @@ export const ModeOneOptions = ({
       return (
             <div className={styles["options"]} onClick={optionsClickHandler}>
                   <div className={styles["option"]} tabIndex={3} data-value="1">
-                        single player
+                        score till you die
                   </div>
                   <div className={styles["option"]} tabIndex={3} data-value="2">
-                        couch play(2 players)
+                        maximize score in 5 min
                   </div>
             </div>
       );

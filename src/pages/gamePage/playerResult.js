@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./playerResult.module.css";
 
-export const PlayerResult = ({ player }) => {
+export const PlayerResult = ({ player, index }) => {
       const [score, setScore] = useState(0);
       const statsLoop = () => {
             if (score + 20 > player.stats.score) {
@@ -19,7 +19,7 @@ export const PlayerResult = ({ player }) => {
       return (
             <div className={styles["player-result"]}>
                   <div className={styles["player-number"]}>
-                        PLAYER {player.number}
+                        {index + 1}: PLAYER {player.number}
                   </div>
                   <div
                         className={

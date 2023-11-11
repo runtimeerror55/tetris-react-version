@@ -1,0 +1,27 @@
+.options {
+      position: absolute;
+      top: 0;
+      background-color: white;
+      border-radius: 5px;
+      top: 30px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+}
+
+.options-theme-0 {
+      background: linear-gradient(rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.3));
+      background-color: black;
+}
+.options-theme-1 {
+      background: linear-gradient(rgba(0, 255, 0, 0.3), rgba(0, 0, 0, 0.3));
+      background-color: black;
+}
+.options-theme-2 {
+      background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.options-theme-3 {
+      background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}

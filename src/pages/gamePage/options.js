@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import { Howl } from "howler";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import clickSoundPath from "../../assets/sounds/click.mp3";
 import styles from "./options.module.css";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../utilities/utilities";
+import { themeContext } from "../../context/theme";
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
@@ -18,6 +19,7 @@ export const Options = ({
       assignedButtonName,
       bindingValue,
 }) => {
+      const { theme } = useContext(themeContext);
       const focusableElements = useMemo(() => {
             return { elements: null, index: -1 };
       }, []);
@@ -26,7 +28,7 @@ export const Options = ({
                   run: true,
             };
       }, []);
-      console.log(assignedButtonName);
+
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
                   if (
@@ -163,14 +165,22 @@ export const Options = ({
       return (
             <>
                   <div
-                        className={styles["options"]}
+                        className={
+                              styles["options"] +
+                              " " +
+                              styles["options-" + theme]
+                        }
                         onClick={optionsClickHandler}
                         data-joystick-index="0"
                         data-binding-value={bindingValue}
                   >
                         <div
                               data-button-index="12"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               value="12"
                               tabIndex={3}
                         >
@@ -178,7 +188,11 @@ export const Options = ({
                         </div>
                         <div
                               data-button-index="13"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               value="13"
                               tabIndex={3}
                         >
@@ -186,7 +200,11 @@ export const Options = ({
                         </div>
                         <div
                               data-button-index="14"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               value="14"
                               tabIndex={3}
                         >
@@ -194,7 +212,11 @@ export const Options = ({
                         </div>
                         <div
                               data-button-index="15"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               value="15"
                               tabIndex={3}
                         >
@@ -202,56 +224,88 @@ export const Options = ({
                         </div>
                         <div
                               data-button-index="2"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               x
                         </div>
                         <div
                               data-button-index="0"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               a
                         </div>
                         <div
                               data-button-index="1"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               b
                         </div>
                         <div
                               data-button-index="3"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               y
                         </div>
                         <div
                               data-button-index="5"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               r1
                         </div>
                         <div
                               data-button-index="7"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               r2
                         </div>
                         <div
                               data-button-index="4"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               l1
                         </div>
                         <div
                               data-button-index="6"
-                              className={styles["option"]}
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
                               tabIndex={3}
                         >
                               l2

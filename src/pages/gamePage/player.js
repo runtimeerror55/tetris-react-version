@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./player.module.css";
 import {} from "../../utilities/playerInputs";
+import { themeContext } from "../../context/theme";
 
 const createGameBox = (
       currentTetromino,
       playerBoardMatrix,
       hardDropCoordinates,
-      game
+      game,
+      theme,
+      playerNumber
 ) => {
-      console.log(playerBoardMatrix);
       const arrayOne = new Array(game.boardRows).fill(0);
       const arrayTwo = new Array(game.boardColumns).fill(0);
+      console.log(theme);
 
       return (
             <>
@@ -24,9 +27,8 @@ const createGameBox = (
                                     <span
                                           className={styles["laser-beam"]}
                                           id={
-                                                styles[
-                                                      "player-1-laser-beam-" + i
-                                                ]
+                                                `player-${playerNumber}-laser-beam-` +
+                                                i
                                           }
                                     ></span>
                                     {arrayTwo.map((element, j) => {
@@ -47,8 +49,9 @@ const createGameBox = (
                                                       className +
                                                       " " +
                                                       styles[
-                                                            currentTetromino
-                                                                  .colorClass
+                                                            currentTetromino.colorClass +
+                                                                  "-" +
+                                                                  theme
                                                       ];
                                           }
                                           if (playerBoardMatrix[i][j]) {
@@ -58,7 +61,9 @@ const createGameBox = (
                                                       styles[
                                                             playerBoardMatrix[
                                                                   i
-                                                            ][j]
+                                                            ][j] +
+                                                                  "-" +
+                                                                  theme
                                                       ];
                                           }
 
@@ -106,19 +111,19 @@ const createGameBox = (
 export const PlayerJsx = ({ player, game }) => {
       const setRender = useState({})[1];
       const [timer, setTimer] = useState(0);
-
-      if (game.gameModes.modeTwo === 1) {
-            if (timer === 60) {
-                  game.speed = 20;
-                  game.gameLoopWaitCount = 0;
-            } else if (timer === 120) {
-                  game.speed = 15;
-                  game.gameLoopWaitCount = 0;
-            }
-      } else if (game.gameModes.modeTwo === 2 && timer === 120) {
-            game.isGameOver = true;
-            game.renderGameResult(true);
-      }
+      const { theme } = useContext(themeContext);
+      //   if (game.gameModes.modeTwo === 1) {
+      //         if (timer === 60) {
+      //               game.speed = 20;
+      //               game.gameLoopWaitCount = 0;
+      //         } else if (timer === 120) {
+      //               game.speed = 15;
+      //               game.gameLoopWaitCount = 0;
+      //         }
+      //   } else if (game.gameModes.modeTwo === 2 && timer === 120) {
+      //         game.isGameOver = true;
+      //         game.renderGameResult(true);
+      //   }
 
       useEffect(() => {
             player.renderUi = setRender;
@@ -139,34 +144,60 @@ export const PlayerJsx = ({ player, game }) => {
 
       return (
             <>
-                  <div id={styles["game-info"]}>
+                  <div
+                        className={
+                              styles["game-info"] +
+                              " " +
+                              styles["game-info-" + theme]
+                        }
+                  >
                         <div
-                              className={styles["info-item"]}
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["time"]}
                         >
                               Timer: {timer} s
                         </div>
                         <div
-                              className={styles["info-item"]}
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["score"]}
                         >
                               Score: {player.stats.score}
                         </div>
 
                         <div
-                              className={styles["info-item"]}
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["single-shot"]}
                         >
                               1X blast: {player.stats.singleShots}
                         </div>
                         <div
-                              className={styles["info-item"]}
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["double-shot"]}
                         >
                               2X blast: {player.stats.doubleShots}
                         </div>
                         <div
-                              className={styles["info-item"]}
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["triple-shot"]}
                         >
                               3X blast: {player.stats.tripleShots}
@@ -178,12 +209,20 @@ export const PlayerJsx = ({ player, game }) => {
                               Pause
                         </button> */}
                   </div>
-                  <div className={styles["container"]}>
+                  <div
+                        className={
+                              styles["container"] +
+                              " " +
+                              styles["container-" + theme]
+                        }
+                  >
                         {createGameBox(
                               player.currentTetromino,
                               player.boardMatrix,
                               player.hardDropCoordinates,
-                              game
+                              game,
+                              theme,
+                              player.number
                         )}
 
                         <div className={styles["menu"]}>

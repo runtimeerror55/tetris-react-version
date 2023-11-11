@@ -1,6 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import styles from "./select.module.css";
 import { Options } from "./options";
+import { themeContext } from "../../context/theme";
+import { CardThree } from "../../components/cards/cardThree";
 let count = 0;
 export const Select = ({
       joystickIndex,
@@ -14,6 +16,7 @@ export const Select = ({
             event.stopPropagation();
             setShowOptions(true);
       };
+      const { theme } = useContext(themeContext);
 
       let assignedButtonName = null;
       for (let i = 0; i < joystick.defaultKeyBindings.length; i++) {
@@ -26,8 +29,8 @@ export const Select = ({
       return (
             <div className={styles["setting-container"]}>
                   <span>{bindingValue}</span>
-                  <div
-                        className={styles["setting"]}
+                  <CardThree
+                        customClass={styles["setting"]}
                         tabIndex={2}
                         onClick={settingClickHandler}
                   >
@@ -43,7 +46,7 @@ export const Select = ({
                         ) : (
                               ""
                         )}
-                  </div>
+                  </CardThree>
             </div>
       );
 };
