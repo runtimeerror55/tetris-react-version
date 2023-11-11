@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo, useContext } from "react";
+import { useState, useContext } from "react";
 import styles from "./select.module.css";
-import { Options } from "./options";
-import { themeContext } from "../../context/theme";
 import { CardThree } from "../../components/cards/cardThree";
-let count = 0;
+import { Options } from "../../components/options/options";
+import { Option } from "../../components/options/option";
+import { toast } from "react-toastify";
+import { toastOptions } from "../../utilities/utilities";
+
 export const Select = ({
       joystickIndex,
       previousGamepadLoop,
@@ -16,7 +18,6 @@ export const Select = ({
             event.stopPropagation();
             setShowOptions(true);
       };
-      const { theme } = useContext(themeContext);
 
       let assignedButtonName = null;
       for (let i = 0; i < joystick.defaultKeyBindings.length; i++) {
@@ -24,7 +25,32 @@ export const Select = ({
                   assignedButtonName = joystick.buttonsNames[i];
             }
       }
-      console.log(showOptions, assignedButtonName);
+
+      const optionsClickHandler = (event, currentGamePadLoopState) => {
+            event.stopPropagation();
+            const buttonIndex = event.target.getAttribute("data-button-index");
+            const joystickIndex = event.currentTarget.getAttribute(
+                  "data-joystick-index"
+            );
+            const bindingValue =
+                  event.currentTarget.getAttribute("data-binding-value");
+
+            if (
+                  game.joysticks[joystickIndex].updateGameKeyBinding(
+                        buttonIndex,
+                        bindingValue
+                  )
+            ) {
+                  game.sounds.clickSound.play();
+                  setShowOptions(false);
+                  currentGamePadLoopState.run = false;
+                  previousGamepadLoop.gamepadLoopState.run = true;
+                  previousGamepadLoop.setStartGamePadLoop(true);
+                  toast.success("updated scuccesfully", toastOptions);
+            } else {
+                  toast.error("already used", toastOptions);
+            }
+      };
 
       return (
             <div className={styles["setting-container"]}>
@@ -35,17 +61,119 @@ export const Select = ({
                         onClick={settingClickHandler}
                   >
                         {assignedButtonName}
+
                         {showOptions ? (
                               <Options
                                     previousGamepadLoop={previousGamepadLoop}
                                     game={game}
-                                    assignedButtonName={assignedButtonName}
-                                    bindingValue={bindingValue}
                                     setShowOptions={setShowOptions}
-                              ></Options>
-                        ) : (
-                              ""
-                        )}
+                                    attributes={{
+                                          "data-joystick-index": 0,
+                                          "data-binding-value": bindingValue,
+                                    }}
+                                    clickHandler={optionsClickHandler}
+                              >
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "12",
+                                          }}
+                                    >
+                                          dpad up
+                                    </Option>
+
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "13",
+                                          }}
+                                    >
+                                          dpad down
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "14",
+                                          }}
+                                    >
+                                          dpad left
+                                    </Option>
+
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "15",
+                                          }}
+                                    >
+                                          dpad right
+                                    </Option>
+
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "2",
+                                          }}
+                                    >
+                                          x
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "0",
+                                          }}
+                                    >
+                                          a
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "1",
+                                          }}
+                                    >
+                                          b
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "3",
+                                          }}
+                                    >
+                                          y
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "5",
+                                          }}
+                                    >
+                                          r1
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "7",
+                                          }}
+                                    >
+                                          r2
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "4",
+                                          }}
+                                    >
+                                          l1
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-button-index": "6",
+                                          }}
+                                    >
+                                          l2
+                                    </Option>
+                              </Options>
+                        ) : null}
                   </CardThree>
             </div>
       );

@@ -650,7 +650,7 @@ export class Joystick {
                   null,
                   null,
                   null,
-                  null,
+                  "dpad up",
                   "dpad down",
                   "dpad left",
                   "dpad right",
