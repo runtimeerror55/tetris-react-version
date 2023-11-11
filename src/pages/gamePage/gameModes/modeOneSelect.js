@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { CardTwo } from "../../../components/cards/cardTwo";
 import styles from "./modeOneSelect.module.css";
-import { ModeOneOptions } from "./modeOneOptions";
 import { Options } from "../../../components/options/options";
 import { toastOptions } from "../../../utilities/utilities";
 import { toast } from "react-toastify";

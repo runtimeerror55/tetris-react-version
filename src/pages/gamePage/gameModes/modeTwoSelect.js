@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from "./modeTwoSelect.module.css";
-import { ModeTwoOptions } from "./modeTwoOptions";
 import { CardThree } from "../../../components/cards/cardThree";
 import { Option } from "../../../components/options/option";
 import { CardTwo } from "../../../components/cards/cardTwo";
