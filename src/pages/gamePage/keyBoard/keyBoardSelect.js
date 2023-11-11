@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useContext } from "react";
 import styles from "./keyBoardSelect.module.css";
-import { KeyBoardOptions } from "./keyBoardOptions";
 import { themeContext } from "../../../context/theme";
 import { CardThree } from "../../../components/cards/cardThree";
 import { Options } from "../../../components/options/options";
@@ -71,18 +70,6 @@ export const KeyBoardSelect = ({
                         onClick={settingClickHandler}
                   >
                         {assignedKeyBoardKey ? assignedKeyBoardKey : "empty"}
-                        {/* {showOptions ? (
-                              <KeyBoardOptions
-                                    previousGamepadLoop={previousGamepadLoop}
-                                    game={game}
-                                    bindingValue={bindingValue}
-                                    setShowOptions={setShowOptions}
-                                    assignedKeyBoardKey={assignedKeyBoardKey}
-                                    playerNumber={playerNumber}
-                              ></KeyBoardOptions>
-                        ) : (
-                              ""
-                        )} */}
                         {showOptions ? (
                               <Options
                                     previousGamepadLoop={previousGamepadLoop}
