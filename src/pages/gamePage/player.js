@@ -1,6 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./player.module.css";
-import {} from "../../utilities/playerInputs";
 import { themeContext } from "../../context/theme";
 
 const createGameBox = (
@@ -13,7 +12,6 @@ const createGameBox = (
 ) => {
       const arrayOne = new Array(game.boardRows).fill(0);
       const arrayTwo = new Array(game.boardColumns).fill(0);
-      console.log(theme);
 
       return (
             <>
