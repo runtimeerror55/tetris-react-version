@@ -84,6 +84,39 @@ export const KeyBoardSelect = ({
                                     <Option
                                           attributes={{
                                                 tabIndex: 3,
+                                                "data-key": "ArrowDown",
+                                          }}
+                                    >
+                                          arrow down
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-key": "ArrowLeft",
+                                          }}
+                                    >
+                                          arrow left
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-key": "ArrowRight",
+                                          }}
+                                    >
+                                          arrow right
+                                    </Option>
+
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-key": " ",
+                                          }}
+                                    >
+                                          space bar
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
                                                 "data-key": "a",
                                           }}
                                     >
@@ -232,6 +265,14 @@ export const KeyBoardSelect = ({
                                           }}
                                     >
                                           s
+                                    </Option>
+                                    <Option
+                                          attributes={{
+                                                tabIndex: 3,
+                                                "data-key": "t",
+                                          }}
+                                    >
+                                          t
                                     </Option>
                                     <Option
                                           attributes={{

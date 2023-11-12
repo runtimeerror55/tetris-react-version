@@ -1,9 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./menu.module.css";
-import { ControlSettings } from "./settings";
+import { ControlSettings } from "./controlSettings";
 import { GameModes } from "./gameModes/gameModes";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import { Howl } from "howler";
 import clickSoundPath from "../../assets/sounds/click.mp3";
