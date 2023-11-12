@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useContext } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styles from "./gamePage.module.css";
 import { PlayerJsx } from "./player";
 import { ToastContainer } from "react-toastify";
@@ -7,7 +7,6 @@ import { Game } from "../../utilities/utilities";
 import { Menu } from "./menu";
 import { StartTimer } from "./startTimer";
 import { GameResult } from "./result";
-import { themeContext } from "../../context/theme";
 import { CardOne } from "../../components/cards/cardOne";
 import { Bars } from "../../components/bars/bars";
 

@@ -7,8 +7,8 @@ import navigationSoundPath from "../assets/sounds/navigation.m4a";
 import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
 
-import { toast } from "react-toastify";
 export class Game {
+      barsState;
       players;
       isGameStarted;
       isGameOver;
@@ -36,6 +36,7 @@ export class Game {
             boardRows,
             boardColumns
       ) {
+            this.barsState = "idle";
             this.boardRows = boardRows;
             this.boardColumns = boardColumns;
             this.speed = 30;

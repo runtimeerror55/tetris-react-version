@@ -122,6 +122,7 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='2']");
       });
+
       const settingsOverlayCloseButtonClickHandler = () => {
             setShowSettingsOverLay(false);
       };
