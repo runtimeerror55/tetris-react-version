@@ -1,10 +1,10 @@
-import styles from "./settings.module.css";
+import styles from "./controlSettings.module.css";
 import { GamePadSettings } from "./gamePadSettings";
 import { GoBackButton } from "../../components/navBar/buttons/goBack";
 import { themeContext } from "../../context/theme";
 import { useContext } from "react";
 import { CardOne } from "../../components/cards/cardOne";
-export const Settings = ({ setShowSettingsOverLay, game }) => {
+export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
       const settingsOverlayCloseButtonClickHandler = () => {
             setShowSettingsOverLay(false);
       };

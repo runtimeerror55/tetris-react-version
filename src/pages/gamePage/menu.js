@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./menu.module.css";
-import { Settings } from "./settings";
+import { ControlSettings } from "./settings";
 import { GameModes } from "./gameModes/gameModes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -206,10 +206,10 @@ export const Menu = ({
                         </div>
                   </CardOne>
                   {showSettingsOverLay ? (
-                        <Settings
+                        <ControlSettings
                               setShowSettingsOverLay={setShowSettingsOverLay}
                               game={game}
-                        ></Settings>
+                        ></ControlSettings>
                   ) : (
                         ""
                   )}
