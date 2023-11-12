@@ -1,4 +1,3 @@
-import { Form } from "react-router-dom";
 import gamePadImage from "../../assets/images/pngwing.com.png";
 import styles from "./controller.module.css";
 import { Select } from "./select";

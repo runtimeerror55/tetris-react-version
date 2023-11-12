@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect, useContext } from "react";
 import styles from "./gamePage.module.css";
-import { NavBar } from "../../components/navBar/navBar";
 import { PlayerJsx } from "./player";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,8 +18,6 @@ export const GamePage = () => {
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
       const [showGame, setShowGame] = useState(true);
       const [showBars, setShowBars] = useState(false);
-
-      const { theme } = useContext(themeContext);
 
       const game = useMemo(() => {
             return new Game(
