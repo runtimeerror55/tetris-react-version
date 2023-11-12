@@ -1,12 +1,12 @@
 import { useState } from "react";
-import styles from "./select.module.css";
+import styles from "./controllerSelect.module.css";
 import { CardThree } from "../../components/cards/cardThree";
 import { Options } from "../../components/options/options";
 import { Option } from "../../components/options/option";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../utilities/utilities";
 
-export const Select = ({
+export const ControllerSelect = ({
       joystickIndex,
       previousGamepadLoop,
       bindingValue,

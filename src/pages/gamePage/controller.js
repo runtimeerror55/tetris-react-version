@@ -1,6 +1,6 @@
 import gamePadImage from "../../assets/images/pngwing.com.png";
 import styles from "./controller.module.css";
-import { Select } from "./select";
+import { ControllerSelect } from "./controllerSelect";
 import { themeContext } from "../../context/theme";
 import { useContext } from "react";
 export const Controller = ({
@@ -27,34 +27,34 @@ export const Controller = ({
                         <div>Player-{joystickIndex}</div>
                   </div>
                   <div>
-                        <Select
+                        <ControllerSelect
                               previousGamepadLoop={previousGamepadLoop}
                               bindingValue="ArrowDown"
                               joystickIndex={joystickIndex}
                               joystick={joystick}
                               game={game}
-                        ></Select>
-                        <Select
+                        ></ControllerSelect>
+                        <ControllerSelect
                               previousGamepadLoop={previousGamepadLoop}
                               bindingValue="ArrowRight"
                               joystickIndex={joystickIndex}
                               joystick={joystick}
                               game={game}
-                        ></Select>
-                        <Select
+                        ></ControllerSelect>
+                        <ControllerSelect
                               previousGamepadLoop={previousGamepadLoop}
                               bindingValue="ArrowLeft"
                               joystickIndex={joystickIndex}
                               joystick={joystick}
                               game={game}
-                        ></Select>
-                        <Select
+                        ></ControllerSelect>
+                        <ControllerSelect
                               previousGamepadLoop={previousGamepadLoop}
                               bindingValue="rotate"
                               joystickIndex={joystickIndex}
                               joystick={joystick}
                               game={game}
-                        ></Select>
+                        ></ControllerSelect>
                   </div>
             </div>
       );
