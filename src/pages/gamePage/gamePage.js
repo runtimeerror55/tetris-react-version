@@ -18,6 +18,7 @@ export const GamePage = () => {
       const [showGameResult, setShowGameResult] = useState(false);
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
       const [showGame, setShowGame] = useState(true);
+      const [showBars, setShowBars] = useState(false);
 
       const { theme } = useContext(themeContext);
 
@@ -55,6 +56,9 @@ export const GamePage = () => {
                         <ToastContainer></ToastContainer>
 
                         <main className={styles["main"]}>
+                              {showBars ? (
+                                    <Bars setShowBars={setShowBars}> </Bars>
+                              ) : null}
                               {showGame
                                     ? game.players.map((player) => {
                                             return (
@@ -76,6 +80,7 @@ export const GamePage = () => {
                                                 setShowGameStartTimer
                                           }
                                           game={game}
+                                          setShowBars={setShowBars}
                                     ></Menu>
                               ) : (
                                     ""

@@ -16,7 +16,12 @@ const navigationSound = new Howl({
 const clickSound = new Howl({
       src: [clickSoundPath],
 });
-export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
+export const Menu = ({
+      setShowMenuOverlay,
+      game,
+      setShowGameStartTimer,
+      setShowBars,
+}) => {
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
       const [showGameModes, setShowGameModes] = useState(false);
       const [renderMenu, setRenderMenu] = useState({});
@@ -31,7 +36,13 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
             setShowGameStartTimer(true);
       };
 
-      const controlsClickHandler = () => {
+      const controlsClickHandler = async () => {
+            setShowBars(true);
+            await new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                        resolve("yes");
+                  }, 1400);
+            });
             setShowSettingsOverLay(true);
       };
 
@@ -78,7 +89,7 @@ export const Menu = ({ setShowMenuOverlay, game, setShowGameStartTimer }) => {
                   document.querySelectorAll("[tabindex='0']");
             focusableElements.elements[0].focus();
       }, [game.isGameStarted]);
-      console.log(focusableElements.elements);
+
       const gamepadLoop = () => {
             const joystick = game.joysticks[0];
             const gamepads = navigator.getGamepads();

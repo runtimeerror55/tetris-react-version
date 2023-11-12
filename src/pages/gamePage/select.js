@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import styles from "./select.module.css";
 import { CardThree } from "../../components/cards/cardThree";
 import { Options } from "../../components/options/options";
