@@ -34,12 +34,13 @@ export class Game {
             renderGameResult,
             renderMenuOverlay,
             boardRows,
-            boardColumns
+            boardColumns,
+            speed
       ) {
             this.barsState = "idle";
             this.boardRows = boardRows;
             this.boardColumns = boardColumns;
-            this.speed = 30;
+            this.speed = speed;
             this.isGameStarted = false;
             this.isGameOver = null;
             this.pause = false;
@@ -107,7 +108,8 @@ export class Game {
                               this.randomTetrominoIndexes[0]
                         ],
                         this.boardRows,
-                        this.boardColumns
+                        this.boardColumns,
+                        this.speed
                   ),
             ];
             this.tetrominos = [
@@ -207,7 +209,8 @@ export class Game {
                                     this.randomTetrominoIndexes[0]
                               ],
                               this.boardRows,
-                              this.boardColumns
+                              this.boardColumns,
+                              this.speed
                         )
                   );
             }
@@ -504,7 +507,8 @@ export class Game {
                   player.reset(
                         this.CoordinatesAndColorsOfTetrominos[
                               this.randomTetrominoIndexes[0]
-                        ]
+                        ],
+                        this.speed
                   );
             });
             // this.joysticks.forEach((joystick) => {
@@ -539,9 +543,15 @@ export class Player {
       previousSpeed;
       currentSpeed;
       frameCounter;
-      constructor(playerNumber, startingTetromino, boardRows, boardColumns) {
-            this.previousSpeed = 15;
-            this.currentSpeed = 15;
+      constructor(
+            playerNumber,
+            startingTetromino,
+            boardRows,
+            boardColumns,
+            speed
+      ) {
+            this.previousSpeed = speed;
+            this.currentSpeed = speed;
             this.frameCounter = 0;
             this.stats = {
                   score: 0,
@@ -560,10 +570,10 @@ export class Player {
             this.renderUi = null;
       }
 
-      reset = (currentTetromino) => {
+      reset = (currentTetromino, speed) => {
             this.isGameOver = false;
-            this.currentSpeed = 15;
-            this.previousSpeed = 15;
+            this.currentSpeed = speed;
+            this.previousSpeed = speed;
             this.frameCounter = 0;
             this.hardDropCoordinates = null;
             this.stats.score = 0;

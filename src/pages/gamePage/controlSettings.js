@@ -21,7 +21,7 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
             return { run: true };
       }, []);
       const focusableElements = useMemo(() => {
-            return { elements: null, index: -1 };
+            return { elements: null, index: 0 };
       }, []);
       const controllerSettingsOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
@@ -126,7 +126,13 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
       useEffect(() => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='2']");
-      });
+      }, []);
+
+      useEffect(() => {
+            if (gamepadLoopState.run) {
+                  focusableElements.elements[focusableElements.index]?.focus();
+            }
+      }, [gamepadLoopState.run]);
 
       const settingsOverlayCloseButtonClickHandler = () => {
             setShowSettingsOverLay(false);
