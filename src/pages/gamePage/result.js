@@ -75,14 +75,18 @@ export const GameResult = ({
       return (
             <section className={styles["game-result-section"]}>
                   <div className={styles["game-result-container"]}>
-                        {game.playersStandings.map((player, index) => {
-                              return (
-                                    <PlayerResult
-                                          player={player}
-                                          index={index}
-                                    ></PlayerResult>
-                              );
-                        })}
+                        {game.players
+                              .sort((a, b) => {
+                                    return b.stats.score - a.stats.score;
+                              })
+                              .map((player, index) => {
+                                    return (
+                                          <PlayerResult
+                                                player={player}
+                                                index={index}
+                                          ></PlayerResult>
+                                    );
+                              })}
                   </div>
 
                   <CardOne>

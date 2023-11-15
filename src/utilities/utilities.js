@@ -355,6 +355,9 @@ export class Game {
                                                 player,
                                                 destroyableRows.length
                                           );
+                                          if (this.gameModes.modeOne === 2) {
+                                                this.checkGameOver();
+                                          }
                                     }
                                     player.currentIndexOfrandomTetrominoIndexes++;
 
@@ -376,7 +379,12 @@ export class Game {
                                           )
                                     ) {
                                           player.isGameOver = true;
-                                          this.checkGameOver();
+                                          if (this.gameModes.modeOne === 2) {
+                                                this.checkGameOver();
+                                          } else {
+                                                this.isGameOver = true;
+                                                this.renderGameResult(true);
+                                          }
                                     }
                               }
                               this.renderPlayersUi({});
@@ -1259,9 +1267,9 @@ export const navigationGamepadLoop = (
                                     joystick.previousPressedButtonIndex !==
                                     buttonIndex
                               ) {
-                                    if (buttonIndex === 1) {
-                                          shouldExit = true;
-                                    }
+                                    // if (buttonIndex === 1) {
+                                    //       shouldExit = true;
+                                    // }
                                     controllerSettingsOverlayKeyDownHandler({
                                           key: joystick.navigationKeyBindings[
                                                 buttonIndex
@@ -1272,9 +1280,9 @@ export const navigationGamepadLoop = (
                                     joystick.throttleCount = 0;
                                     console.log(buttonIndex);
                               } else if (joystick.throttleCount === 10) {
-                                    if (buttonIndex === 1) {
-                                          shouldExit = true;
-                                    }
+                                    // if (buttonIndex === 1) {
+                                    //       shouldExit = true;
+                                    // }
                                     controllerSettingsOverlayKeyDownHandler({
                                           key: joystick.navigationKeyBindings[
                                                 buttonIndex
