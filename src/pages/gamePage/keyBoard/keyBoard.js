@@ -1,11 +1,8 @@
 import keyBoardImage from "../../../assets/images/160060-and-mouse-pic-black-keyboard.png";
-import { useContext } from "react";
 import styles from "./keyBoard.module.css";
 import { KeyBoardSelect } from "./keyBoardSelect";
-import { themeContext } from "../../../context/theme";
 import { CardTwo } from "../../../components/cards/cardTwo";
 export const KeyBoard = ({ playerNumber, previousGamepadLoop, game }) => {
-      const { theme } = useContext(themeContext);
       return (
             <CardTwo customClass={styles["connected-key-board"]}>
                   <div>

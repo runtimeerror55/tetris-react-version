@@ -4,6 +4,8 @@
 2. two game modes infinite time with speed increase at 4min,8min and time limit of 5 min where you need to miximize the score
 3. powers lasers for column destruction , row destruction , freeze time in second game mode, speed
 4. calculating the winner
+5. remove all those commented gamepad loops
+6. violet rgba(202, 9, 202,0.4)
 
 <!-- function deepCloneArray(input) {
       return input.map((element) =>

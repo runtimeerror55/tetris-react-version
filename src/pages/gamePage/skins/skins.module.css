@@ -1,0 +1,101 @@
+.game-modes-section {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
+      overflow-y: scroll;
+}
+
+.game-modes-section::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #f5f5f5;
+}
+
+.game-modes-section::-webkit-scrollbar {
+      width: 10px;
+      background-color: #f5f5f5;
+}
+
+.game-modes-section::-webkit-scrollbar-thumb {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: black;
+}
+
+.game-modes {
+      padding: 20px;
+      border-radius: 20px;
+      width: 90%;
+      margin: 20px;
+}
+
+.game-modes-heading {
+      color: white;
+      font-size: 30px;
+      margin-top: 20px;
+}
+
+.setting-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      flex-wrap: wrap;
+}
+
+.option {
+      width: 200px;
+      height: 150px;
+      margin: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+}
+
+.red {
+      background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+
+.red:focus {
+      box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+      background-color: rgba(255, 0, 0, 0.3);
+      border: 2px solid rgba(255, 0, 0, 1);
+}
+
+.green {
+      background: linear-gradient(rgba(0, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.green:focus {
+      border: 2px solid rgba(0, 255, 0, 1);
+      background-color: rgba(0, 255, 0, 0.3);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 1);
+}
+
+.violet {
+      background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.violet:focus {
+      border: 2px solid rgba(128, 0, 128, 1);
+      background-color: rgba(128, 0, 128, 0.3);
+      box-shadow: 0 0 10px rgba(128, 0, 128, 1);
+}
+
+.yellow {
+      background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+}
+.yellow:focus {
+      border: 2px solid rgba(255, 255, 0, 1);
+      background-color: rgba(255, 255, 0, 0.3);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+}

@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./playerResult.module.css";
+import { themeContext } from "../../context/theme";
+import { CardOne } from "../../components/cards/cardOne";
 
 export const PlayerResult = ({ player, index }) => {
+      const { theme } = useContext(themeContext);
       const [score, setScore] = useState(0);
       const statsLoop = () => {
             if (score + 20 > player.stats.score) {
@@ -17,9 +20,15 @@ export const PlayerResult = ({ player, index }) => {
             requestAnimationFrame(statsLoop);
       }, [score]);
       return (
-            <div className={styles["player-result"]}>
+            <CardOne
+                  customClass={
+                        styles["player-result"] +
+                        " " +
+                        styles["player-result-" + theme]
+                  }
+            >
                   <div className={styles["player-number"]}>
-                        {index + 1}: PLAYER {player.number}
+                        {index + 1}. PLAYER {player.number}
                   </div>
                   <div
                         className={
@@ -43,6 +52,6 @@ export const PlayerResult = ({ player, index }) => {
                         <div>3x shots:</div>
                         <div>{player.stats.tripleShots}</div>
                   </div>
-            </div>
+            </CardOne>
       );
 };

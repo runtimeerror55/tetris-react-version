@@ -1,6 +1,7 @@
 import styles from "./options.module.css";
-import { useState, useEffect, useMemo, useContext } from "react";
+import { useEffect, useMemo, useContext } from "react";
 import { themeContext } from "../../context/theme";
+import { navigationGamepadLoop } from "../../utilities/utilities";
 export const Options = ({
       game,
       setShowOptions,
@@ -10,7 +11,7 @@ export const Options = ({
       children,
 }) => {
       const focusableElements = useMemo(() => {
-            return { elements: null, index: -1 };
+            return { elements: null, index: 0 };
       }, []);
       const currentGamePadLoopState = useMemo(() => {
             return {
@@ -53,79 +54,84 @@ export const Options = ({
                   previousGamepadLoop.setStartGamePadLoop(true);
             }
       };
-      const gamepadLoop = () => {
-            console.log(game);
-            const joystick = game.joysticks[0];
-            const gamepads = navigator.getGamepads();
-            let shouldExit = false;
+      //   const gamepadLoop = () => {
+      //         const joystick = game.joysticks[0];
+      //         const gamepads = navigator.getGamepads();
+      //         let shouldExit = false;
 
-            if (joystick) {
-                  if (joystick.throttleCount < 10) {
-                        joystick.throttleCount++;
-                  }
-                  const gamepad = gamepads[joystick.gamepad.index];
-                  if (gamepad) {
-                        gamepad.buttons.forEach((button, buttonIndex) => {
-                              if (button.pressed) {
-                                    if (
-                                          joystick.previousPressedButtonIndex !==
-                                          buttonIndex
-                                    ) {
-                                          if (buttonIndex === 1) {
-                                                currentGamePadLoopState.run = false;
-                                                controllerSettingsOverlayKeyDownHandler(
-                                                      {
-                                                            key: joystick
-                                                                  .navigationKeyBindings[
-                                                                  buttonIndex
-                                                            ],
-                                                      }
-                                                );
-                                          }
-                                          controllerSettingsOverlayKeyDownHandler(
-                                                {
-                                                      key: joystick
-                                                            .navigationKeyBindings[
-                                                            buttonIndex
-                                                      ],
-                                                }
-                                          );
-                                          joystick.previousPressedButtonIndex =
-                                                buttonIndex;
-                                          joystick.throttleCount = 0;
-                                          //   console.log(buttonIndex);
-                                    } else if (joystick.throttleCount === 10) {
-                                          controllerSettingsOverlayKeyDownHandler(
-                                                {
-                                                      key: joystick
-                                                            .navigationKeyBindings[
-                                                            buttonIndex
-                                                      ],
-                                                }
-                                          );
-                                          joystick.throttleCount = 0;
-                                          //   console.log(buttonIndex);
-                                    }
-                              }
-                        });
-                  }
-            }
-            if (!currentGamePadLoopState.run) {
-                  return;
-            }
+      //         if (joystick) {
+      //               if (joystick.throttleCount < 10) {
+      //                     joystick.throttleCount++;
+      //               }
+      //               const gamepad = gamepads[joystick.gamepad.index];
+      //               if (gamepad) {
+      //                     gamepad.buttons.forEach((button, buttonIndex) => {
+      //                           if (button.pressed) {
+      //                                 if (
+      //                                       joystick.previousPressedButtonIndex !==
+      //                                       buttonIndex
+      //                                 ) {
+      //                                       if (buttonIndex === 1) {
+      //                                             currentGamePadLoopState.run = false;
+      //                                             controllerSettingsOverlayKeyDownHandler(
+      //                                                   {
+      //                                                         key: joystick
+      //                                                               .navigationKeyBindings[
+      //                                                               buttonIndex
+      //                                                         ],
+      //                                                   }
+      //                                             );
+      //                                       }
+      //                                       controllerSettingsOverlayKeyDownHandler(
+      //                                             {
+      //                                                   key: joystick
+      //                                                         .navigationKeyBindings[
+      //                                                         buttonIndex
+      //                                                   ],
+      //                                             }
+      //                                       );
+      //                                       joystick.previousPressedButtonIndex =
+      //                                             buttonIndex;
+      //                                       joystick.throttleCount = 0;
+      //                                       //   console.log(buttonIndex);
+      //                                 } else if (joystick.throttleCount === 10) {
+      //                                       controllerSettingsOverlayKeyDownHandler(
+      //                                             {
+      //                                                   key: joystick
+      //                                                         .navigationKeyBindings[
+      //                                                         buttonIndex
+      //                                                   ],
+      //                                             }
+      //                                       );
+      //                                       joystick.throttleCount = 0;
+      //                                       //   console.log(buttonIndex);
+      //                                 }
+      //                           }
+      //                     });
+      //               }
+      //         }
+      //         if (!currentGamePadLoopState.run) {
+      //               return;
+      //         }
 
-            requestAnimationFrame(gamepadLoop);
-      };
+      //         requestAnimationFrame(gamepadLoop);
+      //   };
 
       useEffect(() => {
-            gamepadLoop();
+            navigationGamepadLoop(
+                  game,
+                  controllerSettingsOverlayKeyDownHandler,
+                  currentGamePadLoopState
+            );
             previousGamepadLoop.gamepadLoopState.run = false;
             previousGamepadLoop.setStartGamePadLoop(false);
       }, []);
       useEffect(() => {
             focusableElements.elements =
                   document.querySelectorAll("[tabindex='3']");
+            focusableElements.elements[focusableElements.index]?.focus();
       });
+
       return (
             <div
                   className={

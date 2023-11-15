@@ -1,8 +1,22 @@
 .player-result {
       color: white;
-      background-color: teal;
       padding: 5px;
-      margin: 5px;
+      margin: 10px;
+}
+
+.player-result-theme-0 {
+      border: 2px solid rgba(255, 0, 0, 1) !important;
+}
+.player-result-theme-1 {
+      border: 2px solid rgba(0, 255, 0, 1) !important;
+}
+
+.player-result-theme-2 {
+      border: 2px solid rgba(128, 0, 128, 1) !important;
+}
+
+.player-result-theme-3 {
+      border: 2px solid rgba(255, 255, 0, 1) !important;
 }
 
 .player-number {

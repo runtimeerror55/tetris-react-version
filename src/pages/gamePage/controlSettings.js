@@ -7,6 +7,7 @@ import menuNavigationSoundPath from "../../assets/sounds/navigation.m4a";
 import clickSoundPath from "../../assets/sounds/click.mp3";
 import { CardOne } from "../../components/cards/cardOne";
 import { KeyBoard } from "./keyBoard/keyBoard";
+import { navigationGamepadLoop } from "../../utilities/utilities";
 
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
@@ -55,66 +56,70 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
                   setShowSettingsOverLay(false);
             }
       };
-      const gamepadLoop = () => {
-            const joystick = game.joysticks[0];
-            const gamepads = navigator.getGamepads();
-            let shouldExit = false;
+      //   const gamepadLoop = () => {
+      //         const joystick = game.joysticks[0];
+      //         const gamepads = navigator.getGamepads();
+      //         let shouldExit = false;
 
-            if (joystick) {
-                  if (joystick.throttleCount < 10) {
-                        joystick.throttleCount++;
-                  }
-                  const gamepad = gamepads[joystick.gamepad.index];
-                  if (gamepad) {
-                        gamepad.buttons.forEach((button, buttonIndex) => {
-                              if (button.pressed) {
-                                    if (
-                                          joystick.previousPressedButtonIndex !==
-                                          buttonIndex
-                                    ) {
-                                          if (buttonIndex === 1) {
-                                                shouldExit = true;
-                                          }
-                                          controllerSettingsOverlayKeyDownHandler(
-                                                {
-                                                      key: joystick
-                                                            .navigationKeyBindings[
-                                                            buttonIndex
-                                                      ],
-                                                }
-                                          );
-                                          joystick.previousPressedButtonIndex =
-                                                buttonIndex;
-                                          joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
-                                    } else if (joystick.throttleCount === 10) {
-                                          if (buttonIndex === 1) {
-                                                shouldExit = true;
-                                          }
-                                          controllerSettingsOverlayKeyDownHandler(
-                                                {
-                                                      key: joystick
-                                                            .navigationKeyBindings[
-                                                            buttonIndex
-                                                      ],
-                                                }
-                                          );
-                                          joystick.throttleCount = 0;
-                                          console.log(buttonIndex);
-                                    }
-                              }
-                        });
-                  }
-            }
-            if (shouldExit || !gamepadLoopState.run) {
-                  return;
-            }
+      //         if (joystick) {
+      //               if (joystick.throttleCount < 10) {
+      //                     joystick.throttleCount++;
+      //               }
+      //               const gamepad = gamepads[joystick.gamepad.index];
+      //               if (gamepad) {
+      //                     gamepad.buttons.forEach((button, buttonIndex) => {
+      //                           if (button.pressed) {
+      //                                 if (
+      //                                       joystick.previousPressedButtonIndex !==
+      //                                       buttonIndex
+      //                                 ) {
+      //                                       if (buttonIndex === 1) {
+      //                                             shouldExit = true;
+      //                                       }
+      //                                       controllerSettingsOverlayKeyDownHandler(
+      //                                             {
+      //                                                   key: joystick
+      //                                                         .navigationKeyBindings[
+      //                                                         buttonIndex
+      //                                                   ],
+      //                                             }
+      //                                       );
+      //                                       joystick.previousPressedButtonIndex =
+      //                                             buttonIndex;
+      //                                       joystick.throttleCount = 0;
+      //                                       console.log(buttonIndex);
+      //                                 } else if (joystick.throttleCount === 10) {
+      //                                       if (buttonIndex === 1) {
+      //                                             shouldExit = true;
+      //                                       }
+      //                                       controllerSettingsOverlayKeyDownHandler(
+      //                                             {
+      //                                                   key: joystick
+      //                                                         .navigationKeyBindings[
+      //                                                         buttonIndex
+      //                                                   ],
+      //                                             }
+      //                                       );
+      //                                       joystick.throttleCount = 0;
+      //                                       console.log(buttonIndex);
+      //                                 }
+      //                           }
+      //                     });
+      //               }
+      //         }
+      //         if (shouldExit || !gamepadLoopState.run) {
+      //               return;
+      //         }
 
-            requestAnimationFrame(gamepadLoop);
-      };
+      //         requestAnimationFrame(gamepadLoop);
+      //   };
       useEffect(() => {
             if (gamepadLoopState.run) {
-                  gamepadLoop();
+                  navigationGamepadLoop(
+                        game,
+                        controllerSettingsOverlayKeyDownHandler,
+                        gamepadLoopState
+                  );
             }
       }, [startGamePadLoop]);
 

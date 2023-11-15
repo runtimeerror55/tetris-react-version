@@ -1227,3 +1227,67 @@ export const toastOptions = {
       progress: undefined,
       theme: "colored",
 };
+
+export const navigationGamepadLoop = (
+      game,
+      controllerSettingsOverlayKeyDownHandler,
+      gamepadLoopState
+) => {
+      const joystick = game.joysticks[0];
+      const gamepads = navigator.getGamepads();
+      let shouldExit = false;
+
+      if (joystick) {
+            if (joystick.throttleCount < 10) {
+                  joystick.throttleCount++;
+            }
+            const gamepad = gamepads[joystick.gamepad.index];
+            if (gamepad) {
+                  gamepad.buttons.forEach((button, buttonIndex) => {
+                        if (button.pressed) {
+                              if (
+                                    joystick.previousPressedButtonIndex !==
+                                    buttonIndex
+                              ) {
+                                    if (buttonIndex === 1) {
+                                          shouldExit = true;
+                                    }
+                                    controllerSettingsOverlayKeyDownHandler({
+                                          key: joystick.navigationKeyBindings[
+                                                buttonIndex
+                                          ],
+                                    });
+                                    joystick.previousPressedButtonIndex =
+                                          buttonIndex;
+                                    joystick.throttleCount = 0;
+                                    console.log(buttonIndex);
+                              } else if (joystick.throttleCount === 10) {
+                                    if (buttonIndex === 1) {
+                                          shouldExit = true;
+                                    }
+                                    controllerSettingsOverlayKeyDownHandler({
+                                          key: joystick.navigationKeyBindings[
+                                                buttonIndex
+                                          ],
+                                    });
+                                    joystick.throttleCount = 0;
+                                    console.log(buttonIndex);
+                              }
+                        }
+                  });
+            }
+      }
+
+      if (shouldExit || !gamepadLoopState.run) {
+            return;
+      }
+
+      requestAnimationFrame(
+            navigationGamepadLoop.bind(
+                  null,
+                  game,
+                  controllerSettingsOverlayKeyDownHandler,
+                  gamepadLoopState
+            )
+      );
+};

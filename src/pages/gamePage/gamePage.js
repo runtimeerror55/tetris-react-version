@@ -98,6 +98,9 @@ export const GamePage = () => {
                                           setShowGameStartTimer={
                                                 setShowGameStartTimer
                                           }
+                                          setShowMenuOverlay={
+                                                setShowMenuOverlay
+                                          }
                                     ></GameResult>
                               ) : (
                                     ""

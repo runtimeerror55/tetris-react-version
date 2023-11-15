@@ -9,8 +9,12 @@ export const CardOne = ({
 }) => {
       const { theme } = useContext(themeContext);
       const className = customClass
-            ? styles["card-one-" + theme] + " " + customClass
-            : styles["card-one-" + theme];
+            ? styles["card-one"] +
+              " " +
+              styles["card-one-" + theme] +
+              " " +
+              customClass
+            : styles["card-one"] + " " + styles["card-one-" + theme];
 
       if (customTag === "section") {
             return (
@@ -22,7 +26,6 @@ export const CardOne = ({
                   </section>
             );
       } else {
-            console.log("yes");
             return (
                   <div
                         className={className}

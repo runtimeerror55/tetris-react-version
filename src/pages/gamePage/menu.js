@@ -7,6 +7,7 @@ import { Howl } from "howler";
 import clickSoundPath from "../../assets/sounds/click.mp3";
 import { themeContext } from "../../context/theme";
 import { CardOne } from "../../components/cards/cardOne";
+import { Skins } from "./skins/skins";
 
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
@@ -22,12 +23,13 @@ export const Menu = ({
 }) => {
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
       const [showGameModes, setShowGameModes] = useState(false);
+      const [showSkins, setShowSkins] = useState(false);
       const [renderMenu, setRenderMenu] = useState({});
       const { theme } = useContext(themeContext);
 
       const focusableElements = useMemo(() => {
             return { elements: null, index: 0 };
-      }, []);
+      }, [game.isGameStarted, game.pause]);
       const newGameButtonClickHandler = (event) => {
             game.reset();
             setShowMenuOverlay(false);
@@ -53,6 +55,14 @@ export const Menu = ({
                   setShowMenuOverlay(false);
                   game.pause = false;
             }
+      };
+
+      const skinsClickHandler = () => {
+            setShowSkins(true);
+      };
+      const quitGameClickHandler = () => {
+            game.reset();
+            setRenderMenu({});
       };
       const menuOverlayKeyDownHandler = (event) => {
             if (event.key === "ArrowDown") {
@@ -87,6 +97,12 @@ export const Menu = ({
                   document.querySelectorAll("[tabindex='0']");
             focusableElements.elements[0].focus();
       }, [game.isGameStarted]);
+
+      useEffect(() => {
+            if (!showSettingsOverLay && !showGameModes && !showSkins) {
+                  focusableElements.elements[focusableElements.index]?.focus();
+            }
+      }, [showSettingsOverLay, showGameModes, showSkins]);
 
       const gamepadLoop = () => {
             const joystick = game.joysticks[0];
@@ -130,10 +146,10 @@ export const Menu = ({
             setRenderMenu({});
       };
       useEffect(() => {
-            if (!showSettingsOverLay && !showGameModes) {
+            if (!showSettingsOverLay && !showGameModes && !showSkins) {
                   requestAnimationFrame(gamepadLoop);
             }
-      }, [showSettingsOverLay, renderMenu, showGameModes]);
+      }, [showSettingsOverLay, renderMenu, showGameModes, showSkins]);
 
       return (
             <>
@@ -181,7 +197,7 @@ export const Menu = ({
                         >
                               CONTROLS
                         </div>
-                        <div
+                        {/* <div
                               className={
                                     styles["option"] +
                                     " " +
@@ -190,17 +206,43 @@ export const Menu = ({
                               tabIndex={0}
                         >
                               SOUNDS
-                        </div>
+                        </div> */}
+                        {!game.isGameStarted && !game.pause ? (
+                              <div
+                                    className={
+                                          styles["option"] +
+                                          " " +
+                                          styles["option-" + theme]
+                                    }
+                                    onClick={gameModesClickHandler}
+                                    tabIndex={0}
+                              >
+                                    GAME MODES
+                              </div>
+                        ) : (
+                              <div
+                                    className={
+                                          styles["option"] +
+                                          " " +
+                                          styles["option-" + theme]
+                                    }
+                                    onClick={quitGameClickHandler}
+                                    tabIndex={0}
+                              >
+                                    QUIT GAME
+                              </div>
+                        )}
+
                         <div
                               className={
                                     styles["option"] +
                                     " " +
                                     styles["option-" + theme]
                               }
-                              onClick={gameModesClickHandler}
+                              onClick={skinsClickHandler}
                               tabIndex={0}
                         >
-                              GAME MODES
+                              SKINS
                         </div>
                   </CardOne>
                   {showSettingsOverLay ? (
@@ -217,6 +259,9 @@ export const Menu = ({
                               setShowGameModes={setShowGameModes}
                               game={game}
                         ></GameModes>
+                  ) : null}
+                  {showSkins ? (
+                        <Skins setShowSkins={setShowSkins} game={game}></Skins>
                   ) : null}
             </>
       );
