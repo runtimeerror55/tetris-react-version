@@ -129,6 +129,7 @@ export const PlayerJsx = ({ player, game }) => {
       useEffect(() => {
             if (game.isGameStarted && !game.isGameOver) {
                   const timerId = setInterval(() => {
+                        player.time++;
                         setTimer((previous) => {
                               return previous + 1;
                         });

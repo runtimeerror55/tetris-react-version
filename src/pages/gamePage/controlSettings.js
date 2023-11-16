@@ -53,6 +53,7 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
                   clickSound.play();
+                  gamepadLoopState.run = false;
                   setShowSettingsOverLay(false);
             }
       };

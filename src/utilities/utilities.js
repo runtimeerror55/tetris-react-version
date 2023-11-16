@@ -29,6 +29,7 @@ export class Game {
       boardRows;
       boardColumns;
       playersStandings = null;
+      timeLimit;
       constructor(
             renderPlayersUi,
             renderGameResult,
@@ -101,6 +102,7 @@ export class Game {
                   modeOne: 1,
                   modeTwo: 1,
             };
+            this.timeLimit = 10;
             this.players = [
                   new Player(
                         0,
@@ -296,6 +298,23 @@ export class Game {
             let shouldReturn = false;
 
             this.players.forEach((player, index) => {
+                  if (
+                        player.time === this.timeLimit &&
+                        this.gameModes.modeTwo === 2
+                  ) {
+                        player.isGameOver = true;
+                        if (this.gameModes.modeOne === 2) {
+                              if (this.checkGameOver()) {
+                                    shouldReturn = true;
+                              }
+                        } else {
+                              this.isGameOver = true;
+                              this.renderGameResult(true);
+                              shouldReturn = true;
+                        }
+                        this.renderPlayersUi({});
+                  }
+
                   if (!player.isGameOver) {
                         player.frameCounter++;
                         if (player.frameCounter === player.currentSpeed) {
@@ -422,6 +441,7 @@ export class Game {
                   this.isGameOver = true;
                   this.renderGameResult(true);
                   this.playersStandings = [...gameOverPlayers];
+                  return true;
             } else if (playingPlayers.length === 1) {
                   if (
                         playingPlayers[0].stats.score >
@@ -433,8 +453,10 @@ export class Game {
                               playingPlayers[0],
                               ...gameOverPlayers,
                         ];
+                        return true;
                   }
             }
+            return false;
       };
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
@@ -551,6 +573,7 @@ export class Player {
       previousSpeed;
       currentSpeed;
       frameCounter;
+      time;
       constructor(
             playerNumber,
             startingTetromino,
@@ -567,6 +590,7 @@ export class Player {
                   doubleShots: 0,
                   tripleShots: 0,
             };
+            this.time = 0;
             this.hardDropCoordinates = null;
             this.timer = 0;
             this.timerId = null;
@@ -601,6 +625,7 @@ export class Player {
                         }
                   }
             }
+            this.time = 0;
       };
 
       hardDropFinalCoordinates = (game) => {

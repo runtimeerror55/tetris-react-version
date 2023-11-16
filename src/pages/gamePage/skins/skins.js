@@ -47,6 +47,7 @@ export const Skins = ({ setShowSkins, game }) => {
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
                   game.sounds.clickSound.play();
+                  gamepadLoopState.run = false;
                   setShowSkins(false);
             }
       };

@@ -49,6 +49,7 @@ export const Options = ({
                   focusableElements.elements[focusableElements.index].click();
             } else if (event.key === "Back") {
                   game.sounds.clickSound.play();
+                  currentGamePadLoopState.run = false;
                   setShowOptions(false);
                   previousGamepadLoop.gamepadLoopState.run = true;
                   previousGamepadLoop.setStartGamePadLoop(true);
