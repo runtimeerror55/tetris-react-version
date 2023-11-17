@@ -65,6 +65,7 @@ export const Menu = ({
             setRenderMenu({});
       };
       const menuOverlayKeyDownHandler = (event) => {
+            console.log("menu is ww");
             if (event.key === "ArrowDown") {
                   if (
                         focusableElements.index ===

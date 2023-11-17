@@ -7,21 +7,47 @@
       left: 0;
       right: 0;
       z-index: 1;
+      min-height: fit-content;
+      max-height: calc((100vh / 2) - 50px);
+      overflow-y: scroll;
+}
+
+.show-top {
+      bottom: 30px;
+      top: initial;
+}
+
+.options::-webkit-scrollbar {
+      width: 5px;
+}
+
+.options::-webkit-scrollbar-thumb {
+      background-color: black;
 }
 
 .options-theme-0 {
-      background: linear-gradient(rgba(255, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+      background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
       background-color: black;
+      color: white;
 }
 .options-theme-1 {
-      background: linear-gradient(rgba(0, 255, 0, 0.3), rgba(0, 0, 0, 0.3));
+      background: linear-gradient(rgba(0, 255, 0, 0.4), rgba(0, 0, 0, 0.3));
       background-color: black;
+      color: white;
 }
 .options-theme-2 {
       background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
       background-color: black;
+      color: white;
 }
 .options-theme-3 {
       background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
       background-color: black;
+      color: white;
+}
+
+.options-theme-4 {
+      background: linear-gradient(rgba(0, 255, 255, 0.4), rgba(0, 0, 0, 0.6));
+      background-color: black;
+      color: white;
 }

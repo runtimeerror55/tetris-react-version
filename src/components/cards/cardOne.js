@@ -21,6 +21,7 @@ export const CardOne = ({
                   <section
                         className={className}
                         onKeyDown={keyDownHandler ? keyDownHandler : null}
+                        tabIndex={-1}
                   >
                         {children}
                   </section>

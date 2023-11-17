@@ -18,6 +18,9 @@ export const GameModes = ({ setShowGameModes, game }) => {
             return { elements: null, index: 0 };
       }, []);
       const controllerSettingsOverlayKeyDownHandler = (event) => {
+            if (event.stopPropagation) {
+                  event.stopPropagation();
+            }
             if (event.key === "ArrowDown") {
                   if (
                         focusableElements.index ===
@@ -45,7 +48,7 @@ export const GameModes = ({ setShowGameModes, game }) => {
             } else if (event.key === "Enter") {
                   game.sounds.clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
-            } else if (event.key === "Back") {
+            } else if (event.key === "Back" || event.key === "Backspace") {
                   game.sounds.clickSound.play();
                   gamepadLoopState.run = false;
                   setShowGameModes(false);
@@ -133,6 +136,7 @@ export const GameModes = ({ setShowGameModes, game }) => {
             <CardOne
                   customClass={styles["game-modes-section"]}
                   customTag="section"
+                  keyDownHandler={controllerSettingsOverlayKeyDownHandler}
             >
                   <GoBackButton
                         onClickHandler={gameModesCloseButtonClickHandler}

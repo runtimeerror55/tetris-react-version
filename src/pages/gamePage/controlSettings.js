@@ -24,6 +24,10 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
             return { elements: null, index: 0 };
       }, []);
       const controllerSettingsOverlayKeyDownHandler = (event) => {
+            if (event.stopPropagation) {
+                  event.stopPropagation();
+            }
+
             if (event.key === "ArrowDown") {
                   if (
                         focusableElements.index ===
@@ -51,69 +55,13 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
             } else if (event.key === "Enter") {
                   clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
-            } else if (event.key === "Back") {
+            } else if (event.key === "Back" || event.key === "Backspace") {
                   clickSound.play();
                   gamepadLoopState.run = false;
                   setShowSettingsOverLay(false);
             }
       };
-      //   const gamepadLoop = () => {
-      //         const joystick = game.joysticks[0];
-      //         const gamepads = navigator.getGamepads();
-      //         let shouldExit = false;
 
-      //         if (joystick) {
-      //               if (joystick.throttleCount < 10) {
-      //                     joystick.throttleCount++;
-      //               }
-      //               const gamepad = gamepads[joystick.gamepad.index];
-      //               if (gamepad) {
-      //                     gamepad.buttons.forEach((button, buttonIndex) => {
-      //                           if (button.pressed) {
-      //                                 if (
-      //                                       joystick.previousPressedButtonIndex !==
-      //                                       buttonIndex
-      //                                 ) {
-      //                                       if (buttonIndex === 1) {
-      //                                             shouldExit = true;
-      //                                       }
-      //                                       controllerSettingsOverlayKeyDownHandler(
-      //                                             {
-      //                                                   key: joystick
-      //                                                         .navigationKeyBindings[
-      //                                                         buttonIndex
-      //                                                   ],
-      //                                             }
-      //                                       );
-      //                                       joystick.previousPressedButtonIndex =
-      //                                             buttonIndex;
-      //                                       joystick.throttleCount = 0;
-      //                                       console.log(buttonIndex);
-      //                                 } else if (joystick.throttleCount === 10) {
-      //                                       if (buttonIndex === 1) {
-      //                                             shouldExit = true;
-      //                                       }
-      //                                       controllerSettingsOverlayKeyDownHandler(
-      //                                             {
-      //                                                   key: joystick
-      //                                                         .navigationKeyBindings[
-      //                                                         buttonIndex
-      //                                                   ],
-      //                                             }
-      //                                       );
-      //                                       joystick.throttleCount = 0;
-      //                                       console.log(buttonIndex);
-      //                                 }
-      //                           }
-      //                     });
-      //               }
-      //         }
-      //         if (shouldExit || !gamepadLoopState.run) {
-      //               return;
-      //         }
-
-      //         requestAnimationFrame(gamepadLoop);
-      //   };
       useEffect(() => {
             if (gamepadLoopState.run) {
                   navigationGamepadLoop(
@@ -143,6 +91,7 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
             <CardOne
                   customClass={styles["settings-overlay"]}
                   customTag="section"
+                  keyDownHandler={controllerSettingsOverlayKeyDownHandler}
             >
                   <GoBackButton
                         onClickHandler={settingsOverlayCloseButtonClickHandler}

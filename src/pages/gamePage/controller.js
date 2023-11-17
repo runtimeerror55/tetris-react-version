@@ -1,23 +1,15 @@
 import gamePadImage from "../../assets/images/pngwing.com.png";
 import styles from "./controller.module.css";
 import { ControllerSelect } from "./controllerSelect";
-import { themeContext } from "../../context/theme";
-import { useContext } from "react";
+import { CardTwo } from "../../components/cards/cardTwo";
 export const Controller = ({
       joystickIndex,
       previousGamepadLoop,
       joystick,
       game,
 }) => {
-      const { theme } = useContext(themeContext);
       return (
-            <div
-                  className={
-                        styles["connected-controller"] +
-                        " " +
-                        styles["connected-controller-" + theme]
-                  }
-            >
+            <CardTwo customClass={styles["connected-controller"]}>
                   <div>
                         <img
                               src={gamePadImage}
@@ -55,7 +47,21 @@ export const Controller = ({
                               joystick={joystick}
                               game={game}
                         ></ControllerSelect>
+                        <ControllerSelect
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="lifeSaver"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></ControllerSelect>
+                        <ControllerSelect
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="hardDrop"
+                              joystickIndex={joystickIndex}
+                              joystick={joystick}
+                              game={game}
+                        ></ControllerSelect>
                   </div>
-            </div>
+            </CardTwo>
       );
 };

@@ -491,6 +491,7 @@ export class Game {
 
       onKeyboard = () => {
             window.addEventListener("keydown", (event) => {
+                  console.log("uitilities window");
                   if (this.isGameStarted && !this.pause && !this.isGameOver) {
                         if (
                               !this.keyBoard.keyBoardMapping[event.key] ||
@@ -670,7 +671,7 @@ export class Joystick {
                   null,
                   null,
                   null,
-                  null,
+                  "lifeSaver",
                   null,
                   null,
                   null,
@@ -805,12 +806,12 @@ export class KeyBoard {
                         bindingValue: null,
                   },
                   m: {
-                        playerNumber: null,
-                        bindingValue: null,
+                        playerNumber: "0",
+                        bindingValue: "hardDrop",
                   },
                   n: {
-                        playerNumber: null,
-                        bindingValue: null,
+                        playerNumber: "0",
+                        bindingValue: "lifeSaver",
                   },
                   o: {
                         playerNumber: null,
@@ -1156,7 +1157,47 @@ export const destroy = (
 
 export const finalInput = (direction, player, sounds, gamepad, game) => {
       let returnValue = false;
-      if (direction === "ArrowDown") {
+      if (direction === "lifeSaver") {
+            let firstNonEmptyRow = -1;
+
+            for (let row = 0; row < game.boardRows; row++) {
+                  if (player.boardMatrix[row][game.boardColumns]) {
+                        firstNonEmptyRow = row;
+                        break;
+                  }
+            }
+            if (firstNonEmptyRow !== -1) {
+                  const destroyableRows = [firstNonEmptyRow];
+                  firstNonEmptyRow++;
+                  while (
+                        destroyableRows.length < 5 &&
+                        firstNonEmptyRow < game.boardRows
+                  ) {
+                        destroyableRows.push(firstNonEmptyRow);
+                        firstNonEmptyRow++;
+                  }
+                  destroy(
+                        destroyableRows,
+                        player.boardMatrix,
+                        player.renderUi,
+                        sounds,
+                        game,
+                        player.number
+                  );
+            }
+            // if (this.joysticks[index]) {
+            //       let duration = (destroyableRows.length - 1) * 200 + 200;
+            //       this.joysticks[index].gamepad.vibrationActuator.playEffect(
+            //             "dual-rumble",
+            //             {
+            //                   startDelay: 0,
+            //                   duration: duration,
+            //                   weakMagnitude: 1.0,
+            //                   strongMagnitude: 1.0,
+            //             }
+            //       );
+            // }
+      } else if (direction === "ArrowDown") {
             if (
                   isPossibleToMove(
                         "ArrowDown",

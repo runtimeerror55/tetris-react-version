@@ -1,5 +1,4 @@
 .page {
-      /* background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.6)); */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -10,7 +9,6 @@
       align-items: center;
       justify-content: center;
       font-family: cursive;
-      /* background-color: black; */
 }
 
 .page-theme-0 {

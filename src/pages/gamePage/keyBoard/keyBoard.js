@@ -38,6 +38,18 @@ export const KeyBoard = ({ playerNumber, previousGamepadLoop, game }) => {
                               playerNumber={playerNumber}
                               game={game}
                         ></KeyBoardSelect>
+                        <KeyBoardSelect
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="lifeSaver"
+                              playerNumber={playerNumber}
+                              game={game}
+                        ></KeyBoardSelect>
+                        <KeyBoardSelect
+                              previousGamepadLoop={previousGamepadLoop}
+                              bindingValue="hardDrop"
+                              playerNumber={playerNumber}
+                              game={game}
+                        ></KeyBoardSelect>
                   </div>
             </CardTwo>
       );

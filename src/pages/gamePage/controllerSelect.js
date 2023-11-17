@@ -14,8 +14,16 @@ export const ControllerSelect = ({
       game,
 }) => {
       const [showOptions, setShowOptions] = useState(false);
+      const [showBottom, setShowBottom] = useState(true);
       const settingClickHandler = (event) => {
             event.stopPropagation();
+            const positions = event.currentTarget.getBoundingClientRect();
+            console.log(positions.top, window.innerHeight / 2);
+            if (positions.top < window.innerHeight / 2) {
+                  setShowBottom(true);
+            } else {
+                  setShowBottom(false);
+            }
             setShowOptions(true);
       };
 
@@ -72,6 +80,7 @@ export const ControllerSelect = ({
                                           "data-binding-value": bindingValue,
                                     }}
                                     clickHandler={optionsClickHandler}
+                                    showBottom={showBottom}
                               >
                                     <Option
                                           attributes={{

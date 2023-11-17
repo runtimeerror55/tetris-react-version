@@ -5,13 +5,10 @@
       width: 100%;
       justify-content: space-between;
       max-width: 700px;
-      /* background-color: cadetblue; */
       border-radius: 20px;
       text-align: center;
 }
-.connected-key-board-theme-0 {
-      background-color: rgba(255, 0, 0, 0.3);
-}
+
 .key-board-image {
       width: 200px;
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useContext } from "react";
 import styles from "./keyBoardSelect.module.css";
-import { themeContext } from "../../../context/theme";
 import { CardThree } from "../../../components/cards/cardThree";
 import { Options } from "../../../components/options/options";
 import { toast } from "react-toastify";
@@ -14,11 +13,18 @@ export const KeyBoardSelect = ({
       game,
 }) => {
       const [showOptions, setShowOptions] = useState(false);
+      const [showBottom, setShowBottom] = useState(true);
       const settingClickHandler = (event) => {
             event.stopPropagation();
+            const positions = event.currentTarget.getBoundingClientRect();
+            console.log(positions.top, window.innerHeight / 2);
+            if (positions.top < window.innerHeight / 2) {
+                  setShowBottom(true);
+            } else {
+                  setShowBottom(false);
+            }
             setShowOptions(true);
       };
-      const { theme } = useContext(themeContext);
 
       let assignedKeyBoardKey = null;
 
@@ -80,6 +86,7 @@ export const KeyBoardSelect = ({
                                           "data-binding-value": bindingValue,
                                     }}
                                     clickHandler={optionsClickHandler}
+                                    showBottom={showBottom}
                               >
                                     <Option
                                           attributes={{

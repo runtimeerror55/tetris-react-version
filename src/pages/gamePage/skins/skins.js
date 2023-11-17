@@ -18,6 +18,9 @@ export const Skins = ({ setShowSkins, game }) => {
             return { elements: null, index: 0 };
       }, []);
       const controllerSettingsOverlayKeyDownHandler = (event) => {
+            if (event.stopPropagation) {
+                  event.stopPropagation();
+            }
             if (event.key === "ArrowDown") {
                   if (
                         focusableElements.index ===
@@ -45,7 +48,7 @@ export const Skins = ({ setShowSkins, game }) => {
             } else if (event.key === "Enter") {
                   game.sounds.clickSound.play();
                   focusableElements.elements[focusableElements.index].click();
-            } else if (event.key === "Back") {
+            } else if (event.key === "Back" || event.key === "Backspace") {
                   game.sounds.clickSound.play();
                   gamepadLoopState.run = false;
                   setShowSkins(false);
@@ -80,6 +83,7 @@ export const Skins = ({ setShowSkins, game }) => {
             <CardOne
                   customClass={styles["game-modes-section"]}
                   customTag="section"
+                  keyDownHandler={controllerSettingsOverlayKeyDownHandler}
             >
                   <GoBackButton
                         onClickHandler={gameModesCloseButtonClickHandler}
@@ -90,6 +94,17 @@ export const Skins = ({ setShowSkins, game }) => {
                               className={styles["setting-container"]}
                               onClick={optionsClickHandler}
                         >
+                              <div
+                                    tabIndex={3}
+                                    className={
+                                          styles["option"] +
+                                          " " +
+                                          styles["blue"]
+                                    }
+                                    data-theme="theme-4"
+                              >
+                                    Blue
+                              </div>
                               <div
                                     tabIndex={3}
                                     className={

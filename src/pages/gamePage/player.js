@@ -177,6 +177,17 @@ export const PlayerJsx = ({ player, game }) => {
                                     " " +
                                     styles["info-item-" + theme]
                               }
+                              id={styles["life-saver"]}
+                        >
+                              life saver: {1}
+                        </div>
+
+                        <div
+                              className={
+                                    styles["info-item"] +
+                                    " " +
+                                    styles["info-item-" + theme]
+                              }
                               id={styles["single-shot"]}
                         >
                               1X blast: {player.stats.singleShots}
