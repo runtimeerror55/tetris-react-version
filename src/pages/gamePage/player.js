@@ -143,107 +143,103 @@ export const PlayerJsx = ({ player, game }) => {
 
       return (
             <>
-                  <div
-                        className={
-                              styles["game-info"] +
-                              " " +
-                              styles["game-info-" + theme]
-                        }
-                  >
+                  <section className={styles["player-section"]}>
                         <div
                               className={
-                                    styles["info-item"] +
+                                    styles["game-info"] +
                                     " " +
-                                    styles["info-item-" + theme]
+                                    styles["game-info-" + theme]
                               }
-                              id={styles["time"]}
                         >
-                              Timer: {timer} s
-                        </div>
-                        <div
-                              className={
-                                    styles["info-item"] +
-                                    " " +
-                                    styles["info-item-" + theme]
-                              }
-                              id={styles["score"]}
-                        >
-                              Score: {player.stats.score}
-                        </div>
-
-                        <div
-                              className={
-                                    styles["info-item"] +
-                                    " " +
-                                    styles["info-item-" + theme]
-                              }
-                              id={styles["life-saver"]}
-                        >
-                              life saver: {1}
-                        </div>
-
-                        <div
-                              className={
-                                    styles["info-item"] +
-                                    " " +
-                                    styles["info-item-" + theme]
-                              }
-                              id={styles["single-shot"]}
-                        >
-                              1X blast: {player.stats.singleShots}
-                        </div>
-                        <div
-                              className={
-                                    styles["info-item"] +
-                                    " " +
-                                    styles["info-item-" + theme]
-                              }
-                              id={styles["double-shot"]}
-                        >
-                              2X blast: {player.stats.doubleShots}
-                        </div>
-                        <div
-                              className={
-                                    styles["info-item"] +
-                                    " " +
-                                    styles["info-item-" + theme]
-                              }
-                              id={styles["triple-shot"]}
-                        >
-                              3X blast: {player.stats.tripleShots}
-                        </div>
-                        {/* <button
-                              className={styles["menu-item"]}
-                              id={styles["pause-button"]}
-                        >
-                              Pause
-                        </button> */}
-                  </div>
-                  <div
-                        className={
-                              styles["container"] +
-                              " " +
-                              styles["container-" + theme]
-                        }
-                  >
-                        {createGameBox(
-                              player.currentTetromino,
-                              player.boardMatrix,
-                              player.hardDropCoordinates,
-                              game,
-                              theme,
-                              player.number
-                        )}
-
-                        <div className={styles["menu"]}>
-                              <button
-                                    className={styles["menu-item"]}
-                                    id={styles["play-button"]}
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["time"]}
                               >
-                                    Play
-                              </button>
+                                    Timer: {timer} s
+                              </div>
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["score"]}
+                              >
+                                    Score: {player.stats.score}
+                              </div>
+
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["life-saver"]}
+                              >
+                                    life saver: {player.lifeSaverCount}
+                              </div>
+
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["single-shot"]}
+                              >
+                                    1X blast: {player.stats.singleShots}
+                              </div>
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["double-shot"]}
+                              >
+                                    2X blast: {player.stats.doubleShots}
+                              </div>
+                              <div
+                                    className={
+                                          styles["info-item"] +
+                                          " " +
+                                          styles["info-item-" + theme]
+                                    }
+                                    id={styles["triple-shot"]}
+                              >
+                                    3X blast: {player.stats.tripleShots}
+                              </div>
                         </div>
-                  </div>
+                        <div
+                              className={
+                                    styles["container"] +
+                                    " " +
+                                    styles["container-" + theme]
+                              }
+                        >
+                              {createGameBox(
+                                    player.currentTetromino,
+                                    player.boardMatrix,
+                                    player.hardDropCoordinates,
+                                    game,
+                                    theme,
+                                    player.number
+                              )}
+
+                              <div className={styles["menu"]}>
+                                    <button
+                                          className={styles["menu-item"]}
+                                          id={styles["play-button"]}
+                                    >
+                                          Play
+                                    </button>
+                              </div>
+                        </div>
+                  </section>
             </>
       );
 };

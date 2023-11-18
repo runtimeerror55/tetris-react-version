@@ -5,7 +5,11 @@
 3. powers lasers for column destruction , row destruction , freeze time in second game mode, speed
 4. violet rgba(202, 9, 202,0.4)
 5. add attributes property to card one
-6. during lifesaver or destory stop taking input
+6. during lifesaver or destory stop taking input and update life saver count
+7. navigation transition animation
+8. opacity animation
+9. write guide
+     <!-- 8. starting position of tetronimo should be centered to the board width -->
 
 <!-- function deepCloneArray(input) {
       return input.map((element) =>

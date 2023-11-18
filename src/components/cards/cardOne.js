@@ -1,39 +1,31 @@
 import styles from "./cardOne.module.css";
 import { themeContext } from "../../context/theme";
 import { useContext } from "react";
-export const CardOne = ({
-      customClass,
-      customTag,
-      keyDownHandler,
-      children,
-}) => {
+export const CardOne = ({ customTag, children, attributes }) => {
       const { theme } = useContext(themeContext);
-      const className = customClass
-            ? styles["card-one"] +
-              " " +
-              styles["card-one-" + theme] +
-              " " +
-              customClass
-            : styles["card-one"] + " " + styles["card-one-" + theme];
+
+      if (attributes) {
+            if (attributes.className) {
+                  attributes.className =
+                        attributes.className +
+                        " " +
+                        styles["card-one"] +
+                        " " +
+                        styles["card-one-" + theme];
+            } else {
+                  attributes.className =
+                        styles["card-one"] + " " + styles["card-one-" + theme];
+            }
+      } else {
+            attributes = {
+                  className:
+                        styles["card-one"] + " " + styles["card-one-" + theme],
+            };
+      }
 
       if (customTag === "section") {
-            return (
-                  <section
-                        className={className}
-                        onKeyDown={keyDownHandler ? keyDownHandler : null}
-                        tabIndex={-1}
-                  >
-                        {children}
-                  </section>
-            );
+            return <section {...attributes}>{children}</section>;
       } else {
-            return (
-                  <div
-                        className={className}
-                        onKeyDown={keyDownHandler ? keyDownHandler : null}
-                  >
-                        {children}
-                  </div>
-            );
+            return <div {...attributes}>{children}</div>;
       }
 };

@@ -134,9 +134,12 @@ export const GameModes = ({ setShowGameModes, game }) => {
 
       return (
             <CardOne
-                  customClass={styles["game-modes-section"]}
                   customTag="section"
-                  keyDownHandler={controllerSettingsOverlayKeyDownHandler}
+                  attributes={{
+                        className: styles["game-modes-section"],
+                        onKeyDown: controllerSettingsOverlayKeyDownHandler,
+                        tabIndex: -1,
+                  }}
             >
                   <GoBackButton
                         onClickHandler={gameModesCloseButtonClickHandler}

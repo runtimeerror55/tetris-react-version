@@ -49,7 +49,10 @@ export const GamePage = () => {
 
       return (
             <>
-                  <CardOne customClass={styles["page"]} customTag="div">
+                  <CardOne
+                        customTag="div"
+                        attributes={{ className: styles["page"] }}
+                  >
                         <ToastContainer></ToastContainer>
 
                         <main className={styles["main"]}>

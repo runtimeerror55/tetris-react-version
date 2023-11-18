@@ -8,8 +8,15 @@ import { toast } from "react-toastify";
 import { toastOptions } from "../../../utilities/utilities";
 export const ModeTwoSelect = ({ previousGamepadLoop, game }) => {
       const [showOptions, setShowOptions] = useState(false);
+      const [showBottom, setShowBottom] = useState(true);
       const settingClickHandler = (event) => {
             event.stopPropagation();
+            const positions = event.currentTarget.getBoundingClientRect();
+            if (positions.top < window.innerHeight / 2) {
+                  setShowBottom(true);
+            } else {
+                  setShowBottom(false);
+            }
             setShowOptions(true);
       };
 
@@ -50,6 +57,7 @@ export const ModeTwoSelect = ({ previousGamepadLoop, game }) => {
                                     game={game}
                                     setShowOptions={setShowOptions}
                                     clickHandler={optionsClickHandler}
+                                    showBottom={showBottom}
                               >
                                     <Option
                                           attributes={{

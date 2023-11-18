@@ -1,3 +1,6 @@
+.player-section {
+      display: flex;
+}
 .game-info {
       width: 150px;
       color: white;
@@ -143,7 +146,7 @@
 }
 
 /* theme-0 */
-.l-tetromino-activ-theme-0,
+.l-tetromino-active-theme-0,
 .t-tetromino-active-theme-0,
 .square-tetromino-active-theme-0,
 .line-tetromino-active-theme-0,
@@ -154,7 +157,7 @@
 }
 
 /* theme-1 */
-.l-tetromino-activ-theme-1,
+.l-tetromino-active-theme-1,
 .t-tetromino-active-theme-1,
 .square-tetromino-active-theme-1,
 .line-tetromino-active-theme-1,
@@ -165,7 +168,7 @@
 }
 
 /* theme-2 */
-.l-tetromino-activ-theme-2,
+.l-tetromino-active-theme-2,
 .t-tetromino-active-theme-2,
 .square-tetromino-active-theme-2,
 .line-tetromino-active-theme-2,
@@ -176,7 +179,7 @@
 }
 
 /* theme-3 */
-.l-tetromino-activ-theme-3,
+.l-tetromino-active-theme-3,
 .t-tetromino-active-theme-3,
 .square-tetromino-active-theme-3,
 .line-tetromino-active-theme-3,
@@ -186,7 +189,7 @@
       box-shadow: 0 0 10px rgba(255, 255, 0, 1);
 }
 
-.l-tetromino-activ-theme-4,
+.l-tetromino-active-theme-4,
 .t-tetromino-active-theme-4,
 .square-tetromino-active-theme-4,
 .line-tetromino-active-theme-4,
@@ -196,7 +199,7 @@
       box-shadow: 0 0 10px rgba(0, 255, 255, 1);
 }
 
-.l-tetromino-activ-theme-5 {
+.l-tetromino-active-theme-5 {
       border: 2px solid rgba(255, 0, 0, 1);
       background-color: rgba(255, 0, 0, 0.3);
       box-shadow: 0 0 10px rgba(255, 0, 0, 1);

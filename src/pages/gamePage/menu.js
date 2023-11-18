@@ -155,9 +155,12 @@ export const Menu = ({
       return (
             <>
                   <CardOne
-                        customClass={styles["menu-overlay-section"]}
-                        keyDownHandler={menuOverlayKeyDownHandler}
                         customTag="section"
+                        attributes={{
+                              className: styles["menu-overlay-section"],
+                              onKeyDown: menuOverlayKeyDownHandler,
+                              tabIndex: -1,
+                        }}
                   >
                         {!game.isGameStarted ? (
                               <div

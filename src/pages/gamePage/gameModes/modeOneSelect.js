@@ -9,8 +9,15 @@ import { Option } from "../../../components/options/option";
 
 export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
       const [showOptions, setShowOptions] = useState(false);
+      const [showBottom, setShowBottom] = useState(true);
       const settingClickHandler = (event) => {
             event.stopPropagation();
+            const positions = event.currentTarget.getBoundingClientRect();
+            if (positions.top < window.innerHeight / 2) {
+                  setShowBottom(true);
+            } else {
+                  setShowBottom(false);
+            }
             setShowOptions(true);
       };
       const modeOneValue =
@@ -48,6 +55,7 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
                                     game={game}
                                     setShowOptions={setShowOptions}
                                     clickHandler={optionsClickHandler}
+                                    showBottom={showBottom}
                               >
                                     <Option
                                           attributes={{

@@ -5,7 +5,7 @@ import { CardTwo } from "../../../components/cards/cardTwo";
 export const KeyBoard = ({ playerNumber, previousGamepadLoop, game }) => {
       return (
             <CardTwo customClass={styles["connected-key-board"]}>
-                  <div>
+                  <div className={styles["container"]}>
                         <img
                               src={keyBoardImage}
                               alt="gamepad"

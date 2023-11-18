@@ -18,7 +18,6 @@ export const ControllerSelect = ({
       const settingClickHandler = (event) => {
             event.stopPropagation();
             const positions = event.currentTarget.getBoundingClientRect();
-            console.log(positions.top, window.innerHeight / 2);
             if (positions.top < window.innerHeight / 2) {
                   setShowBottom(true);
             } else {

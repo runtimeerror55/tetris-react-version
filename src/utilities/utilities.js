@@ -47,56 +47,57 @@ export class Game {
             this.pause = false;
             this.renderGameResult = renderGameResult;
             this.renderMenuOverlay = renderMenuOverlay;
-            this.CoordinatesAndColorsOfTetrominos = [
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [1, 5],
-                              [2, 5],
-                              [2, 6],
-                        ],
-                        colorClass: "l-tetromino-active",
-                  }, // l tetromino
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [0, 7],
-                              [1, 6],
-                        ],
-                        colorClass: "t-tetromino-active",
-                  }, // t tetromino
+            // this.CoordinatesAndColorsOfTetrominos = [
+            //       {
+            //             allCoordinates: [
+            //                   [0, 5],
+            //                   [1, 5],
+            //                   [2, 5],
+            //                   [2, 6],
+            //             ],
+            //             colorClass: "l-tetromino-active",
+            //       }, // l tetromino
+            //       {
+            //             allCoordinates: [
+            //                   [0, 5],
+            //                   [0, 6],
+            //                   [0, 7],
+            //                   [1, 6],
+            //             ],
+            //             colorClass: "t-tetromino-active",
+            //       }, // t tetromino
 
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [1, 5],
-                              [1, 6],
-                        ],
-                        colorClass: "square-tetromino-active",
-                  }, // square
+            //       {
+            //             allCoordinates: [
+            //                   [0, 5],
+            //                   [0, 6],
+            //                   [1, 5],
+            //                   [1, 6],
+            //             ],
+            //             colorClass: "square-tetromino-active",
+            //       }, // square
 
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [0, 6],
-                              [0, 7],
-                              [0, 8],
-                        ],
-                        colorClass: "line-tetromino-active",
-                  }, // line tetromino
+            //       {
+            //             allCoordinates: [
+            //                   [0, 5],
+            //                   [0, 6],
+            //                   [0, 7],
+            //                   [0, 8],
+            //             ],
+            //             colorClass: "line-tetromino-active",
+            //       }, // line tetromino
 
-                  {
-                        allCoordinates: [
-                              [0, 5],
-                              [1, 5],
-                              [1, 6],
-                              [2, 6],
-                        ],
-                        colorClass: "z-tetromino-active",
-                  }, // skew tetromino
-            ];
+            //       {
+            //             allCoordinates: [
+            //                   [0, 5],
+            //                   [1, 5],
+            //                   [1, 6],
+            //                   [2, 6],
+            //             ],
+            //             colorClass: "z-tetromino-active",
+            //       }, // skew tetromino
+            // ];
+            this.CoordinatesAndColorsOfTetrominos = tetrominoes(boardColumns);
             this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
             this.gameModes = {
                   modeOne: 1,
@@ -542,20 +543,15 @@ export class Game {
                         this.speed
                   );
             });
-            // this.joysticks.forEach((joystick) => {
-            //       if (joystick) {
-            //             joystick.reset();
-            //       }
-            // });
       };
 
       generateNewTetrominoIndexes = () => {
             let a = [];
             for (let i = 0; i < 500; i++) {
-                  const randomInteger = Math.ceil(Math.random() * 4);
+                  const randomInteger = Math.floor(Math.random() * 5);
                   a.push(randomInteger);
             }
-
+            console.log(a);
             return a;
       };
 }
@@ -575,6 +571,7 @@ export class Player {
       currentSpeed;
       frameCounter;
       time;
+      lifeSaverCount;
       constructor(
             playerNumber,
             startingTetromino,
@@ -591,6 +588,7 @@ export class Player {
                   doubleShots: 0,
                   tripleShots: 0,
             };
+            this.lifeSaverCount = 1;
             this.time = 0;
             this.hardDropCoordinates = null;
             this.timer = 0;
@@ -604,6 +602,7 @@ export class Player {
       }
 
       reset = (currentTetromino, speed) => {
+            this.lifeSaverCount = 1;
             this.isGameOver = false;
             this.currentSpeed = speed;
             this.previousSpeed = speed;
@@ -1085,7 +1084,10 @@ export const shiftBlocks = (destroyableRows, playerBoardMatrix, game) => {
       destroyableRows.forEach((row) => {
             let currentRow = row;
             let upperRow = row - 1;
-            while (playerBoardMatrix[upperRow][game.boardColumns]) {
+            while (
+                  upperRow !== -1 &&
+                  playerBoardMatrix[upperRow][game.boardColumns]
+            ) {
                   playerBoardMatrix[currentRow].forEach((element, column) => {
                         if (column === game.boardColumns) {
                               playerBoardMatrix[currentRow][game.boardColumns] =
@@ -1157,7 +1159,7 @@ export const destroy = (
 
 export const finalInput = (direction, player, sounds, gamepad, game) => {
       let returnValue = false;
-      if (direction === "lifeSaver") {
+      if (direction === "lifeSaver" && player.lifeSaverCount) {
             let firstNonEmptyRow = -1;
 
             for (let row = 0; row < game.boardRows; row++) {
@@ -1184,19 +1186,18 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                         game,
                         player.number
                   );
+
+                  if (gamepad) {
+                        let duration = (destroyableRows.length - 1) * 200 + 200;
+                        gamepad.vibrationActuator.playEffect("dual-rumble", {
+                              startDelay: 0,
+                              duration: duration,
+                              weakMagnitude: 1.0,
+                              strongMagnitude: 1.0,
+                        });
+                  }
+                  player.lifeSaverCount--;
             }
-            // if (this.joysticks[index]) {
-            //       let duration = (destroyableRows.length - 1) * 200 + 200;
-            //       this.joysticks[index].gamepad.vibrationActuator.playEffect(
-            //             "dual-rumble",
-            //             {
-            //                   startDelay: 0,
-            //                   duration: duration,
-            //                   weakMagnitude: 1.0,
-            //                   strongMagnitude: 1.0,
-            //             }
-            //       );
-            // }
       } else if (direction === "ArrowDown") {
             if (
                   isPossibleToMove(
@@ -1374,4 +1375,113 @@ export const navigationGamepadLoop = (
                   gamepadLoopState
             )
       );
+};
+
+export const tetrominoes = (boardColumns) => {
+      let midpoint = -1;
+      if (boardColumns % 2 === 0) {
+            midpoint = boardColumns / 2 - 1;
+            return [
+                  {
+                        allCoordinates: [
+                              [0, midpoint],
+                              [1, midpoint],
+                              [2, midpoint],
+                              [2, midpoint + 1],
+                        ],
+                        colorClass: "l-tetromino-active",
+                  }, // l tetromino
+                  {
+                        allCoordinates: [
+                              [0, midpoint - 1],
+                              [0, midpoint],
+                              [0, midpoint + 1],
+                              [1, midpoint],
+                        ],
+                        colorClass: "t-tetromino-active",
+                  }, // t tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint],
+                              [0, midpoint + 1],
+                              [1, midpoint],
+                              [1, midpoint + 1],
+                        ],
+                        colorClass: "square-tetromino-active",
+                  }, // square
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint - 1],
+                              [0, midpoint],
+                              [0, midpoint + 1],
+                              [0, midpoint + 2],
+                        ],
+                        colorClass: "line-tetromino-active",
+                  }, // line tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint],
+                              [1, midpoint],
+                              [1, midpoint + 1],
+                              [2, midpoint + 1],
+                        ],
+                        colorClass: "z-tetromino-active",
+                  }, // skew tetromino
+            ];
+      } else {
+            midpoint = (boardColumns + 1) / 2 - 1;
+            return [
+                  {
+                        allCoordinates: [
+                              [0, midpoint],
+                              [1, midpoint],
+                              [2, midpoint],
+                              [2, midpoint + 1],
+                        ],
+                        colorClass: "l-tetromino-active",
+                  }, // l tetromino
+                  {
+                        allCoordinates: [
+                              [0, midpoint - 1],
+                              [0, midpoint],
+                              [0, midpoint + 1],
+                              [1, midpoint],
+                        ],
+                        colorClass: "t-tetromino-active",
+                  }, // t tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint - 1],
+                              [0, midpoint],
+                              [1, midpoint - 1],
+                              [1, midpoint],
+                        ],
+                        colorClass: "square-tetromino-active",
+                  }, // square
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint - 2],
+                              [0, midpoint - 1],
+                              [0, midpoint],
+                              [0, midpoint + 1],
+                        ],
+                        colorClass: "line-tetromino-active",
+                  }, // line tetromino
+
+                  {
+                        allCoordinates: [
+                              [0, midpoint],
+                              [1, midpoint],
+                              [1, midpoint + 1],
+                              [2, midpoint + 1],
+                        ],
+                        colorClass: "z-tetromino-active",
+                  }, // skew tetromino
+            ];
+      }
 };

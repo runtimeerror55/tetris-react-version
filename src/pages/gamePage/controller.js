@@ -10,7 +10,7 @@ export const Controller = ({
 }) => {
       return (
             <CardTwo customClass={styles["connected-controller"]}>
-                  <div>
+                  <div className={styles["container"]}>
                         <img
                               src={gamePadImage}
                               alt="gamepad"

@@ -21,11 +21,12 @@ export const PlayerResult = ({ player, index }) => {
       }, [score]);
       return (
             <CardOne
-                  customClass={
-                        styles["player-result"] +
-                        " " +
-                        styles["player-result-" + theme]
-                  }
+                  attributes={{
+                        className:
+                              styles["player-result"] +
+                              " " +
+                              styles["player-result-" + theme],
+                  }}
             >
                   <div className={styles["player-number"]}>
                         {index + 1}. PLAYER {player.number}

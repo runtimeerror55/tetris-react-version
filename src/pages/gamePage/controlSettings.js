@@ -89,9 +89,12 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
 
       return (
             <CardOne
-                  customClass={styles["settings-overlay"]}
                   customTag="section"
-                  keyDownHandler={controllerSettingsOverlayKeyDownHandler}
+                  attributes={{
+                        className: styles["settings-overlay"],
+                        onKeyDown: controllerSettingsOverlayKeyDownHandler,
+                        tabIndex: -1,
+                  }}
             >
                   <GoBackButton
                         onClickHandler={settingsOverlayCloseButtonClickHandler}
