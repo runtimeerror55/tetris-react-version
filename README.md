@@ -2,20 +2,68 @@
 
 1. smaller board with 20 rows 12 columns
 2. two game modes infinite time with speed increase at 4min,8min and time limit of 5 min where you need to miximize the score
-3. powers lasers for column destruction , row destruction , freeze time in second game mode, speed
-4. violet rgba(202, 9, 202,0.4)
-5. add attributes property to card one
-6. during lifesaver or destory stop taking input and update life saver count
-7. navigation transition animation
-8. opacity animation
-9. write guide
-     <!-- 8. starting position of tetronimo should be centered to the board width -->
+
+   <!-- 8. starting position of tetronimo should be centered to the board width -->
 
 <!-- function deepCloneArray(input) {
       return input.map((element) =>
             Array.isArray(element) ? deepCloneArray(element) : element
       );
 } -->
+
+# about page
+
+## Introduction:
+
+Welcome to the new modern age of gaming! Dive into the world of our simple, elegant, and fun web-based Tetris game. Designed with ease of use,clean user interface ,multi controller support, split screen and many more in mind, this classic favorite has been given a fresh, contemporary twist for your enjoyment. Whether you're a seasoned Tetris pro or a newcomer to the game, this guide is here to help you make the most of your experience. Let's explore the exciting features and navigate through the captivating world of Tetris!
+
+## Game Overview:
+
+Get ready for an exhilarating Tetris experience with two distinct game modes, each offering its own set of challenges and excitement.
+
+1. GAME MODES
+
+### Mode One:
+
+Single Player: Embark on a solo journey to achieve the highest score possible.
+
+Couch Player (2 Players): Invite a friend to join the fun! Experience the thrill of competitive Tetris with two players on the same screen, side by side. It's a test of skill and strategy as you aim to outlast and outscore your opponent.
+
+### Mode Two:
+
+Delve into a different Tetris adventure with Mode Two, featuring two enticing options:
+
+Score Until You Die: Keep clearing lines and stacking blocks until you can't go on any longer. Challenge yourself to reach new heights with each game.
+
+Maximize Score in 5 Min: Feel the pressure as you aim to achieve the highest score possible within a time limit of 5 minutes. Quick thinking and precision are key to mastering this fast-paced mode.
+
+2. skins
+   Explore our collection of carefully crafted skins, each designed to elevate your gaming experience. From vibrant color schemes to sleek, minimalist designs, there's a skin for every taste. Choose the one that reflects your style and adds an extra layer of enjoyment to your Tetris sessions.Our skins are not just about aesthetics—they're designed for optimal visual appeal. Crisp graphics, seamless animations, and attention to detail create a visually engaging environment.
+   These are the names of the skins
+
+      1. Blue
+      2. Red
+      3. Green
+      4. violet
+      5. yellow
+
+3. controls
+
+This is one of the best part of our game. Both controller and keyboard are supported in both single palyer mode and couch play mode.
+You can connect two controllers to play couch play. Also you can change the contols in the controls section as you like for controller as well as keyboard. you can also have two players playing on same keyboard but with different key bindings.
+In order to see multiple controller and mutltiple keyboard settings in controls section you need to choose couch play in the game modes section.
+
+4. Navigation
+
+Another big feature of our game is that you get full contoller support and keyboard support for navigating the whole game.
+
+keyboard navigation:
+use Arrow up and Arrow down keys to navigate through options
+use Enter to select an option
+
+controller navigation:
+use d-pad up and d-pad down buttons to navigate through options
+use X to select an option
 
 # tetris-react-version
 

@@ -1,0 +1,57 @@
+.guide-section {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
+      overflow-y: scroll;
+}
+
+.guide-section::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #f5f5f5;
+}
+
+.guide-section::-webkit-scrollbar {
+      width: 10px;
+      background-color: #f5f5f5;
+}
+
+.guide-section::-webkit-scrollbar-thumb {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: black;
+}
+
+.guide {
+      padding: 20px;
+      border-radius: 20px;
+      width: 90%;
+      margin: 20px;
+}
+
+.guide-heading {
+      color: white;
+      font-size: 30px;
+      margin-top: 20px;
+}
+
+.container {
+      margin-left: 10px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+}
+
+.h2-heading {
+      border-top: 2px solid rgba(0, 255, 255, 0.5);
+      margin-top: 5px;
+}
+
+.p1 {
+      margin: 10px;
+}

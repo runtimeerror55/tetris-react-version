@@ -39,7 +39,7 @@ export const ModeTwoSelect = ({ previousGamepadLoop, game }) => {
                   : "maximize score in 5 min";
       return (
             <CardTwo customClass={styles["setting-container"]}>
-                  <span>mode one</span>
+                  <span>Mode two</span>
                   <CardThree
                         customClass={styles["setting"]}
                         tabIndex={2}

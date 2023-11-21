@@ -42,7 +42,7 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
       };
       return (
             <CardTwo customClass={styles["setting-container"]}>
-                  <span>mode one</span>
+                  <span>Mode one</span>
                   <CardThree
                         customClass={styles["setting"]}
                         tabIndex={2}

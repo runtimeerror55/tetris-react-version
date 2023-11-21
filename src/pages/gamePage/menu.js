@@ -8,6 +8,7 @@ import clickSoundPath from "../../assets/sounds/click.mp3";
 import { themeContext } from "../../context/theme";
 import { CardOne } from "../../components/cards/cardOne";
 import { Skins } from "./skins/skins";
+import { Guide } from "./guide/guide";
 
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
@@ -24,6 +25,7 @@ export const Menu = ({
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
       const [showGameModes, setShowGameModes] = useState(false);
       const [showSkins, setShowSkins] = useState(false);
+      const [showGuide, setShowGuide] = useState(false);
       const [renderMenu, setRenderMenu] = useState({});
       const { theme } = useContext(themeContext);
 
@@ -59,6 +61,10 @@ export const Menu = ({
 
       const skinsClickHandler = () => {
             setShowSkins(true);
+      };
+
+      const guideClickHandler = () => {
+            setShowGuide(true);
       };
       const quitGameClickHandler = () => {
             game.reset();
@@ -100,10 +106,15 @@ export const Menu = ({
       }, [game.isGameStarted]);
 
       useEffect(() => {
-            if (!showSettingsOverLay && !showGameModes && !showSkins) {
+            if (
+                  !showSettingsOverLay &&
+                  !showGameModes &&
+                  !showSkins &&
+                  !showGuide
+            ) {
                   focusableElements.elements[focusableElements.index]?.focus();
             }
-      }, [showSettingsOverLay, showGameModes, showSkins]);
+      }, [showSettingsOverLay, showGameModes, showSkins, showGuide]);
 
       const gamepadLoop = () => {
             const joystick = game.joysticks[0];
@@ -147,10 +158,21 @@ export const Menu = ({
             setRenderMenu({});
       };
       useEffect(() => {
-            if (!showSettingsOverLay && !showGameModes && !showSkins) {
+            if (
+                  !showSettingsOverLay &&
+                  !showGameModes &&
+                  !showSkins &&
+                  !showGuide
+            ) {
                   requestAnimationFrame(gamepadLoop);
             }
-      }, [showSettingsOverLay, renderMenu, showGameModes, showSkins]);
+      }, [
+            showSettingsOverLay,
+            renderMenu,
+            showGameModes,
+            showSkins,
+            showGuide,
+      ]);
 
       return (
             <>
@@ -248,6 +270,17 @@ export const Menu = ({
                         >
                               SKINS
                         </div>
+                        <div
+                              className={
+                                    styles["option"] +
+                                    " " +
+                                    styles["option-" + theme]
+                              }
+                              onClick={guideClickHandler}
+                              tabIndex={0}
+                        >
+                              GUIDE
+                        </div>
                   </CardOne>
                   {showSettingsOverLay ? (
                         <ControlSettings
@@ -266,6 +299,10 @@ export const Menu = ({
                   ) : null}
                   {showSkins ? (
                         <Skins setShowSkins={setShowSkins} game={game}></Skins>
+                  ) : null}
+
+                  {showGuide ? (
+                        <Guide setShowGuide={setShowGuide} game={game}></Guide>
                   ) : null}
             </>
       );

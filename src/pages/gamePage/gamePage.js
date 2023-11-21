@@ -66,6 +66,10 @@ export const GamePage = () => {
                                                         <PlayerJsx
                                                               player={player}
                                                               game={game}
+                                                              key={
+                                                                    "player " +
+                                                                    player.number
+                                                              }
                                                         ></PlayerJsx>
                                                   </>
                                             );

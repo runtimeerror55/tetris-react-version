@@ -6,7 +6,18 @@ import gameOverPath from "../assets/sounds/gameOver.wav";
 import navigationSoundPath from "../assets/sounds/navigation.m4a";
 import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
+import { toast } from "react-toastify";
 
+export const toastOptions = {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+};
 export class Game {
       barsState;
       players;
@@ -316,7 +327,7 @@ export class Game {
                         this.renderPlayersUi({});
                   }
 
-                  if (!player.isGameOver) {
+                  if (!player.isGameOver && !player.destroyInAction) {
                         player.frameCounter++;
                         if (player.frameCounter === player.currentSpeed) {
                               if (
@@ -347,11 +358,8 @@ export class Game {
                                     if (destroyableRows.length > 0) {
                                           destroy(
                                                 destroyableRows,
-                                                player.boardMatrix,
-                                                player.renderUi,
-                                                this.sounds,
                                                 this,
-                                                player.number
+                                                player
                                           );
                                           if (this.joysticks[index]) {
                                                 let duration =
@@ -461,6 +469,8 @@ export class Game {
       };
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
+                  console.log(event);
+                  toast.success(event.gamepad.id + " connected", toastOptions);
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (this.joysticks[i] === null) {
                               this.joysticks[i] = new Joystick(
@@ -477,6 +487,7 @@ export class Game {
       onJoystickDisconnect = () => {
             window.addEventListener("gamepaddisconnected", (event) => {
                   console.log(event);
+                  toast.error(event.gamepad.id + " disconnected", toastOptions);
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (
                               this.joysticks[i].gamepad.index ===
@@ -507,13 +518,15 @@ export class Game {
                         const bindingValue =
                               this.keyBoard.keyBoardMapping[event.key]
                                     .bindingValue;
-                        finalInput(
-                              bindingValue,
-                              this.players[playerNumber],
-                              this.sounds,
-                              null,
-                              this
-                        );
+                        if (!this.players[playerNumber].destroyInAction) {
+                              finalInput(
+                                    bindingValue,
+                                    this.players[playerNumber],
+                                    this.sounds,
+                                    null,
+                                    this
+                              );
+                        }
 
                         this.players.forEach((player) => {
                               player.hardDropCoordinates = null;
@@ -551,7 +564,7 @@ export class Game {
                   const randomInteger = Math.floor(Math.random() * 5);
                   a.push(randomInteger);
             }
-            console.log(a);
+
             return a;
       };
 }
@@ -572,6 +585,8 @@ export class Player {
       frameCounter;
       time;
       lifeSaverCount;
+      destroyInAction;
+
       constructor(
             playerNumber,
             startingTetromino,
@@ -579,6 +594,7 @@ export class Player {
             boardColumns,
             speed
       ) {
+            this.destroyInAction = false;
             this.previousSpeed = speed;
             this.currentSpeed = speed;
             this.frameCounter = 0;
@@ -602,6 +618,7 @@ export class Player {
       }
 
       reset = (currentTetromino, speed) => {
+            this.destroyInAction = false;
             this.lifeSaverCount = 1;
             this.isGameOver = false;
             this.currentSpeed = speed;
@@ -1111,45 +1128,40 @@ export const shiftBlocks = (destroyableRows, playerBoardMatrix, game) => {
       });
 };
 
-export const destroy = (
-      destroyableRows,
-      playerBoardMatrix,
-      setDestroy,
-      sounds,
-      game,
-      playerNumber
-) => {
+export const destroy = (destroyableRows, game, player) => {
       let column = 0;
       let throttleCount = 0;
-      sounds.blasterSound.play();
+      game.sounds.blasterSound.play();
+      player.destroyInAction = true;
 
       const destroyAnimationLoop = () => {
             throttleCount++;
             if (throttleCount === 2) {
                   if (column === game.boardColumns) {
                         destroyableRows.forEach((row) => {
-                              playerBoardMatrix[row][column] = 0;
+                              player.boardMatrix[row][column] = 0;
                               const laserBeam = document.querySelector(
-                                    `#player-${playerNumber}-laser-beam-${row}`
+                                    `#player-${player.number}-laser-beam-${row}`
                               );
                               laserBeam.style.width = "0px";
                         });
-                        shiftBlocks(destroyableRows, playerBoardMatrix, game);
-                        setDestroy({});
+                        shiftBlocks(destroyableRows, player.boardMatrix, game);
+                        player.renderUi({});
+                        player.destroyInAction = false;
                         return;
                   }
 
                   destroyableRows.forEach((row) => {
-                        playerBoardMatrix[row][column] = "";
+                        player.boardMatrix[row][column] = "";
                         const laserBeam = document.querySelector(
-                              `#player-${playerNumber}-laser-beam-${row}`
+                              `#player-${player.number}-laser-beam-${row}`
                         );
 
                         laserBeam.style.width = 25 * (column + 1) + "px";
                   });
                   column++;
 
-                  setDestroy({});
+                  player.renderUi({});
                   throttleCount = 0;
             }
             requestAnimationFrame(destroyAnimationLoop);
@@ -1178,14 +1190,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                         destroyableRows.push(firstNonEmptyRow);
                         firstNonEmptyRow++;
                   }
-                  destroy(
-                        destroyableRows,
-                        player.boardMatrix,
-                        player.renderUi,
-                        sounds,
-                        game,
-                        player.number
-                  );
+                  destroy(destroyableRows, game, player);
 
                   if (gamepad) {
                         let duration = (destroyableRows.length - 1) * 200 + 200;
@@ -1300,17 +1305,6 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
       player.hardDropCoordinates = null;
       player.hardDropFinalCoordinates(game);
       return returnValue;
-};
-
-export const toastOptions = {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
 };
 
 export const navigationGamepadLoop = (
