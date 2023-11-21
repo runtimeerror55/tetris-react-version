@@ -25,7 +25,7 @@ export const GamePage = () => {
                   setShowMenuOverlay,
                   20,
                   10,
-                  15
+                  30
             );
       }, []);
       useEffect(() => {

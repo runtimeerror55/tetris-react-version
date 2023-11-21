@@ -304,6 +304,7 @@ export class Game {
             return isTrue;
       };
       gameLoop = () => {
+            console.log("hello");
             this.gamepadLoop.bind(this)();
 
             // this.gameLoopWaitCount++;
@@ -650,12 +651,10 @@ export class Player {
             let flag = false;
 
             while (
-                  isPossibleToMove(
-                        "ArrowDown",
+                  isPossibleToMove("ArrowDown", game, {
                         currentTetromino,
-                        this.boardMatrix,
-                        game
-                  )
+                        boardMatrix: this.boardMatrix,
+                  })
             ) {
                   currentTetromino = moveDown(currentTetromino);
                   flag = true;
@@ -981,37 +980,48 @@ export const moveLeft = (currentTetromino) => {
       };
 };
 
-export const isPossibleToMove = (
-      direction,
-      currentTetromino,
-      playerBoardMatrix,
-      game
-) => {
+export const isPossibleToMove = (direction, game, player) => {
       if (direction === "ArrowLeft") {
-            return currentTetromino.allCoordinates.every((coordinates) => {
-                  return (
-                        coordinates[1] > 0 &&
-                        !playerBoardMatrix[coordinates[0]][coordinates[1] - 1]
-                  );
-            });
+            return player.currentTetromino.allCoordinates.every(
+                  (coordinates) => {
+                        return (
+                              coordinates[1] > 0 &&
+                              !player.boardMatrix[coordinates[0]][
+                                    coordinates[1] - 1
+                              ]
+                        );
+                  }
+            );
       } else if (direction === "ArrowRight") {
-            return currentTetromino.allCoordinates.every((coordinates) => {
-                  return (
-                        coordinates[1] < game.boardColumns - 1 &&
-                        !playerBoardMatrix[coordinates[0]][coordinates[1] + 1]
-                  );
-            });
+            return player.currentTetromino.allCoordinates.every(
+                  (coordinates) => {
+                        return (
+                              coordinates[1] < game.boardColumns - 1 &&
+                              !player.boardMatrix[coordinates[0]][
+                                    coordinates[1] + 1
+                              ]
+                        );
+                  }
+            );
       } else if (direction === "ArrowDown") {
-            return currentTetromino.allCoordinates.every((coordinates) => {
-                  return (
-                        coordinates[0] < game.boardRows - 1 &&
-                        !playerBoardMatrix[coordinates[0] + 1][coordinates[1]]
-                  );
-            });
+            return player.currentTetromino.allCoordinates.every(
+                  (coordinates) => {
+                        return (
+                              coordinates[0] < game.boardRows - 1 &&
+                              !player.boardMatrix[coordinates[0] + 1][
+                                    coordinates[1]
+                              ]
+                        );
+                  }
+            );
       } else if ("startingPosition") {
-            return currentTetromino.allCoordinates.every((coordinates) => {
-                  return !playerBoardMatrix[coordinates[0]][coordinates[1]];
-            });
+            return player.currentTetromino.allCoordinates.every(
+                  (coordinates) => {
+                        return !player.boardMatrix[coordinates[0]][
+                              coordinates[1]
+                        ];
+                  }
+            );
       }
 };
 
@@ -1171,6 +1181,7 @@ export const destroy = (destroyableRows, game, player) => {
 
 export const finalInput = (direction, player, sounds, gamepad, game) => {
       let returnValue = false;
+      console.log("yes");
       if (direction === "lifeSaver" && player.lifeSaverCount) {
             let firstNonEmptyRow = -1;
 
@@ -1204,14 +1215,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   player.lifeSaverCount--;
             }
       } else if (direction === "ArrowDown") {
-            if (
-                  isPossibleToMove(
-                        "ArrowDown",
-                        player.currentTetromino,
-                        player.boardMatrix,
-                        game
-                  )
-            ) {
+            if (isPossibleToMove("ArrowDown", game, player)) {
                   const newTetromino = moveDown(player.currentTetromino);
 
                   if (sounds) {
@@ -1222,14 +1226,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   returnValue = true;
             }
       } else if (direction === "ArrowLeft") {
-            if (
-                  isPossibleToMove(
-                        "ArrowLeft",
-                        player.currentTetromino,
-                        player.boardMatrix,
-                        game
-                  )
-            ) {
+            if (isPossibleToMove("ArrowLeft", game, player)) {
                   const newTetromino = moveLeft(player.currentTetromino);
 
                   if (sounds) {
@@ -1240,14 +1237,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   returnValue = true;
             }
       } else if (direction === "ArrowRight") {
-            if (
-                  isPossibleToMove(
-                        "ArrowRight",
-                        player.currentTetromino,
-                        player.boardMatrix,
-                        game
-                  )
-            ) {
+            if (isPossibleToMove("ArrowRight", game, player)) {
                   const newTetromino = moveRight(player.currentTetromino);
 
                   if (sounds) {
@@ -1273,14 +1263,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   returnValue = true;
             }
       } else if (direction === "startingPosition") {
-            if (
-                  isPossibleToMove(
-                        "startingPosition",
-                        player.currentTetromino,
-                        player.boardMatrix,
-                        game
-                  )
-            ) {
+            if (isPossibleToMove("startingPosition", game, player)) {
                   returnValue = true;
             }
       } else if (direction === "hardDrop") {
