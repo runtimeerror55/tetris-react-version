@@ -344,16 +344,11 @@ export class Game {
                                           player.currentSpeed =
                                                 player.previousSpeed;
                                     }
-                                    updateplayerBoardMatrix(
-                                          player.currentTetromino,
-                                          player.boardMatrix,
-                                          this
-                                    );
+                                    updateplayerBoardMatrix(player, this);
                                     const destroyableRows =
                                           areThereAnydestroyableRows(
-                                                player.currentTetromino,
-                                                player.boardMatrix,
-                                                this
+                                                this,
+                                                player
                                           );
 
                                     if (destroyableRows.length > 0) {
@@ -1042,25 +1037,17 @@ export const createPlayerBoardMatrix = (boardRows, boardColumns) => {
       return playerBoardMatrix;
 };
 
-export const updateplayerBoardMatrix = (
-      currentTetromino,
-      playerBoardMatrix,
-      game
-) => {
-      currentTetromino.allCoordinates.forEach((coordinates) => {
-            playerBoardMatrix[coordinates[0]][game.boardColumns]++;
-            playerBoardMatrix[coordinates[0]][coordinates[1]] =
-                  currentTetromino.colorClass;
+export const updateplayerBoardMatrix = (player, game) => {
+      player.currentTetromino.allCoordinates.forEach((coordinates) => {
+            player.boardMatrix[coordinates[0]][game.boardColumns]++;
+            player.boardMatrix[coordinates[0]][coordinates[1]] =
+                  player.currentTetromino.colorClass;
       });
 };
 
-export const isRotationPossible = (
-      currentTetromino,
-      playerBoardMatrix,
-      game
-) => {
-      const x = currentTetromino.allCoordinates;
-      const y = playerBoardMatrix;
+export const isRotationPossible = (game, player) => {
+      const x = player.currentTetromino.allCoordinates;
+      const y = player.boardMatrix;
       const setOfrotatedCoordinates = x.map((coordinates) => {
             return [
                   coordinates[1] - x[0][1] + x[0][0],
@@ -1085,15 +1072,11 @@ export const isRotationPossible = (
       }
 };
 
-export const areThereAnydestroyableRows = (
-      currentTetromino,
-      playerBoardMatrix,
-      game
-) => {
+export const areThereAnydestroyableRows = (game, player) => {
       let destroyableRows = new Set();
-      currentTetromino.allCoordinates.forEach((coordinates) => {
+      player.currentTetromino.allCoordinates.forEach((coordinates) => {
             if (
-                  playerBoardMatrix[coordinates[0]][game.boardColumns] ===
+                  player.boardMatrix[coordinates[0]][game.boardColumns] ===
                   game.boardColumns
             ) {
                   destroyableRows.add(coordinates[0]);
@@ -1248,11 +1231,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   returnValue = true;
             }
       } else if (direction === " " || direction === "rotate") {
-            const setOfrotatedCoordinates = isRotationPossible(
-                  player.currentTetromino,
-                  player.boardMatrix,
-                  game
-            );
+            const setOfrotatedCoordinates = isRotationPossible(game, player);
             if (setOfrotatedCoordinates) {
                   if (sounds) {
                         sounds.fall.play();
