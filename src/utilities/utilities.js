@@ -930,16 +930,6 @@ export class KeyBoard {
       }
 }
 
-export const updateStats = (player, numberOfDestroyedRows) => {
-      if (numberOfDestroyedRows === 1) {
-            player.stats.singleShots++;
-      } else if (numberOfDestroyedRows === 2) {
-            player.stats.doubleShots++;
-      } else if (numberOfDestroyedRows === 3) {
-            player.stats.tripleShots++;
-      }
-      player.stats.score += numberOfDestroyedRows * 100 * numberOfDestroyedRows;
-};
 export const moveRight = (currentTetromino) => {
       const newTetromino = [];
       currentTetromino.allCoordinates.forEach((coordinates, index) => {
@@ -1090,28 +1080,41 @@ export const areThereAnydestroyableRows = (game, player) => {
       return destroyableRows;
 };
 
-export const shiftBlocks = (destroyableRows, playerBoardMatrix, game) => {
+export const updateStats = (player, numberOfDestroyedRows) => {
+      if (numberOfDestroyedRows === 1) {
+            player.stats.singleShots++;
+      } else if (numberOfDestroyedRows === 2) {
+            player.stats.doubleShots++;
+      } else if (numberOfDestroyedRows === 3) {
+            player.stats.tripleShots++;
+      }
+      player.stats.score += numberOfDestroyedRows * 100 * numberOfDestroyedRows;
+};
+
+export const shiftBlocks = (destroyableRows, player, game) => {
       destroyableRows.forEach((row) => {
             let currentRow = row;
             let upperRow = row - 1;
             while (
                   upperRow !== -1 &&
-                  playerBoardMatrix[upperRow][game.boardColumns]
+                  player.boardMatrix[upperRow][game.boardColumns]
             ) {
-                  playerBoardMatrix[currentRow].forEach((element, column) => {
+                  player.boardMatrix[currentRow].forEach((element, column) => {
                         if (column === game.boardColumns) {
-                              playerBoardMatrix[currentRow][game.boardColumns] =
-                                    playerBoardMatrix[upperRow][
+                              player.boardMatrix[currentRow][
+                                    game.boardColumns
+                              ] =
+                                    player.boardMatrix[upperRow][
                                           game.boardColumns
                                     ];
-                              playerBoardMatrix[upperRow][
+                              player.boardMatrix[upperRow][
                                     game.boardColumns
                               ] = 0;
                         } else {
-                              playerBoardMatrix[currentRow][column] =
-                                    playerBoardMatrix[upperRow][column];
+                              player.boardMatrix[currentRow][column] =
+                                    player.boardMatrix[upperRow][column];
 
-                              playerBoardMatrix[upperRow][column] = "";
+                              player.boardMatrix[upperRow][column] = "";
                         }
                   });
 
@@ -1121,6 +1124,7 @@ export const shiftBlocks = (destroyableRows, playerBoardMatrix, game) => {
       });
 };
 
+//
 export const destroy = (destroyableRows, game, player) => {
       let column = 0;
       let throttleCount = 0;
@@ -1138,7 +1142,7 @@ export const destroy = (destroyableRows, game, player) => {
                               );
                               laserBeam.style.width = "0px";
                         });
-                        shiftBlocks(destroyableRows, player.boardMatrix, game);
+                        shiftBlocks(destroyableRows, player, game);
                         player.renderUi({});
                         player.destroyInAction = false;
                         return;
@@ -1164,7 +1168,7 @@ export const destroy = (destroyableRows, game, player) => {
 
 export const finalInput = (direction, player, sounds, gamepad, game) => {
       let returnValue = false;
-      console.log("yes");
+
       if (direction === "lifeSaver" && player.lifeSaverCount) {
             let firstNonEmptyRow = -1;
 
