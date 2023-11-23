@@ -2,41 +2,91 @@ import { screen, render, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import App from "../../App";
+import { Menu } from "./menu";
+import { Game } from "../../utilities/utilities";
 
 describe("menu options", () => {
       test("renders new game option", () => {
-            render(<App></App>);
+            const game = new Game(
+                  () => {},
+                  () => {},
+                  () => {},
+                  20,
+                  10,
+                  30
+            );
+            render(<Menu game={game}></Menu>);
             const output = screen.getByText("NEW GAME");
             expect(output).toBeInTheDocument();
       });
 
       test("renders controls option", () => {
-            render(<App></App>);
+            const game = new Game(
+                  () => {},
+                  () => {},
+                  () => {},
+                  20,
+                  10,
+                  30
+            );
+            render(<Menu game={game}></Menu>);
             const output = screen.getByText("CONTROLS");
             expect(output).toBeInTheDocument();
       });
 
       test("renders game modes option", () => {
-            render(<App></App>);
+            const game = new Game(
+                  () => {},
+                  () => {},
+                  () => {},
+                  20,
+                  10,
+                  30
+            );
+            render(<Menu game={game}></Menu>);
             const output = screen.getByText("GAME MODES");
             expect(output).toBeInTheDocument();
       });
 
       test("renders skins option", () => {
-            render(<App></App>);
+            const game = new Game(
+                  () => {},
+                  () => {},
+                  () => {},
+                  20,
+                  10,
+                  30
+            );
+            render(<Menu game={game}></Menu>);
             const output = screen.getByText("SKINS");
             expect(output).toBeInTheDocument();
       });
 
       test("renders guide option", () => {
-            render(<App></App>);
+            const game = new Game(
+                  () => {},
+                  () => {},
+                  () => {},
+                  20,
+                  10,
+                  30
+            );
+            render(<Menu game={game}></Menu>);
             const output = screen.getByText("GUIDE");
             expect(output).toBeInTheDocument();
       });
 });
 
-test("renders controls component", async () => {
-      render(<App></App>);
+test("renders controls component on click", async () => {
+      const game = new Game(
+            () => {},
+            () => {},
+            () => {},
+            20,
+            10,
+            30
+      );
+      render(<Menu game={game} setShowBars={() => {}}></Menu>);
 
       const output = screen.getByText("CONTROLS");
       await act(() => {
@@ -52,8 +102,16 @@ test("renders controls component", async () => {
       );
 });
 
-test("renders game modes component", async () => {
-      render(<App></App>);
+test("renders game modes component on click", async () => {
+      const game = new Game(
+            () => {},
+            () => {},
+            () => {},
+            20,
+            10,
+            30
+      );
+      render(<Menu game={game}></Menu>);
 
       const output = screen.getByText("GAME MODES");
       await act(() => {
@@ -64,8 +122,16 @@ test("renders game modes component", async () => {
       expect(output2).toBeInTheDocument();
 });
 
-test("renders guide  component", async () => {
-      render(<App></App>);
+test("renders guide  component on click", async () => {
+      const game = new Game(
+            () => {},
+            () => {},
+            () => {},
+            20,
+            10,
+            30
+      );
+      render(<Menu game={game}></Menu>);
 
       const output = screen.getByText("GUIDE");
       await act(() => {
@@ -76,14 +142,22 @@ test("renders guide  component", async () => {
       expect(output2).toBeInTheDocument();
 });
 
-test("renders guide page introduction", async () => {
-      render(<App></App>);
+test("renders skins  component on click", async () => {
+      const game = new Game(
+            () => {},
+            () => {},
+            () => {},
+            20,
+            10,
+            30
+      );
+      render(<Menu game={game}></Menu>);
 
-      const output = screen.getByText("GUIDE");
+      const output = screen.getByText("SKINS");
       await act(() => {
             userEvent.click(output);
       });
 
-      const output2 = await screen.findByText("Introduction");
+      const output2 = await screen.findByText("Skins");
       expect(output2).toBeInTheDocument();
 });
