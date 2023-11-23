@@ -73,6 +73,7 @@ export const KeyBoardSelect = ({
                         customClass={styles["setting"]}
                         tabIndex={2}
                         onClick={settingClickHandler}
+                        testId="key-board-select"
                   >
                         {assignedKeyBoardKey ? assignedKeyBoardKey : "empty"}
                         {showOptions ? (
