@@ -1279,13 +1279,13 @@ export const navigationGamepadLoop = (
       gamepadLoopState
 ) => {
       const joystick = game.joysticks[0];
-      const gamepads = navigator.getGamepads();
       let shouldExit = false;
 
       if (joystick) {
             if (joystick.throttleCount < 10) {
                   joystick.throttleCount++;
             }
+            const gamepads = navigator.getGamepads();
             const gamepad = gamepads[joystick.gamepad.index];
             if (gamepad) {
                   gamepad.buttons.forEach((button, buttonIndex) => {

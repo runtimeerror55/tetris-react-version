@@ -101,7 +101,7 @@ export const ControlSettings = ({ setShowSettingsOverLay, game }) => {
                   ></GoBackButton>
                   <div className={styles["settings"]}>
                         <h1 className={styles["controller-settings-heading"]}>
-                              Controller settings
+                              Controls
                         </h1>
                         <div className={styles["connected-controllers"]}>
                               {game.players.map((player, index) => {
