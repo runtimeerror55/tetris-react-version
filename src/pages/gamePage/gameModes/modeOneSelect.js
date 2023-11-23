@@ -47,6 +47,7 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
                         customClass={styles["setting"]}
                         tabIndex={2}
                         onClick={settingClickHandler}
+                        testId="mode-one-select"
                   >
                         {modeOneValue}
                         {showOptions ? (

@@ -44,6 +44,7 @@ export const ModeTwoSelect = ({ previousGamepadLoop, game }) => {
                         customClass={styles["setting"]}
                         tabIndex={2}
                         onClick={settingClickHandler}
+                        testId="mode-two-select"
                   >
                         {modeTwoValue}
                         {showOptions ? (
