@@ -3,12 +3,10 @@
 1. smaller board with 20 rows 12 columns
 2. two game modes infinite time with speed increase at 4min,8min and time limit of 5 min where you need to miximize the score
 
-# tetris-react-version
-
 ## key functionalities
 
 2. Tetromino movements,destorying blocks,shifting blocks
-3. calculating player stats like score,timer,single shots,double shots,triple shots
+3. calculating player stats like score,time elapsed,single shots,double shots,triple shots
 4. generate random tetrominos for every new game
 5. single player
 6. couch play(2 players on one screen side by side)
@@ -18,7 +16,7 @@
 10. multiple players on single keyboard support
 11. immersive sound effects
 12. immersive 5 different skins
-13. two game modes
+13. two different game modes
 14. Dynamic game board(can generated board of any size)
 15. Dynamic falling speed of Player tetromino
 
