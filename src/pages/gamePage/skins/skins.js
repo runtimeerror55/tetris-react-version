@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useContext } from "react";
 import styles from "./skins.module.css";
-import { GoBackButton } from "../../../components/navBar/buttons/goBack";
+import { GoBackButton } from "../../../components/buttons/goBack";
 import { CardOne } from "../../../components/cards/cardOne";
 import { navigationGamepadLoop } from "../../../utilities/utilities";
 import { themeContext } from "../../../context/theme";

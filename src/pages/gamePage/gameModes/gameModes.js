@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import styles from "./gameModes.module.css";
-import { GoBackButton } from "../../../components/navBar/buttons/goBack";
+import { GoBackButton } from "../../../components/buttons/goBack";
 import { ModeOneSelect } from "./modeOneSelect";
 import { ModeTwoSelect } from "./modeTwoSelect";
 import { CardOne } from "../../../components/cards/cardOne";

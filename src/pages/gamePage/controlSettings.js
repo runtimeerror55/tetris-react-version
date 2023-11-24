@@ -1,5 +1,5 @@
 import styles from "./controlSettings.module.css";
-import { GoBackButton } from "../../components/navBar/buttons/goBack";
+import { GoBackButton } from "../../components/buttons/goBack";
 import { useEffect, useState, useMemo } from "react";
 import { Controller } from "./controller";
 import { Howl } from "howler";

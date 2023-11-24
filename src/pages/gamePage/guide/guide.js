@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import styles from "./guide.module.css";
 import { CardOne } from "../../../components/cards/cardOne";
 import { CardTwo } from "../../../components/cards/cardTwo";
-import { GoBackButton } from "../../../components/navBar/buttons/goBack";
+import { GoBackButton } from "../../../components/buttons/goBack";
 import { navigationGamepadLoop } from "../../../utilities/utilities";
 
 export const Guide = ({ setShowGuide, game }) => {
