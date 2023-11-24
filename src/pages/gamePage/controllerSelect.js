@@ -66,6 +66,7 @@ export const ControllerSelect = ({
                         customClass={styles["setting"]}
                         tabIndex={2}
                         onClick={settingClickHandler}
+                        testId="gamepad-select"
                   >
                         {assignedButtonName}
 
