@@ -9,7 +9,7 @@ import { themeContext } from "../../context/theme";
 import { CardOne } from "../../components/cards/cardOne";
 import { Skins } from "./skins/skins";
 import { Guide } from "./guide/guide";
-
+import { LasersShooting } from "../../components/svg/lasersShooting";
 const navigationSound = new Howl({
       src: [menuNavigationSoundPath],
 });
@@ -21,6 +21,7 @@ export const Menu = ({
       game,
       setShowGameStartTimer,
       setShowBars,
+      setShowGame,
 }) => {
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
       const [showGameModes, setShowGameModes] = useState(false);
@@ -36,6 +37,7 @@ export const Menu = ({
             game.reset();
             setShowMenuOverlay(false);
             setShowGameStartTimer(true);
+            setShowGame(true);
       };
 
       const controlsClickHandler = async () => {
@@ -184,6 +186,7 @@ export const Menu = ({
                               tabIndex: -1,
                         }}
                   >
+                        <LasersShooting></LasersShooting>
                         {!game.isGameStarted ? (
                               <div
                                     className={

@@ -9,7 +9,6 @@
       align-items: center;
       z-index: 1;
       flex-direction: column;
-      cursor: pointer;
 }
 
 .menu-overlay-close-button {
@@ -24,6 +23,7 @@
       font-size: 20px;
       padding: 5px;
       cursor: pointer;
+      z-index: 100;
 }
 
 .option-theme-0:focus {

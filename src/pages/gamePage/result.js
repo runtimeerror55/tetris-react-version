@@ -5,6 +5,8 @@ import { CardOne } from "../../components/cards/cardOne";
 import { Option } from "../../components/options/option";
 import { PlayerResult } from "./playerResult";
 import { navigationGamepadLoop } from "../../utilities/utilities";
+import { CardsFlying } from "../../components/svg/cardsFlying";
+
 export const GameResult = ({
       game,
       setShowGameStartTimer,
@@ -74,6 +76,7 @@ export const GameResult = ({
       }, []);
       return (
             <section className={styles["game-result-section"]}>
+                  <CardsFlying></CardsFlying>
                   <div className={styles["game-result-container"]}>
                         {game.players
                               .sort((a, b) => {

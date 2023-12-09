@@ -69,8 +69,37 @@
       box-shadow: 0 0 5px rgba(0, 255, 255, 1);
 }
 
+.score-update-animation {
+      animation: type 0.2s linear;
+      transform: scale(1);
+}
+
+@keyframes type {
+      from {
+            transform: scale(1);
+      }
+      to {
+            transform: scale(1.5);
+      }
+}
+
 .container {
       position: relative;
+}
+.shaking {
+      animation: shaking-animation 0.1s linear;
+}
+@keyframes shaking-animation {
+      0%,
+      40%,
+      80% {
+            transform: rotate(2deg);
+      }
+      20%,
+      60%,
+      100% {
+            transform: rotate(-2deg);
+      }
 }
 
 .container-theme-0 {

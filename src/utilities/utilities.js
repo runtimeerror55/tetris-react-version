@@ -8,6 +8,14 @@ import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
 import { toast } from "react-toastify";
 
+export const svgThemes = {
+      "theme-0": "rgba(255, 0, 0, 1)",
+      "theme-1": "rgba(0, 255, 0, 1)",
+      "theme-2": "rgba(128, 0, 128, 1)",
+      "theme-3": "rgba(255, 255, 0, 1)",
+      "theme-4": "rgba(0, 255, 255, 1)",
+};
+
 export const toastOptions = {
       position: "bottom-right",
       autoClose: 5000,
@@ -114,7 +122,7 @@ export class Game {
                   modeOne: 1,
                   modeTwo: 1,
             };
-            this.timeLimit = 10;
+            this.timeLimit = 300;
             this.players = [
                   new Player(
                         0,

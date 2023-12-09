@@ -143,7 +143,13 @@ export const PlayerJsx = ({ player, game }) => {
 
       return (
             <>
-                  <section className={styles["player-section"]}>
+                  <section
+                        className={
+                              styles["player-section"] +
+                              " " +
+                              (player.destroyInAction ? styles["shaking"] : "")
+                        }
+                  >
                         <div
                               className={
                                     styles["game-info"] +
@@ -169,7 +175,17 @@ export const PlayerJsx = ({ player, game }) => {
                                     }
                                     id={styles["score"]}
                               >
-                                    Score: {player.stats.score}
+                                    <div
+                                          className={
+                                                player.destroyInAction
+                                                      ? styles[
+                                                              "score-update-animation"
+                                                        ]
+                                                      : null
+                                          }
+                                    >
+                                          Score: {player.stats.score}
+                                    </div>
                               </div>
 
                               <div

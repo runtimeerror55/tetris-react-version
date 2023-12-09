@@ -1,7 +1,11 @@
 # to do
 
-1. smaller board with 20 rows 12 columns
+1. smaller board with 20 rows 8 columns and 15 speed
 2. two game modes infinite time with speed increase at 4min,8min and time limit of 5 min where you need to miximize the score
+3. 60 fps on all different refresh rate displays
+4. removing back button
+5. deleting sound files,images
+6. transiton animation
 
 ## key functionalities
 

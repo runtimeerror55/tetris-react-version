@@ -15,7 +15,7 @@ export const GamePage = () => {
       const [showGameStartTimer, setShowGameStartTimer] = useState(false);
       const [showGameResult, setShowGameResult] = useState(false);
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
-      const [showGame, setShowGame] = useState(true);
+      const [showGame, setShowGame] = useState(false);
       const [showBars, setShowBars] = useState(false);
 
       const game = useMemo(() => {
@@ -85,6 +85,7 @@ export const GamePage = () => {
                                           }
                                           game={game}
                                           setShowBars={setShowBars}
+                                          setShowGame={setShowGame}
                                     ></Menu>
                               ) : (
                                     ""
