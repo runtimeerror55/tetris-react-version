@@ -19,7 +19,7 @@
 11. immersive sound effects
 12. immersive 5 different skins
 13. two different game modes
-14. Dynamic game board(can generated board of any size)
+14. Dynamic game board(can generate board of any size)
 15. Dynamic falling speed of Player tetromino
 
 ## Lannguages and tools used:
