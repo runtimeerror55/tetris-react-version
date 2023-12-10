@@ -581,8 +581,6 @@ export class Player {
       boardMatrix;
       renderUi;
       currentIndexOfrandomTetrominoIndexes;
-      timer;
-      timerId;
       hardDropCoordinates;
       previousSpeed;
       currentSpeed;
@@ -611,8 +609,6 @@ export class Player {
             this.lifeSaverCount = 1;
             this.time = 0;
             this.hardDropCoordinates = null;
-            this.timer = 0;
-            this.timerId = null;
             this.isGameOver = false;
             this.number = playerNumber;
             this.currentIndexOfrandomTetrominoIndexes = 0;

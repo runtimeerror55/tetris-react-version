@@ -110,18 +110,15 @@ export const PlayerJsx = ({ player, game }) => {
       const setRender = useState({})[1];
       const [timer, setTimer] = useState(0);
       const { theme } = useContext(themeContext);
-      //   if (game.gameModes.modeTwo === 1) {
-      //         if (timer === 60) {
-      //               game.speed = 20;
-      //               game.gameLoopWaitCount = 0;
-      //         } else if (timer === 120) {
-      //               game.speed = 15;
-      //               game.gameLoopWaitCount = 0;
-      //         }
-      //   } else if (game.gameModes.modeTwo === 2 && timer === 120) {
-      //         game.isGameOver = true;
-      //         game.renderGameResult(true);
-      //   }
+      if (game.gameModes.modeTwo === 1) {
+            if (player.time === 120) {
+                  player.currentSpeed = 20;
+                  player.frameCounter = 0;
+            } else if (player.time === 240) {
+                  player.currentSpeed = 15;
+                  player.frameCounter = 0;
+            }
+      }
 
       useEffect(() => {
             player.renderUi = setRender;
