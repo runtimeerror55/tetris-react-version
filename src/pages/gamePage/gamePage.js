@@ -16,7 +16,6 @@ export const GamePage = () => {
       const [showGameResult, setShowGameResult] = useState(false);
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
       const [showGame, setShowGame] = useState(false);
-      const [showBars, setShowBars] = useState(false);
 
       const game = useMemo(() => {
             return new Game(
@@ -51,14 +50,16 @@ export const GamePage = () => {
             <>
                   <CardOne
                         customTag="div"
-                        attributes={{ className: styles["page"] }}
+                        attributes={{
+                              className:
+                                    styles["page"] +
+                                    " " +
+                                    styles["page-animation"],
+                        }}
                   >
                         <ToastContainer></ToastContainer>
 
                         <main className={styles["main"]}>
-                              {showBars ? (
-                                    <Bars setShowBars={setShowBars}> </Bars>
-                              ) : null}
                               {showGame
                                     ? game.players.map((player) => {
                                             return (
@@ -84,7 +85,6 @@ export const GamePage = () => {
                                                 setShowGameStartTimer
                                           }
                                           game={game}
-                                          setShowBars={setShowBars}
                                           setShowGame={setShowGame}
                                     ></Menu>
                               ) : (
@@ -96,6 +96,7 @@ export const GamePage = () => {
                                                 setShowGameStartTimer
                                           }
                                           game={game}
+                                          setShowGame={setShowGame}
                                     ></StartTimer>
                               ) : (
                                     ""

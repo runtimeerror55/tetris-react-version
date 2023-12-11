@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styles from "./player.module.css";
 import { themeContext } from "../../context/theme";
-
+import { ScoreAnimation } from "./scoreAnimation";
 const createGameBox = (
       currentTetromino,
       playerBoardMatrix,
@@ -234,6 +234,11 @@ export const PlayerJsx = ({ player, game }) => {
                                     styles["container-" + theme]
                               }
                         >
+                              <ScoreAnimation
+                                    player={player}
+                                    game={game}
+                              ></ScoreAnimation>
+
                               {createGameBox(
                                     player.currentTetromino,
                                     player.boardMatrix,

@@ -4,6 +4,7 @@
 4. removing back button
 5. deleting sound files,images
 6. transiton animation
+7. delicious is shown when live save is used. it should not
 
 ## key functionalities
 

@@ -8,6 +8,21 @@
       justify-content: center;
       z-index: 1;
       overflow-y: scroll;
+      opacity: 0;
+}
+
+.page-animation {
+      animation: opacity-animation 0.4s ease-in-out;
+      opacity: 1;
+}
+
+@keyframes opacity-animation {
+      from {
+            opacity: 0;
+      }
+      to {
+            opacity: 1;
+      }
 }
 
 .game-modes-section::-webkit-scrollbar-track {

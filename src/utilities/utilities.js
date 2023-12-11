@@ -7,6 +7,7 @@ import navigationSoundPath from "../assets/sounds/navigation.m4a";
 import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
 import { toast } from "react-toastify";
+import deliciousSoundPath from "../assets/sounds/deliciousOne.mp3";
 
 export const svgThemes = {
       "theme-0": "rgba(255, 0, 0, 1)",
@@ -122,7 +123,7 @@ export class Game {
                   modeOne: 1,
                   modeTwo: 1,
             };
-            this.timeLimit = 300;
+            this.timeLimit = 100;
             this.players = [
                   new Player(
                         0,
@@ -217,6 +218,9 @@ export class Game {
                   }),
                   clickSound: new Howl({
                         src: [clickSoundPath],
+                  }),
+                  deliciousSound: new Howl({
+                        src: [deliciousSoundPath],
                   }),
             };
       }
@@ -385,7 +389,8 @@ export class Game {
                                           }
                                           updateStats(
                                                 player,
-                                                destroyableRows.length
+                                                destroyableRows.length,
+                                                this
                                           );
                                           if (this.gameModes.modeOne === 2) {
                                                 this.checkGameOver();
@@ -588,6 +593,7 @@ export class Player {
       time;
       lifeSaverCount;
       destroyInAction;
+      numberOfDestroyedRows;
 
       constructor(
             playerNumber,
@@ -597,6 +603,7 @@ export class Player {
             speed
       ) {
             this.destroyInAction = false;
+            this.numberOfDestroyedRows = 0;
             this.previousSpeed = speed;
             this.currentSpeed = speed;
             this.frameCounter = 0;
@@ -620,6 +627,7 @@ export class Player {
       reset = (currentTetromino, speed) => {
             this.destroyInAction = false;
             this.lifeSaverCount = 1;
+            this.numberOfDestroyedRows = 0;
             this.isGameOver = false;
             this.currentSpeed = speed;
             this.previousSpeed = speed;
@@ -1084,7 +1092,7 @@ export const areThereAnydestroyableRows = (game, player) => {
       return destroyableRows;
 };
 
-export const updateStats = (player, numberOfDestroyedRows) => {
+export const updateStats = (player, numberOfDestroyedRows, game) => {
       if (numberOfDestroyedRows === 1) {
             player.stats.singleShots++;
       } else if (numberOfDestroyedRows === 2) {
@@ -1134,6 +1142,7 @@ export const destroy = (destroyableRows, game, player) => {
       let throttleCount = 0;
       game.sounds.blasterSound.play();
       player.destroyInAction = true;
+      player.numberOfDestroyedRows = destroyableRows.length;
 
       const destroyAnimationLoop = () => {
             throttleCount++;

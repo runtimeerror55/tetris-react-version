@@ -8,6 +8,21 @@
       right: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.8);
+      opacity: 0;
+}
+
+.start-timer-animation {
+      animation: opacity-animation 0.4s ease-in-out;
+      opacity: 1;
+}
+
+@keyframes opacity-animation {
+      from {
+            opacity: 0;
+      }
+      to {
+            opacity: 1;
+      }
 }
 
 .time {

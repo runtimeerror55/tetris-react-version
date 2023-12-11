@@ -10,6 +10,19 @@
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.8);
 }
+.page-animation {
+      animation: opacity-animation 1s ease-in-out;
+      opacity: 1;
+}
+
+@keyframes opacity-animation {
+      from {
+            opacity: 0;
+      }
+      to {
+            opacity: 1;
+      }
+}
 
 .game-result-container {
       display: flex;

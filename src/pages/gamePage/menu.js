@@ -20,7 +20,6 @@ export const Menu = ({
       setShowMenuOverlay,
       game,
       setShowGameStartTimer,
-      setShowBars,
       setShowGame,
 }) => {
       const [showSettingsOverLay, setShowSettingsOverLay] = useState(false);
@@ -37,16 +36,9 @@ export const Menu = ({
             game.reset();
             setShowMenuOverlay(false);
             setShowGameStartTimer(true);
-            setShowGame(true);
       };
 
       const controlsClickHandler = async () => {
-            setShowBars(true);
-            await new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                        resolve("yes");
-                  }, 1400);
-            });
             setShowSettingsOverLay(true);
       };
 

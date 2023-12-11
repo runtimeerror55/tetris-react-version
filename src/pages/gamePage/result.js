@@ -75,7 +75,13 @@ export const GameResult = ({
             focusableElements.elements[0].focus();
       }, []);
       return (
-            <section className={styles["game-result-section"]}>
+            <section
+                  className={
+                        styles["game-result-section"] +
+                        " " +
+                        styles["page-animation"]
+                  }
+            >
                   <CardsFlying></CardsFlying>
                   <div className={styles["game-result-container"]}>
                         {game.players

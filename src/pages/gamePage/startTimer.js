@@ -3,7 +3,7 @@ import styles from "./startTimer.module.css";
 import { useEffect } from "react";
 import countingSoundPath from "../../assets/sounds/counting.mp3";
 import { Howl } from "howler";
-export const StartTimer = ({ setShowGameStartTimer, game }) => {
+export const StartTimer = ({ setShowGameStartTimer, game, setShowGame }) => {
       const [time, setTime] = useState(3);
       const [timerId, setTimerId] = useState(null);
       const [countingSound, setCountingSound] = useState(
@@ -26,10 +26,17 @@ export const StartTimer = ({ setShowGameStartTimer, game }) => {
                   clearTimeout(timerId);
                   setShowGameStartTimer(false);
                   game.start();
+                  setShowGame(true);
             }
       }, [time]);
       return (
-            <section className={styles["start-timer-section"]}>
+            <section
+                  className={
+                        styles["start-timer-section"] +
+                        " " +
+                        styles["start-timer-animation"]
+                  }
+            >
                   <p className={styles["time"]}>{time}</p>
             </section>
       );
