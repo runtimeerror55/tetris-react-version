@@ -30,13 +30,7 @@ export const StartTimer = ({ setShowGameStartTimer, game, setShowGame }) => {
             }
       }, [time]);
       return (
-            <section
-                  className={
-                        styles["start-timer-section"] +
-                        " " +
-                        styles["start-timer-animation"]
-                  }
-            >
+            <section className={styles["start-timer-section"]}>
                   <p className={styles["time"]}>{time}</p>
             </section>
       );

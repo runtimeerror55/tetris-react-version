@@ -136,10 +136,7 @@ export const GameModes = ({ setShowGameModes, game }) => {
             <CardOne
                   customTag="section"
                   attributes={{
-                        className:
-                              styles["game-modes-section"] +
-                              " " +
-                              styles["page-animation"],
+                        className: styles["game-modes-section"],
                         onKeyDown: controllerSettingsOverlayKeyDownHandler,
                         tabIndex: -1,
                   }}
