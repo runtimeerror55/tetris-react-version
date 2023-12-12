@@ -9,9 +9,10 @@
       right: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
 }
 .page-animation {
-      animation: opacity-animation 1s ease-in-out;
+      animation: opacity-animation 0.5s ease-in-out;
       opacity: 1;
 }
 

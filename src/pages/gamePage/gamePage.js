@@ -8,7 +8,7 @@ import { Menu } from "./menu";
 import { StartTimer } from "./startTimer";
 import { GameResult } from "./result";
 import { CardOne } from "../../components/cards/cardOne";
-import { Bars } from "../../components/bars/bars";
+import { Arena } from "./arena";
 
 export const GamePage = () => {
       const [renderPlayersUi, setRenderPlayersUi] = useState({});
@@ -51,31 +51,13 @@ export const GamePage = () => {
                   <CardOne
                         customTag="div"
                         attributes={{
-                              className:
-                                    styles["page"] +
-                                    " " +
-                                    styles["page-animation"],
+                              className: styles["page"],
                         }}
                   >
                         <ToastContainer></ToastContainer>
 
                         <main className={styles["main"]}>
-                              {showGame
-                                    ? game.players.map((player) => {
-                                            return (
-                                                  <>
-                                                        <PlayerJsx
-                                                              player={player}
-                                                              game={game}
-                                                              key={
-                                                                    "player " +
-                                                                    player.number
-                                                              }
-                                                        ></PlayerJsx>
-                                                  </>
-                                            );
-                                      })
-                                    : ""}
+                              {showGame ? <Arena game={game}></Arena> : ""}
                               {showMenuOverlay ? (
                                     <Menu
                                           setShowMenuOverlay={
@@ -111,6 +93,7 @@ export const GamePage = () => {
                                           setShowMenuOverlay={
                                                 setShowMenuOverlay
                                           }
+                                          setShowGame={setShowGame}
                                     ></GameResult>
                               ) : (
                                     ""

@@ -63,6 +63,7 @@ export const Menu = ({
       const quitGameClickHandler = () => {
             game.reset();
             setRenderMenu({});
+            setShowGame(false);
       };
       const menuOverlayKeyDownHandler = (event) => {
             console.log("menu is ww");

@@ -12,6 +12,7 @@ export const GameResult = ({
       setShowGameStartTimer,
       setShowGameResult,
       setShowMenuOverlay,
+      setShowGame,
 }) => {
       const gamepadLoopState = useMemo(() => {
             return { run: true };
@@ -58,6 +59,7 @@ export const GameResult = ({
             gamepadLoopState.run = false;
             setShowMenuOverlay(true);
             setShowGameResult(false);
+            setShowGame(false);
       };
       useEffect(() => {
             if (gamepadLoopState.run) {

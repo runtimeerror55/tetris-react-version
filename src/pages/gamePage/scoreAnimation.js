@@ -46,6 +46,7 @@ export const ScoreAnimation = ({ player, game }) => {
                                     setShowScoreAdded(false);
                               }}
                         >
+                              +
                               {player.numberOfDestroyedRows *
                                     100 *
                                     player.numberOfDestroyedRows}

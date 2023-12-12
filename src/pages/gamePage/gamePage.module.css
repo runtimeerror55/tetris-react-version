@@ -1,33 +1,11 @@
 .page {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
       width: 100vw;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: cursive;
-}
-
-.page-theme-0 {
-      background: linear-gradient(rgba(255, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
-      background-color: black;
-}
-
-.page-theme-1 {
-      background: linear-gradient(rgba(0, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
-      background-color: black;
-}
-
-.page-theme-2 {
-      background: linear-gradient(rgba(128, 0, 128, 0.4), rgba(0, 0, 0, 0.6));
-      background-color: black;
-}
-.page-theme-3 {
-      background: linear-gradient(rgba(255, 255, 0, 0.4), rgba(0, 0, 0, 0.6));
-      background-color: black;
+      animation: none !important;
 }
 
 .main {
