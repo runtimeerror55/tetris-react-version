@@ -435,8 +435,6 @@ export class Game {
       };
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
-                  console.log(event, "hello");
-
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (this.joysticks[i] === null) {
                               this.joysticks[i] = new Joystick(
@@ -456,15 +454,13 @@ export class Game {
       };
       onJoystickDisconnect = () => {
             window.addEventListener("gamepaddisconnected", (event) => {
-                  console.log(event);
-                  toast.error(event.gamepad.id + " disconnected", toastOptions);
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (
                               this.joysticks[i].gamepad.index ===
                               event.gamepad.index
                         ) {
                               this.joysticks[i] = null;
-                              toast.success(
+                              toast.error(
                                     `player ${i} disconnected`,
                                     toastOptions
                               );
