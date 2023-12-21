@@ -111,7 +111,12 @@ export const Menu = ({
       }, [showSettingsOverLay, showGameModes, showSkins, showGuide]);
 
       const gamepadLoop = () => {
-            const joystick = game.joysticks[0];
+            let joystick = null;
+            game.joysticks.forEach((element) => {
+                  if (joystick === null && element !== null) {
+                        joystick = element;
+                  }
+            });
 
             if (joystick) {
                   if (joystick.throttleCount < 10) {

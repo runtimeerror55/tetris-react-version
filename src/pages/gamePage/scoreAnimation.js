@@ -7,11 +7,10 @@ export const ScoreAnimation = ({ player, game }) => {
       const [showSpeedIncrease, setShowSpeedIncrease] = useState(false);
 
       if (player.destroyInAction) {
-            if (!showScoreAdded) {
+            if (!showScoreAdded && player.numberOfDestroyedRows > 0) {
                   setShowScoreAdded(true);
             }
             if (!showDelecious) {
-                  console.log(player.numberOfDestroyedRows);
                   if (player.numberOfDestroyedRows >= 3) {
                         setShowDelicious(true);
                         game.sounds.deliciousSound.play();

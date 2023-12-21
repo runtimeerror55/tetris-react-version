@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 import laserGunShotSoundPath from "../assets/sounds/laserGunShot.wav";
-import fallPath from "../assets/sounds/fireball.wav";
+import fallPath from "../assets/sounds/ballTap.wav";
 import glassBreakPath from "../assets/sounds/laserInSpace.wav";
 import gameOverPath from "../assets/sounds/gameOver.wav";
 import navigationSoundPath from "../assets/sounds/navigation.m4a";
@@ -8,6 +8,7 @@ import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
 import { toast } from "react-toastify";
 import deliciousSoundPath from "../assets/sounds/deliciousOne.mp3";
+import whipSoundPath from "../assets/sounds/whoosh.wav";
 
 export const svgThemes = {
       "theme-0": "rgba(255, 0, 0, 1)",
@@ -50,6 +51,7 @@ export class Game {
       boardColumns;
       playersStandings = null;
       timeLimit;
+
       constructor(
             renderPlayersUi,
             renderGameResult,
@@ -67,56 +69,6 @@ export class Game {
             this.pause = false;
             this.renderGameResult = renderGameResult;
             this.renderMenuOverlay = renderMenuOverlay;
-            // this.CoordinatesAndColorsOfTetrominos = [
-            //       {
-            //             allCoordinates: [
-            //                   [0, 5],
-            //                   [1, 5],
-            //                   [2, 5],
-            //                   [2, 6],
-            //             ],
-            //             colorClass: "l-tetromino-active",
-            //       }, // l tetromino
-            //       {
-            //             allCoordinates: [
-            //                   [0, 5],
-            //                   [0, 6],
-            //                   [0, 7],
-            //                   [1, 6],
-            //             ],
-            //             colorClass: "t-tetromino-active",
-            //       }, // t tetromino
-
-            //       {
-            //             allCoordinates: [
-            //                   [0, 5],
-            //                   [0, 6],
-            //                   [1, 5],
-            //                   [1, 6],
-            //             ],
-            //             colorClass: "square-tetromino-active",
-            //       }, // square
-
-            //       {
-            //             allCoordinates: [
-            //                   [0, 5],
-            //                   [0, 6],
-            //                   [0, 7],
-            //                   [0, 8],
-            //             ],
-            //             colorClass: "line-tetromino-active",
-            //       }, // line tetromino
-
-            //       {
-            //             allCoordinates: [
-            //                   [0, 5],
-            //                   [1, 5],
-            //                   [1, 6],
-            //                   [2, 6],
-            //             ],
-            //             colorClass: "z-tetromino-active",
-            //       }, // skew tetromino
-            // ];
             this.CoordinatesAndColorsOfTetrominos = tetrominoes(boardColumns);
             this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
             this.gameModes = {
@@ -222,6 +174,9 @@ export class Game {
                   deliciousSound: new Howl({
                         src: [deliciousSoundPath],
                   }),
+                  whipSound: new Howl({
+                        src: [whipSoundPath],
+                  }),
             };
       }
 
@@ -277,6 +232,7 @@ export class Game {
                                                                   true
                                                             );
                                                             this.pause = true;
+                                                            this.sounds.clickSound.play();
                                                       }
                                                 }
                                                 joystick.previousPressedButtonIndex =
@@ -316,7 +272,6 @@ export class Game {
             return isTrue;
       };
       gameLoop = () => {
-            console.log("hello");
             this.gamepadLoop.bind(this)();
 
             // this.gameLoopWaitCount++;
@@ -364,6 +319,8 @@ export class Game {
                                           );
 
                                     if (destroyableRows.length > 0) {
+                                          player.numberOfDestroyedRows =
+                                                destroyableRows.length;
                                           destroy(
                                                 destroyableRows,
                                                 this,
@@ -478,8 +435,8 @@ export class Game {
       };
       onJoyStickConnect = () => {
             window.addEventListener("gamepadconnected", (event) => {
-                  console.log(event);
-                  toast.success(event.gamepad.id + " connected", toastOptions);
+                  console.log(event, "hello");
+
                   for (let i = 0; i < this.joysticks.length; i++) {
                         if (this.joysticks[i] === null) {
                               this.joysticks[i] = new Joystick(
@@ -488,6 +445,10 @@ export class Game {
                               );
 
                               this.renderPlayersUi({});
+                              toast.success(
+                                    `player ${i} connected`,
+                                    toastOptions
+                              );
                               return;
                         }
                   }
@@ -503,6 +464,10 @@ export class Game {
                               event.gamepad.index
                         ) {
                               this.joysticks[i] = null;
+                              toast.success(
+                                    `player ${i} disconnected`,
+                                    toastOptions
+                              );
                               console.log(this.joysticks);
                               return;
                         }
@@ -512,7 +477,6 @@ export class Game {
 
       onKeyboard = () => {
             window.addEventListener("keydown", (event) => {
-                  console.log("uitilities window");
                   if (this.isGameStarted && !this.pause && !this.isGameOver) {
                         if (
                               !this.keyBoard.keyBoardMapping[event.key] ||
@@ -565,6 +529,7 @@ export class Game {
                         this.speed
                   );
             });
+            console.log(this.CoordinatesAndColorsOfTetrominos);
       };
 
       generateNewTetrominoIndexes = () => {
@@ -619,12 +584,17 @@ export class Player {
             this.isGameOver = false;
             this.number = playerNumber;
             this.currentIndexOfrandomTetrominoIndexes = 0;
-            this.currentTetromino = startingTetromino;
+            this.currentTetromino = {
+                  allCoordinates: deepCloneArray(
+                        startingTetromino.allCoordinates
+                  ),
+                  colorClass: startingTetromino.colorClass,
+            };
             this.boardMatrix = createPlayerBoardMatrix(boardRows, boardColumns);
             this.renderUi = null;
       }
 
-      reset = (currentTetromino, speed) => {
+      reset = (startingTetromino, speed) => {
             this.destroyInAction = false;
             this.lifeSaverCount = 1;
             this.numberOfDestroyedRows = 0;
@@ -638,7 +608,12 @@ export class Player {
             this.stats.doubleShots = 0;
             this.stats.tripleShots = 0;
             this.currentIndexOfrandomTetrominoIndexes = 0;
-            this.currentTetromino = currentTetromino;
+            this.currentTetromino = {
+                  allCoordinates: deepCloneArray(
+                        startingTetromino.allCoordinates
+                  ),
+                  colorClass: startingTetromino.colorClass,
+            };
             let rows = this.boardMatrix.length;
             for (let i = 0; i < rows; i++) {
                   const columns = this.boardMatrix[i].length;
@@ -1142,7 +1117,6 @@ export const destroy = (destroyableRows, game, player) => {
       let throttleCount = 0;
       game.sounds.blasterSound.play();
       player.destroyInAction = true;
-      player.numberOfDestroyedRows = destroyableRows.length;
 
       const destroyAnimationLoop = () => {
             throttleCount++;
@@ -1201,6 +1175,8 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                         destroyableRows.push(firstNonEmptyRow);
                         firstNonEmptyRow++;
                   }
+
+                  player.numberOfDestroyedRows = 0;
                   destroy(destroyableRows, game, player);
 
                   if (gamepad) {
@@ -1219,7 +1195,9 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   const newTetromino = moveDown(player.currentTetromino);
 
                   if (sounds) {
-                        sounds.fall.play();
+                        if (!sounds.fall.playing()) {
+                              sounds.fall.play();
+                        }
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
@@ -1230,7 +1208,9 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   const newTetromino = moveLeft(player.currentTetromino);
 
                   if (sounds) {
-                        sounds.fall.play();
+                        if (!sounds.fall.playing()) {
+                              sounds.fall.play();
+                        }
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
@@ -1241,7 +1221,9 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   const newTetromino = moveRight(player.currentTetromino);
 
                   if (sounds) {
-                        sounds.fall.play();
+                        if (!sounds.fall.playing()) {
+                              sounds.fall.play();
+                        }
                   }
                   player.currentTetromino = newTetromino;
                   player.renderUi({});
@@ -1251,10 +1233,14 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
             const setOfrotatedCoordinates = isRotationPossible(game, player);
             if (setOfrotatedCoordinates) {
                   if (sounds) {
-                        sounds.fall.play();
+                        if (!sounds.fall.playing()) {
+                              sounds.fall.play();
+                        }
                   }
-                  player.currentTetromino.allCoordinates =
-                        setOfrotatedCoordinates;
+                  player.currentTetromino = {
+                        allCoordinates: setOfrotatedCoordinates,
+                        colorClass: player.currentTetromino.colorClass,
+                  };
                   player.renderUi({});
                   returnValue = true;
             }
@@ -1263,7 +1249,7 @@ export const finalInput = (direction, player, sounds, gamepad, game) => {
                   returnValue = true;
             }
       } else if (direction === "hardDrop") {
-            game?.sounds?.blasterSound.play();
+            game?.sounds?.whipSound.play();
             if (player.currentSpeed !== 2) {
                   player.previousSpeed = player.currentSpeed;
             }
@@ -1291,7 +1277,13 @@ export const navigationGamepadLoop = (
       controllerSettingsOverlayKeyDownHandler,
       gamepadLoopState
 ) => {
-      const joystick = game.joysticks[0];
+      let joystick = null;
+      game.joysticks.forEach((element) => {
+            if (joystick === null && element !== null) {
+                  joystick = element;
+            }
+      });
+
       let shouldExit = false;
 
       if (joystick) {
@@ -1307,9 +1299,6 @@ export const navigationGamepadLoop = (
                                     joystick.previousPressedButtonIndex !==
                                     buttonIndex
                               ) {
-                                    // if (buttonIndex === 1) {
-                                    //       shouldExit = true;
-                                    // }
                                     controllerSettingsOverlayKeyDownHandler({
                                           key: joystick.navigationKeyBindings[
                                                 buttonIndex
@@ -1318,18 +1307,13 @@ export const navigationGamepadLoop = (
                                     joystick.previousPressedButtonIndex =
                                           buttonIndex;
                                     joystick.throttleCount = 0;
-                                    console.log(buttonIndex);
                               } else if (joystick.throttleCount === 10) {
-                                    // if (buttonIndex === 1) {
-                                    //       shouldExit = true;
-                                    // }
                                     controllerSettingsOverlayKeyDownHandler({
                                           key: joystick.navigationKeyBindings[
                                                 buttonIndex
                                           ],
                                     });
                                     joystick.throttleCount = 0;
-                                    console.log(buttonIndex);
                               }
                         }
                   });
@@ -1456,5 +1440,19 @@ export const tetrominoes = (boardColumns) => {
                         colorClass: "z-tetromino-active",
                   }, // skew tetromino
             ];
+      }
+};
+
+const deepCloneArray = (input) => {
+      console.log(input);
+      return input.map((element) =>
+            Array.isArray(element) ? deepCloneArray(element) : element
+      );
+};
+
+const shiftElementsOfArray = (input, index) => {
+      for (let i = index; i < input.length - 1; i++) {
+            input[i] = input[i + 1];
+            input[i + 1] = null;
       }
 };

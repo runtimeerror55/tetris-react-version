@@ -31,8 +31,19 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
             const value = event.target.getAttribute("data-value");
             game.gameModes.modeOne = +value;
             game.createPlayers(+value);
-            console.log(game);
-            // game.reset();
+
+            if (value === "1") {
+                  let j = 0;
+                  while (!game.joysticks[0] && j < game.joysticks.length) {
+                        if (game.joysticks[j] !== null) {
+                              game.joysticks[0] = game.joysticks[j];
+                              game.joysticks[j] = null;
+                        }
+                        j++;
+                  }
+                  console.log(game.joysticks, navigator.getGamepads());
+                  // game.reset();
+            }
 
             setShowOptions(false);
             currentGamePadLoopState.run = false;

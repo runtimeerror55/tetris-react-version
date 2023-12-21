@@ -3,8 +3,8 @@
 3. 60 fps on all different refresh rate displays
 4. removing back button
 5. deleting sound files,images
-6. delicious is shown when live save is used. it should not
-7. tetrominos are getting rotated when playing again to be solved
+6. when there are multiple gamepads connected and in sinle player you should prevent the second joystick in giving input
+7. game sounds are bad in multiplayer mode
 
 ## key functionalities
 
