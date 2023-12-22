@@ -2,13 +2,14 @@ import { Howl } from "howler";
 import laserGunShotSoundPath from "../assets/sounds/laserGunShot.wav";
 import fallPath from "../assets/sounds/ballTap.wav";
 import glassBreakPath from "../assets/sounds/laserInSpace.wav";
-import gameOverPath from "../assets/sounds/gameOver.wav";
+import gameOverPath from "../assets/sounds/gameOver1.wav";
 import navigationSoundPath from "../assets/sounds/navigation.m4a";
 import clickSoundPath from "../assets/sounds/click.mp3";
 import blasterSoundPath from "../assets/sounds/blaster.mp3";
 import { toast } from "react-toastify";
 import deliciousSoundPath from "../assets/sounds/deliciousOne.mp3";
 import whipSoundPath from "../assets/sounds/whoosh.wav";
+import gameBackgroundSoundPath from "../assets/sounds/gameBackgroundMusic.wav";
 
 export const svgThemes = {
       "theme-0": "rgba(255, 0, 0, 1)",
@@ -56,6 +57,7 @@ export class Game {
             renderPlayersUi,
             renderGameResult,
             renderMenuOverlay,
+            setShowGamePadState,
             boardRows,
             boardColumns,
             speed
@@ -69,13 +71,14 @@ export class Game {
             this.pause = false;
             this.renderGameResult = renderGameResult;
             this.renderMenuOverlay = renderMenuOverlay;
+            this.setShowGamePadState = setShowGamePadState;
             this.CoordinatesAndColorsOfTetrominos = tetrominoes(boardColumns);
             this.randomTetrominoIndexes = this.generateNewTetrominoIndexes();
             this.gameModes = {
                   modeOne: 1,
                   modeTwo: 1,
             };
-            this.timeLimit = 100;
+            this.timeLimit = 300;
             this.players = [
                   new Player(
                         0,
@@ -162,7 +165,7 @@ export class Game {
                         src: [glassBreakPath],
                   }),
 
-                  gameOver: new Howl({
+                  gameOverSound: new Howl({
                         src: [gameOverPath],
                   }),
                   navigationSound: new Howl({
@@ -176,6 +179,9 @@ export class Game {
                   }),
                   whipSound: new Howl({
                         src: [whipSoundPath],
+                  }),
+                  gameBackgroundSound: new Howl({
+                        src: [gameBackgroundSoundPath],
                   }),
             };
       }
@@ -202,6 +208,9 @@ export class Game {
             const joysticks = this.joysticks;
             const gamepads = navigator.getGamepads();
             joysticks.forEach((joystick, joystickIndex) => {
+                  if (this.gameModes.modeOne === 1 && joystickIndex > 0) {
+                        return;
+                  }
                   if (joystick) {
                         if (joystick.throttleCount < 10) {
                               joystick.throttleCount++;
@@ -288,6 +297,7 @@ export class Game {
                                     shouldReturn = true;
                               }
                         } else {
+                              this.sounds.gameOverSound.play();
                               this.isGameOver = true;
                               this.renderGameResult(true);
                               shouldReturn = true;
@@ -297,6 +307,7 @@ export class Game {
 
                   if (!player.isGameOver && !player.destroyInAction) {
                         player.frameCounter++;
+
                         if (player.frameCounter === player.currentSpeed) {
                               if (
                                     !finalInput(
@@ -376,6 +387,7 @@ export class Game {
                                           if (this.gameModes.modeOne === 2) {
                                                 this.checkGameOver();
                                           } else {
+                                                this.sounds.gameOverSound.play();
                                                 this.isGameOver = true;
                                                 this.renderGameResult(true);
                                           }
@@ -413,6 +425,7 @@ export class Game {
             });
 
             if (playingPlayers.length === 0) {
+                  this.sounds.gameOverSound.play();
                   this.isGameOver = true;
                   this.renderGameResult(true);
                   this.playersStandings = [...gameOverPlayers];
@@ -422,6 +435,7 @@ export class Game {
                         playingPlayers[0].stats.score >
                         gameOverPlayers[0].stats.score
                   ) {
+                        this.sounds.gameOverSound.play();
                         this.isGameOver = true;
                         this.renderGameResult(true);
                         this.playersStandings = [
@@ -442,7 +456,7 @@ export class Game {
                                     i
                               );
 
-                              this.renderPlayersUi({});
+                              this.setShowGamePadState({});
                               toast.success(
                                     `player ${i} connected`,
                                     toastOptions
@@ -460,11 +474,12 @@ export class Game {
                               event.gamepad.index
                         ) {
                               this.joysticks[i] = null;
+                              this.setShowGamePadState({});
                               toast.error(
                                     `player ${i} disconnected`,
                                     toastOptions
                               );
-                              console.log(this.joysticks);
+
                               return;
                         }
                   }
@@ -525,7 +540,6 @@ export class Game {
                         this.speed
                   );
             });
-            console.log(this.CoordinatesAndColorsOfTetrominos);
       };
 
       generateNewTetrominoIndexes = () => {
@@ -1440,7 +1454,6 @@ export const tetrominoes = (boardColumns) => {
 };
 
 const deepCloneArray = (input) => {
-      console.log(input);
       return input.map((element) =>
             Array.isArray(element) ? deepCloneArray(element) : element
       );

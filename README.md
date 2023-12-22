@@ -3,8 +3,7 @@
 3. 60 fps on all different refresh rate displays
 4. removing back button
 5. deleting sound files,images
-6. when there are multiple gamepads connected and in sinle player you should prevent the second joystick in giving input
-7. game sounds are bad in multiplayer mode
+6. connecting gamepad in the arena increases the speed, it should not, removed renderplayerui which does not show controller when connected in controls page, should be rectified, even on disconnection
 
 ## key functionalities
 

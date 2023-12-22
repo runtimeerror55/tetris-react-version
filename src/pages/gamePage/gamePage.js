@@ -12,6 +12,7 @@ import { Arena } from "./arena";
 
 export const GamePage = () => {
       const [renderPlayersUi, setRenderPlayersUi] = useState({});
+      const [renderGamePadState, setShowGamePadState] = useState({});
       const [showGameStartTimer, setShowGameStartTimer] = useState(false);
       const [showGameResult, setShowGameResult] = useState(false);
       const [showMenuOverlay, setShowMenuOverlay] = useState(true);
@@ -22,10 +23,19 @@ export const GamePage = () => {
                   setRenderPlayersUi,
                   setShowGameResult,
                   setShowMenuOverlay,
+                  setShowGamePadState,
                   20,
                   10,
                   30
             );
+      }, []);
+      useEffect(() => {
+            console.log(game.joysticks, game.players);
+      }, []);
+      useEffect(() => {
+            game.sounds.gameBackgroundSound.loop(true);
+            game.sounds.gameBackgroundSound.volume(0.03);
+            game.sounds.gameBackgroundSound.play();
       }, []);
       useEffect(() => {
             if (!game.pause && game.isGameStarted && !game.isGameOver) {

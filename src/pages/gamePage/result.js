@@ -87,7 +87,7 @@ export const GameResult = ({
                   <CardsFlying></CardsFlying>
                   <div className={styles["game-result-container"]}>
                         {game.players
-                              .sort((a, b) => {
+                              .toSorted((a, b) => {
                                     return b.stats.score - a.stats.score;
                               })
                               .map((player, index) => {

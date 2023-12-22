@@ -30,7 +30,7 @@ export const ScoreAnimation = ({ player, game }) => {
       }
 
       if (game.gameModes.modeTwo === 1) {
-            if (player.time === 240 || player.time === 480) {
+            if (player.time === 180 || player.time === 360) {
                   if (!showSpeedIncrease) {
                         setShowSpeedIncrease(true);
                   }
@@ -82,9 +82,9 @@ export const ScoreAnimation = ({ player, game }) => {
                               }}
                         >
                               speed increase:{" "}
-                              {player.time === 240
+                              {player.time === 180
                                     ? "1.5x"
-                                    : player.time === 480
+                                    : player.time === 360
                                     ? "2x"
                                     : null}
                         </h3>

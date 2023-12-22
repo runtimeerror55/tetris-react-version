@@ -111,10 +111,10 @@ export const PlayerJsx = ({ player, game }) => {
       const [timer, setTimer] = useState(0);
       const { theme } = useContext(themeContext);
       if (game.gameModes.modeTwo === 1) {
-            if (player.time === 240) {
+            if (player.time === 180) {
                   player.currentSpeed = 20;
                   player.frameCounter = 0;
-            } else if (player.time === 480) {
+            } else if (player.time === 360) {
                   player.currentSpeed = 15;
                   player.frameCounter = 0;
             }

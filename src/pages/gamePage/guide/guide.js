@@ -20,7 +20,19 @@ export const Guide = ({ setShowGuide, game }) => {
                   event.stopPropagation();
             }
             if (event.key === "ArrowDown") {
+                  if (guideRef.current) {
+                        guideRef.current.scrollBy({
+                              top: 50,
+                              behavior: "smooth",
+                        });
+                  }
             } else if (event.key === "ArrowUp") {
+                  if (guideRef.current) {
+                        guideRef.current.scrollBy({
+                              top: -50,
+                              behavior: "smooth",
+                        });
+                  }
             } else if (event.key === "Enter") {
             } else if (event.key === "Back" || event.key === "Backspace") {
                   game.sounds.clickSound.play();
