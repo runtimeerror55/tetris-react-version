@@ -133,7 +133,9 @@ export const Guide = ({ setShowGuide, game }) => {
                                                 blocks until you can't go on any
                                                 longer. Challenge yourself to
                                                 reach new heights with each
-                                                game.
+                                                game. Speed of the tetromino
+                                                increases at 3 minutes (1.5x)
+                                                and 6 minutes (2x).
                                           </li>
                                           <li>
                                                 Maximize Score in 5 Min: Feel
@@ -164,7 +166,7 @@ export const Guide = ({ setShowGuide, game }) => {
                                           contollers should be connected) and
                                           mutltiple keyboards bindings(single
                                           connected keyboard is enough) you need
-                                          to select split screen mode
+                                          to select 2 players split screen mode
                                     </li>
                               </ul>
                               <h2 className={styles["h2-heading"]}>
@@ -238,6 +240,18 @@ export const Guide = ({ setShowGuide, game }) => {
                                     <li>Violet</li>
                                     <li>Yellow</li>
                               </ul>
+
+                              <h2 className={styles["h2-heading"]}>Note</h2>
+                              <p className={styles["p1"]}>
+                                    The game is does not run at fixed fps. it is
+                                    develeped with 60fps in mind. If you are
+                                    playing in higher refresh rate monitors the
+                                    tetrominos will have higher speed, so play
+                                    the game at 60fps to get the correct
+                                    experience. An update will be released soon
+                                    to be able to play without changing your
+                                    monitor refresh rate.
+                              </p>
                         </CardTwo>
                   </div>
             </CardOne>

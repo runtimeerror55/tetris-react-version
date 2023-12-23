@@ -83,6 +83,7 @@ export const GameResult = ({
                         " " +
                         styles["page-animation"]
                   }
+                  onKeyDown={controllerSettingsOverlayKeyDownHandler}
             >
                   <CardsFlying></CardsFlying>
                   <div className={styles["game-result-container"]}>

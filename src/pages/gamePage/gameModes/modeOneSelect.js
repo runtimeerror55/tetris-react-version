@@ -23,7 +23,7 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
       const modeOneValue =
             game.gameModes.modeOne === 1
                   ? "single player"
-                  : "couch play(2 players)";
+                  : "split screen (2 players)";
 
       const optionsClickHandler = (event, currentGamePadLoopState) => {
             event.stopPropagation();
@@ -83,7 +83,7 @@ export const ModeOneSelect = ({ previousGamepadLoop, game }) => {
                                                 "data-value": "2",
                                           }}
                                     >
-                                          couch play(2 players)
+                                          split screen (2 players)
                                     </Option>
                               </Options>
                         ) : null}

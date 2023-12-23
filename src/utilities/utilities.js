@@ -761,8 +761,8 @@ export class KeyBoard {
                         bindingValue: "ArrowRight",
                   },
                   " ": {
-                        playerNumber: "0",
-                        bindingValue: "rotate",
+                        playerNumber: null,
+                        bindingValue: null,
                   },
                   a: {
                         playerNumber: null,
@@ -781,8 +781,8 @@ export class KeyBoard {
                         bindingValue: null,
                   },
                   e: {
-                        playerNumber: null,
-                        bindingValue: null,
+                        playerNumber: "0",
+                        bindingValue: "hardDrop",
                   },
                   f: {
                         playerNumber: null,
@@ -813,12 +813,12 @@ export class KeyBoard {
                         bindingValue: null,
                   },
                   m: {
-                        playerNumber: "0",
-                        bindingValue: "hardDrop",
+                        playerNumber: null,
+                        bindingValue: null,
                   },
                   n: {
-                        playerNumber: "0",
-                        bindingValue: "lifeSaver",
+                        playerNumber: null,
+                        bindingValue: null,
                   },
                   o: {
                         playerNumber: null,
@@ -829,8 +829,8 @@ export class KeyBoard {
                         bindingValue: null,
                   },
                   q: {
-                        playerNumber: null,
-                        bindingValue: null,
+                        playerNumber: "0",
+                        bindingValue: "lifeSaver",
                   },
                   r: {
                         playerNumber: null,
@@ -853,8 +853,8 @@ export class KeyBoard {
                         bindingValue: null,
                   },
                   w: {
-                        playerNumber: null,
-                        bindingValue: null,
+                        playerNumber: "0",
+                        bindingValue: "rotate",
                   },
                   x: {
                         playerNumber: null,
